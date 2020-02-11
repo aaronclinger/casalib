@@ -16,6 +16,13 @@ Since its original release, CASA Lib has been heavily supported by community fee
 
 CASA Lib was under active development until late 2011 and was one of the most popular ActionScript libraries. It was used by many agencies, startups, and Fortune 500 companies.
 
+## Documentation
+
+CASA Lib’s documentation can be found in this repository or hosted here:
+
+* [ActionScipt 3 Documentation](http://as3.casalib.org/docs/)
+* [ActionScipt 2 Documentation](http://as2.casalib.org/docs/)
+
 ## Subversion Repository
 
 CASA Lib was originally developed and kept under [Subversion](https://en.wikipedia.org/wiki/Apache_Subversion) (SVN) version control. You can still access the original repositories and development history here:
