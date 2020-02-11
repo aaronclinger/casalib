@@ -1,0 +1,988 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" encoding="utf-8">
+	<head>
+		<title>GeomUtil | CASA Lib AS3 Docs</title>
+		<link rel="stylesheet" type="text/css" href="../css/shCoreDefault.min.css" />
+		<link rel="stylesheet" type="text/css" href="../css/VisDoc.min.css" />
+		<script type="text/javascript" src="../js/1_jquery.min.js"></script>
+		<script type="text/javascript" src="../js/2_jquery.cookie.min.js"></script>
+		<script type="text/javascript" src="../js/3_jquery.simpletreeview.min.js"></script>
+		<script type="text/javascript" src="../js/4_shCore.min.js"></script>
+		<script type="text/javascript" src="../js/5_shBrushAS3.min.js"></script>
+		<script type="text/javascript" src="../js/6_shBrushJava.min.js"></script>
+		<script type="text/javascript" src="../js/7_VisDoc.min.js"></script>
+	</head>
+	<body class='isShowingNavigation' id='page_org_casalib_util_GeomUtil'>
+	    <div id='page'> 
+			<div id='wrapper'>
+				<div id='outer'> 
+					<div id='floatWrap'> 
+						<div id='main'>
+							<div id='clearHeaderCenter'></div> 
+							<div id='mainContent'>
+																<h1>GeomUtil</h1>									<div class='classProperties'>
+		<table cellspacing='0'>
+				<tr>
+		<th>Kind of class:</th>
+		<td>public class</td>
+	</tr>
+							<tr>
+		<th>Package:</th>
+		<td>
+			<ul>
+								<li>			<a href="package_org_casalib_util.html">org.casalib.util</a>
+</li>
+							</ul>
+		</td>
+	</tr>
+							<tr>
+		<th>Inherits from:</th>
+		<td>
+			<ul>
+								<li>			none</li>
+							</ul>
+		</td>
+	</tr>
+																<tr>
+		<th class='classDetails'>Version:</th>
+		<td class='classDetails'>05/11/11</td>
+	</tr>
+	<tr>
+		<th class='classDetails'>Author:</th>
+		<td class='classDetails'>Aaron Clinger, Jon Adams</td>
+	</tr>
+	<tr>
+		<th class='classDetails'>Classpath:</th>
+		<td class='classDetails'>org.casalib.util.GeomUtil</td>
+	</tr>
+	<tr>
+		<th class='classDetails'>File last modified:</th>
+		<td class='classDetails'>Friday, 20 May 2011, 00:59:45</td>
+	</tr>
+		</table>
+	</div>
+	<div class='sourceCode'>
+				<span class='sourceCodeShow'><a href="#"><span class='closure'>&#9658;&nbsp;</span><span class='linkLabel'>View source</span></a></span><span class='sourceCodeHide'><a href="#"><span class='disclosure'>&#9660;&nbsp;</span><span class='linkLabel'>Hide source</span></a></span>	<pre id="source" class="brush:as3">/*
+    CASA Lib for ActionScript 3.0
+    Copyright (c) 2011, Aaron Clinger & Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+package org.casalib.util {
+    import flash.geom.Point;
+    import flash.geom.Rectangle;
+    import org.casalib.util.ConversionUtil;
+    import org.casalib.util.NumberUtil;
+    
+    
+    /**
+        Utilities for positioning, calculating and manipulating geometeric shapes and points.
+        
+        @author Aaron Clinger
+        @author Jon Adams
+        @version 05/11/11
+    */
+    public class GeomUtil {
+        
+        
+        /**
+            Rotates a <code>Point</code> around another <code>Point</code> by the specified angle.
+            
+            @param point: The <code>Point</code> to rotate.
+            @param centerPoint: The <code>Point</code> to rotate the <code>Point</code> around.
+            @param angle: The angle (in degrees) to rotate the <code>Point</code>.
+        */
+        public static function rotatePoint(point:Point, centerPoint:Point, angle:Number):void {
+            const radians:Number = ConversionUtil.degreesToRadians(angle);
+            const baseX:Number   = point.x - centerPoint.x;
+            const baseY:Number   = point.y - centerPoint.y;
+            
+            point.x = (Math.cos(radians) * baseX) - (Math.sin(radians) * baseY) + centerPoint.x;
+            point.y = (Math.sin(radians) * baseX) + (Math.cos(radians) * baseY) + centerPoint.y;
+        }
+        
+        /**
+            Determines the angle/degree between the first and second <code>Point</code>.
+            
+            @param first: The first <code>Point</code>.
+            @param second: The second <code>Point</code>.
+            @return The degree between the two points.
+        */
+        public static function angle(first:Point, second:Point):Number {
+            return Math.atan2(second.y - first.y, second.x - first.x) / (Math.PI / 180);
+        }
+        
+        /**
+            Places a <code>Point</code> randomly within a defined area.
+            
+            @param area: The area in which to randomly place the <code>Point</code>.
+            @param snapToPixel: If the <code>Point</code> should only be placed on whole pixels <code>true</code>, or allow placement on sub-pixels <code>false</code>; defaults to <code>true</code>.
+            @return A randomly placed <code>Point</code> within the defined bounds.
+        */
+        public static function randomlyPlacePoint(area:Rectangle, snapToPixel:Boolean = true):Point {
+            if (snapToPixel)
+                return new Point(NumberUtil.randomIntegerWithinRange(Math.ceil(area.x), Math.floor(area.right)), NumberUtil.randomIntegerWithinRange(Math.ceil(area.y), Math.floor(area.bottom)));
+            
+            return new Point(NumberUtil.randomWithinRange(area.x, area.right), NumberUtil.randomWithinRange(area.y, area.bottom));
+        }
+        
+        /**
+            Places a <code>Rectangle</code> randomly within a defined area.
+            
+            @param area: The area in which to randomly place the <code>Rectangle</code>.
+            @param rect: The <code>Rectangle</code> to randomly place within the bounds.
+            @param snapToPixel: If the <code>Rectangle</code> should only be placed on whole pixels <code>true</code>, or allow placement on sub-pixels <code>false</code>; defaults to <code>true</code>.
+            @return A new randomly placed <code>Rectangle</code> within the defined bounds.
+            @throws <code>Error</code> if the area is too small to contain the <code>Rectangle</code>.
+        */
+        public static function randomlyPlaceRectangle(area:Rectangle, rect:Rectangle, snapToPixel:Boolean = true):Rectangle {
+            const zone:Rectangle = area.clone();
+            const size:Rectangle = rect.clone();
+            size.x               = area.x;
+            size.y               = area.y;
+            
+            if ( ! zone.containsRect(size))
+                throw new Error('Area needs to be large enough to contain the rectangle.');
+                
+            zone.right  -= size.width;
+            zone.bottom -= size.height;
+            
+            const point:Point = GeomUtil.randomlyPlacePoint(zone, snapToPixel);
+            
+            return new Rectangle(point.x, point.y, rect.width, rect.height);
+        }
+        
+        /**
+            Takes the provided <code>Rectangle</code> and returns a new <code>Rectangle</code> that is flipped (width becomes height, height becomes width).
+            
+            @param rect: The <code>Rectangle</code> to flip.
+            @return A new <code>Rectangle</code> that is flipped.
+            @usageNote The <code>Rectangle</code>'s X and Y are unaffected.
+        */
+        public static function flipRectangle(rect:Rectangle):Rectangle {
+            return new Rectangle(rect.x, rect.y, rect.height, rect.width);
+        }
+        
+        /**
+            Calculates the perimeter of a <code>Rectangle</code>.
+            
+            @param rect: <code>Rectangle</code> to determine the perimeter of.
+            @return The <code>Rectangle</code>'s perimeter.
+        */
+        public static function getRectanglePerimeter(rect:Rectangle):Number {
+            return rect.width * 2 + rect.height * 2;
+        }
+        
+        /**
+            Takes any degree value and returns the normalized 0-360 degree equivalent.
+            
+            @param degree: The degree to normalize.
+            @return Returns a degree value between <code>0 </code> and <code>360</code>.
+            @example
+                <code>
+                    trace(GeomUtil.normalizeDegree(-90)); // Traces "270"
+                    trace(GeomUtil.normalizeDegree(1080)); // Traces "0"
+                </code>
+        */
+        public static function normalizeDegree(degree:Number):Number {
+            degree %= 360;
+            
+            return (degree < 0) ? degree + 360 : degree;
+        }
+        
+        /**
+            Determines the shortest distance and direction between two degrees.
+            
+            @param startDegree: The first degree.
+            @param endDegree: The second degree.
+            @return Returns a degree value between <code>-180</code> and <code>180</code>.
+            @example
+                <code>
+                    trace(GeomUtil.distanceBetweenDegrees(45, 100)); // Traces "55"
+                    trace(GeomUtil.distanceBetweenDegrees(270, 10)); // Traces "100"
+                    trace(GeomUtil.distanceBetweenDegrees(0, 190)); // Traces "-170"
+                </code>
+        */
+        public static function distanceBetweenDegrees(startDegree:Number, endDegree:Number):Number {
+            const start:Number = GeomUtil.normalizeDegree(startDegree);
+            const end:Number   = GeomUtil.normalizeDegree(endDegree);
+            const dif:Number   = Math.abs(start - end);
+            var dis:Number     = (dif > 180) ? 360 - dif : dif;
+            
+            if (end != GeomUtil.normalizeDegree(start + dis))
+                dis *= -1;
+            
+            return dis;
+        }
+    }
+}</pre>
+</div>
+	<div class='classDescription'>
+	<span class='descriptionSummary'>Utilities for positioning, calculating and manipulating geometeric shapes and points.</span></div>
+
+									<div class='toc'>
+		<h2 id='Summary'>Summary</h2>
+		<div class='docNav'>
+			<ul>
+									<li>
+						<span class='typeInfoHide'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>&times;</span>Hide type info</a></span>
+						<span class='typeInfoShow'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>+</span>Show type info</a></span>
+					</li>									<li>
+						<span class='summariesHide'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>&times;</span>Hide summaries</a></span>
+						<span class='summariesShow'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>+</span>Show summaries</a></span>
+					</li>			</ul>
+			<div class='clear'></div>
+		</div>
+				<div class='memberList'>
+							<div class='memberSummaryPart'>
+					<span class='title'>Class methods</span>
+					<ul>
+													<li class=''>								
+								<a href="#rotatePoint">rotatePoint</a>
+																<span class='typeInfo'>(point:Point, centerPoint:Point, angle:Number) : void</span>																<ul class='summary'>
+									<li>Rotates a Point around another Point by the specified angle.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#angle">angle</a>
+																<span class='typeInfo'>(first:Point, second:Point) : Number</span>																<ul class='summary'>
+									<li>Determines the angle/degree between the first and second Point.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#randomlyPlacePoint">randomlyPlacePoint</a>
+																<span class='typeInfo'>(area:Rectangle, snapToPixel:Boolean = true) : Point</span>																<ul class='summary'>
+									<li>Places a Point randomly within a defined area.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#randomlyPlaceRectangle">randomlyPlaceRectangle</a>
+																<span class='typeInfo'>(area:Rectangle, rect:Rectangle, snapToPixel:Boolean = true) : Rectangle</span>																<ul class='summary'>
+									<li>Places a Rectangle randomly within a defined area.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#flipRectangle">flipRectangle</a>
+																<span class='typeInfo'>(rect:Rectangle) : Rectangle</span>																<ul class='summary'>
+									<li>Takes the provided Rectangle and returns a new Rectangle that is flipped (width becomes height, height becomes width).</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#getRectanglePerimeter">getRectanglePerimeter</a>
+																<span class='typeInfo'>(rect:Rectangle) : Number</span>																<ul class='summary'>
+									<li>Calculates the perimeter of a Rectangle.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#normalizeDegree">normalizeDegree</a>
+																<span class='typeInfo'>(degree:Number) : Number</span>																<ul class='summary'>
+									<li>Takes any degree value and returns the normalized 0-360 degree equivalent.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#distanceBetweenDegrees">distanceBetweenDegrees</a>
+																<span class='typeInfo'>(startDegree:Number, endDegree:Number) : Number</span>																<ul class='summary'>
+									<li>Determines the shortest distance and direction between two degrees.</li>
+								</ul>							</li>
+											</ul>
+									</div>
+					</div>	</div>
+																					<div class='memberSection'>
+			<h2 id='Classmethods'>Class methods</h2>
+							<div class='member' id='angle'>
+									<h3>angle</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>angle</strong>(first:Point,
+                      second:Point) : Number</span>						</div>											<div class='description'>
+																			<p>Determines the angle/degree between the first and second <code><span class="codeIdentifier">Point</span></code>.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>first <span class='itemSeparator'>:</span></span>The first <code><span class="codeIdentifier">Point</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>second<span class='itemSeparator'>:</span></span>The second <code><span class="codeIdentifier">Point</span></code>.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					The degree between the two points.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='distanceBetweenDegrees'>
+									<h3>distanceBetweenDegrees</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>distanceBetweenDegrees</strong>(startDegree:Number,
+                                       endDegree:Number) : Number</span>						</div>											<div class='description'>
+																			<p>Determines the shortest distance and direction between two degrees.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>startDegree<span class='itemSeparator'>:</span></span>The first degree.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>endDegree  <span class='itemSeparator'>:</span></span>The second degree.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<pre>
+trace(GeomUtil.distanceBetweenDegrees(45, 100)); <span class="codeComment">// Traces &quot;55&quot;</span>
+trace(GeomUtil.distanceBetweenDegrees(270, 10)); <span class="codeComment">// Traces &quot;100&quot;</span>
+trace(GeomUtil.distanceBetweenDegrees(0, 190)); <span class="codeComment">// Traces &quot;-170&quot;</span>
+</pre>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns a degree value between <code>-<span class="codeNumber">180</span></code> and <code><span class="codeNumber">180</span></code>.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='flipRectangle'>
+									<h3>flipRectangle</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>flipRectangle</strong>(rect:Rectangle) : Rectangle</span>						</div>											<div class='description'>
+																			<p>Takes the provided <code><span class="codeIdentifier">Rectangle</span></code> and returns a new <code><span class="codeIdentifier">Rectangle</span></code> that is flipped (width becomes height, height becomes width).</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>rect<span class='itemSeparator'>:</span></span>The <code><span class="codeIdentifier">Rectangle</span></code> to flip.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					A new <code><span class="codeIdentifier">Rectangle</span></code> that is flipped.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Usage note</span>
+					<div class='item'>
+					<ul>
+								<li>
+					The <code><span class="codeIdentifier">Rectangle</span></code>'s X and Y are unaffected.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='getRectanglePerimeter'>
+									<h3>getRectanglePerimeter</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>getRectanglePerimeter</strong>(rect:Rectangle) : Number</span>						</div>											<div class='description'>
+																			<p>Calculates the perimeter of a <code><span class="codeIdentifier">Rectangle</span></code>.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>rect<span class='itemSeparator'>:</span></span><code><span class="codeIdentifier">Rectangle</span></code> to determine the perimeter of.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					The <code><span class="codeIdentifier">Rectangle</span></code>'s perimeter.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='normalizeDegree'>
+									<h3>normalizeDegree</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>normalizeDegree</strong>(degree:Number) : Number</span>						</div>											<div class='description'>
+																			<p>Takes any degree value and returns the normalized 0-360 degree equivalent.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>degree<span class='itemSeparator'>:</span></span>The degree to normalize.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<pre>
+trace(GeomUtil.normalizeDegree(-90)); <span class="codeComment">// Traces &quot;270&quot;</span>
+trace(GeomUtil.normalizeDegree(1080)); <span class="codeComment">// Traces &quot;0&quot;</span>
+</pre>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns a degree value between <code><span class="codeNumber">0</span></code> and <code><span class="codeNumber">360</span></code>.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='randomlyPlacePoint'>
+									<h3>randomlyPlacePoint</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>randomlyPlacePoint</strong>(area:Rectangle,
+                                   snapToPixel:Boolean = true) : Point</span>						</div>											<div class='description'>
+																			<p>Places a <code><span class="codeIdentifier">Point</span></code> randomly within a defined area.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>area       <span class='itemSeparator'>:</span></span>The area in which to randomly place the <code><span class="codeIdentifier">Point</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel<span class='itemSeparator'>:</span></span>If the <code><span class="codeIdentifier">Point</span></code> should only be placed on whole pixels <code><span class="codeIdentifier">true</span></code>, or allow placement on sub-pixels <code><span class="codeIdentifier">false</span></code>; defaults to <code><span class="codeIdentifier">true</span></code>.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					A randomly placed <code><span class="codeIdentifier">Point</span></code> within the defined bounds.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='randomlyPlaceRectangle'>
+									<h3>randomlyPlaceRectangle</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>randomlyPlaceRectangle</strong>(area:Rectangle,
+                                       rect:Rectangle,
+                                       snapToPixel:Boolean = true) : Rectangle</span>						</div>											<div class='description'>
+																			<p>Places a <code><span class="codeIdentifier">Rectangle</span></code> randomly within a defined area.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>area       <span class='itemSeparator'>:</span></span>The area in which to randomly place the <code><span class="codeIdentifier">Rectangle</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>rect       <span class='itemSeparator'>:</span></span>The <code><span class="codeIdentifier">Rectangle</span></code> to randomly place within the bounds.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel<span class='itemSeparator'>:</span></span>If the <code><span class="codeIdentifier">Rectangle</span></code> should only be placed on whole pixels <code><span class="codeIdentifier">true</span></code>, or allow placement on sub-pixels <code><span class="codeIdentifier">false</span></code>; defaults to <code><span class="codeIdentifier">true</span></code>.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					A new randomly placed <code><span class="codeIdentifier">Rectangle</span></code> within the defined bounds.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Throws</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<a href="org_casalib_util_GeomUtil.html"></a>  <code><span class="codeIdentifier">Error</span></code> if the area is too small to contain the <code><span class="codeIdentifier">Rectangle</span></code>.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='rotatePoint'>
+									<h3>rotatePoint</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>rotatePoint</strong>(point:Point,
+                            centerPoint:Point,
+                            angle:Number) : void</span>						</div>											<div class='description'>
+																			<p>Rotates a <code><span class="codeIdentifier">Point</span></code> around another <code><span class="codeIdentifier">Point</span></code> by the specified angle.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>point      <span class='itemSeparator'>:</span></span>The <code><span class="codeIdentifier">Point</span></code> to rotate.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>centerPoint<span class='itemSeparator'>:</span></span>The <code><span class="codeIdentifier">Point</span></code> to rotate the <code><span class="codeIdentifier">Point</span></code> around.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>angle      <span class='itemSeparator'>:</span></span>The angle (in degrees) to rotate the <code><span class="codeIdentifier">Point</span></code>.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+											</div>				</div>
+					</div>
+		
+							</div>
+						</div>
+											<div id='sidebar'>
+		<div id='clearHeaderLeft'></div> 
+		<div id='sidebarContent'>
+				<div class="list">
+							<ul>
+		<li  class=''>											<li id='menu_index' class=''>				<a href="index.html">CASA Lib AS3 Docs</a>
+</li>
+						</li>
+</ul>
+
+					<ul id='treemenu'>
+		<li  class=''>									<h2>Packages and classes</h2>											<ul>
+		<li  id='menu_package_org_casalib_collection' class='package'>
+																	<a href="package_org_casalib_collection.html">org.casalib.collection</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_collection_IList' class='interface'>				<a href="org_casalib_collection_IList.html"><span class='packagePath'>org.casalib.collection.</span>IList</a>
+</li>
+							<li id='menu_org_casalib_collection_List' class=''>				<a href="org_casalib_collection_List.html"><span class='packagePath'>org.casalib.collection.</span>List</a>
+</li>
+							<li id='menu_org_casalib_collection_UniqueList' class=''>				<a href="org_casalib_collection_UniqueList.html"><span class='packagePath'>org.casalib.collection.</span>UniqueList</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_control' class='package'>
+																	<a href="package_org_casalib_control.html">org.casalib.control</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_control_IResumable' class='interface'>				<a href="org_casalib_control_IResumable.html"><span class='packagePath'>org.casalib.control.</span>IResumable</a>
+</li>
+							<li id='menu_org_casalib_control_IRunnable' class='interface'>				<a href="org_casalib_control_IRunnable.html"><span class='packagePath'>org.casalib.control.</span>IRunnable</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_core' class='package'>
+																	<a href="package_org_casalib_core.html">org.casalib.core</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_core_Destroyable' class=''>				<a href="org_casalib_core_Destroyable.html"><span class='packagePath'>org.casalib.core.</span>Destroyable</a>
+</li>
+							<li id='menu_org_casalib_core_IDestroyable' class='interface'>				<a href="org_casalib_core_IDestroyable.html"><span class='packagePath'>org.casalib.core.</span>IDestroyable</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_display' class='package'>
+																	<a href="package_org_casalib_display.html">org.casalib.display</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_display_CasaBitmap' class=''>				<a href="org_casalib_display_CasaBitmap.html"><span class='packagePath'>org.casalib.display.</span>CasaBitmap</a>
+</li>
+							<li id='menu_org_casalib_display_CasaMovieClip' class=''>				<a href="org_casalib_display_CasaMovieClip.html"><span class='packagePath'>org.casalib.display.</span>CasaMovieClip</a>
+</li>
+							<li id='menu_org_casalib_display_CasaShape' class=''>				<a href="org_casalib_display_CasaShape.html"><span class='packagePath'>org.casalib.display.</span>CasaShape</a>
+</li>
+							<li id='menu_org_casalib_display_CasaSimpleButton' class=''>				<a href="org_casalib_display_CasaSimpleButton.html"><span class='packagePath'>org.casalib.display.</span>CasaSimpleButton</a>
+</li>
+							<li id='menu_org_casalib_display_CasaSprite' class=''>				<a href="org_casalib_display_CasaSprite.html"><span class='packagePath'>org.casalib.display.</span>CasaSprite</a>
+</li>
+							<li id='menu_org_casalib_display_CasaTextField' class=''>				<a href="org_casalib_display_CasaTextField.html"><span class='packagePath'>org.casalib.display.</span>CasaTextField</a>
+</li>
+							<li id='menu_org_casalib_display_ReversibleMovieClip' class=''>				<a href="org_casalib_display_ReversibleMovieClip.html"><span class='packagePath'>org.casalib.display.</span>ReversibleMovieClip</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_errors' class='package'>
+																	<a href="package_org_casalib_errors.html">org.casalib.errors</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_errors_ArguementTypeError' class=''>				<a href="org_casalib_errors_ArguementTypeError.html"><span class='packagePath'>org.casalib.errors.</span>ArguementTypeError</a>
+</li>
+							<li id='menu_org_casalib_errors_ArrayContentsError' class=''>				<a href="org_casalib_errors_ArrayContentsError.html"><span class='packagePath'>org.casalib.errors.</span>ArrayContentsError</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_events' class='package'>
+																	<a href="package_org_casalib_events.html">org.casalib.events</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_events_InactivityEvent' class=''>				<a href="org_casalib_events_InactivityEvent.html"><span class='packagePath'>org.casalib.events.</span>InactivityEvent</a>
+</li>
+							<li id='menu_org_casalib_events_IRemovableEventDispatcher' class='interface'>				<a href="org_casalib_events_IRemovableEventDispatcher.html"><span class='packagePath'>org.casalib.events.</span>IRemovableEventDispatcher</a>
+</li>
+							<li id='menu_org_casalib_events_KeyComboEvent' class=''>				<a href="org_casalib_events_KeyComboEvent.html"><span class='packagePath'>org.casalib.events.</span>KeyComboEvent</a>
+</li>
+							<li id='menu_org_casalib_events_ListenerManager' class=''>				<a href="org_casalib_events_ListenerManager.html"><span class='packagePath'>org.casalib.events.</span>ListenerManager</a>
+</li>
+							<li id='menu_org_casalib_events_LoadEvent' class=''>				<a href="org_casalib_events_LoadEvent.html"><span class='packagePath'>org.casalib.events.</span>LoadEvent</a>
+</li>
+							<li id='menu_org_casalib_events_ProcessEvent' class=''>				<a href="org_casalib_events_ProcessEvent.html"><span class='packagePath'>org.casalib.events.</span>ProcessEvent</a>
+</li>
+							<li id='menu_org_casalib_events_RemovableEventDispatcher' class=''>				<a href="org_casalib_events_RemovableEventDispatcher.html"><span class='packagePath'>org.casalib.events.</span>RemovableEventDispatcher</a>
+</li>
+							<li id='menu_org_casalib_events_RetryEvent' class=''>				<a href="org_casalib_events_RetryEvent.html"><span class='packagePath'>org.casalib.events.</span>RetryEvent</a>
+</li>
+							<li id='menu_org_casalib_events_SequenceEvent' class=''>				<a href="org_casalib_events_SequenceEvent.html"><span class='packagePath'>org.casalib.events.</span>SequenceEvent</a>
+</li>
+							<li id='menu_org_casalib_events_StageEventProxy' class=''>				<a href="org_casalib_events_StageEventProxy.html"><span class='packagePath'>org.casalib.events.</span>StageEventProxy</a>
+</li>
+							<li id='menu_org_casalib_events_TweenEvent' class=''>				<a href="org_casalib_events_TweenEvent.html"><span class='packagePath'>org.casalib.events.</span>TweenEvent</a>
+</li>
+							<li id='menu_org_casalib_events_VideoInfoEvent' class=''>				<a href="org_casalib_events_VideoInfoEvent.html"><span class='packagePath'>org.casalib.events.</span>VideoInfoEvent</a>
+</li>
+							<li id='menu_org_casalib_events_VideoLoadEvent' class=''>				<a href="org_casalib_events_VideoLoadEvent.html"><span class='packagePath'>org.casalib.events.</span>VideoLoadEvent</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_layout' class='package'>
+																	<a href="package_org_casalib_layout.html">org.casalib.layout</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_layout_Distribution' class=''>				<a href="org_casalib_layout_Distribution.html"><span class='packagePath'>org.casalib.layout.</span>Distribution</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_load' class='package'>
+																	<a href="package_org_casalib_load.html">org.casalib.load</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_load_AudioLoad' class=''>				<a href="org_casalib_load_AudioLoad.html"><span class='packagePath'>org.casalib.load.</span>AudioLoad</a>
+</li>
+							<li id='menu_org_casalib_load_CasaLoader' class=''>				<a href="org_casalib_load_CasaLoader.html"><span class='packagePath'>org.casalib.load.</span>CasaLoader</a>
+</li>
+							<li id='menu_org_casalib_load_DataLoad' class=''>				<a href="org_casalib_load_DataLoad.html"><span class='packagePath'>org.casalib.load.</span>DataLoad</a>
+</li>
+							<li id='menu_org_casalib_load_GroupLoad' class=''>				<a href="org_casalib_load_GroupLoad.html"><span class='packagePath'>org.casalib.load.</span>GroupLoad</a>
+</li>
+							<li id='menu_org_casalib_load_ImageLoad' class=''>				<a href="org_casalib_load_ImageLoad.html"><span class='packagePath'>org.casalib.load.</span>ImageLoad</a>
+</li>
+							<li id='menu_org_casalib_load_LoadItem' class=''>				<a href="org_casalib_load_LoadItem.html"><span class='packagePath'>org.casalib.load.</span>LoadItem</a>
+</li>
+							<li id='menu_org_casalib_load_SwfLoad' class=''>				<a href="org_casalib_load_SwfLoad.html"><span class='packagePath'>org.casalib.load.</span>SwfLoad</a>
+</li>
+							<li id='menu_org_casalib_load_VideoLoad' class=''>				<a href="org_casalib_load_VideoLoad.html"><span class='packagePath'>org.casalib.load.</span>VideoLoad</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_math' class='package'>
+																	<a href="package_org_casalib_math.html">org.casalib.math</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_math_Percent' class=''>				<a href="org_casalib_math_Percent.html"><span class='packagePath'>org.casalib.math.</span>Percent</a>
+</li>
+							<li id='menu_org_casalib_math_Range' class=''>				<a href="org_casalib_math_Range.html"><span class='packagePath'>org.casalib.math.</span>Range</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_math_geom' class='package'>
+																	<a href="package_org_casalib_math_geom.html">org.casalib.math.geom</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_math_geom_Ellipse' class=''>				<a href="org_casalib_math_geom_Ellipse.html"><span class='packagePath'>org.casalib.math.geom.</span>Ellipse</a>
+</li>
+							<li id='menu_org_casalib_math_geom_Point3d' class=''>				<a href="org_casalib_math_geom_Point3d.html"><span class='packagePath'>org.casalib.math.geom.</span>Point3d</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_process' class='package'>
+																	<a href="package_org_casalib_process.html">org.casalib.process</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_process_Process' class=''>				<a href="org_casalib_process_Process.html"><span class='packagePath'>org.casalib.process.</span>Process</a>
+</li>
+							<li id='menu_org_casalib_process_ProcessGroup' class=''>				<a href="org_casalib_process_ProcessGroup.html"><span class='packagePath'>org.casalib.process.</span>ProcessGroup</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_time' class='package'>
+																	<a href="package_org_casalib_time.html">org.casalib.time</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_time_EnterFrame' class=''>				<a href="org_casalib_time_EnterFrame.html"><span class='packagePath'>org.casalib.time.</span>EnterFrame</a>
+</li>
+							<li id='menu_org_casalib_time_FrameDelay' class=''>				<a href="org_casalib_time_FrameDelay.html"><span class='packagePath'>org.casalib.time.</span>FrameDelay</a>
+</li>
+							<li id='menu_org_casalib_time_FrameTime' class=''>				<a href="org_casalib_time_FrameTime.html"><span class='packagePath'>org.casalib.time.</span>FrameTime</a>
+</li>
+							<li id='menu_org_casalib_time_FrameTimeStopwatch' class=''>				<a href="org_casalib_time_FrameTimeStopwatch.html"><span class='packagePath'>org.casalib.time.</span>FrameTimeStopwatch</a>
+</li>
+							<li id='menu_org_casalib_time_Inactivity' class=''>				<a href="org_casalib_time_Inactivity.html"><span class='packagePath'>org.casalib.time.</span>Inactivity</a>
+</li>
+							<li id='menu_org_casalib_time_Interval' class=''>				<a href="org_casalib_time_Interval.html"><span class='packagePath'>org.casalib.time.</span>Interval</a>
+</li>
+							<li id='menu_org_casalib_time_Sequence' class=''>				<a href="org_casalib_time_Sequence.html"><span class='packagePath'>org.casalib.time.</span>Sequence</a>
+</li>
+							<li id='menu_org_casalib_time_Stopwatch' class=''>				<a href="org_casalib_time_Stopwatch.html"><span class='packagePath'>org.casalib.time.</span>Stopwatch</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_transitions' class='package'>
+																	<a href="package_org_casalib_transitions.html">org.casalib.transitions</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_transitions_PropertyTween' class=''>				<a href="org_casalib_transitions_PropertyTween.html"><span class='packagePath'>org.casalib.transitions.</span>PropertyTween</a>
+</li>
+							<li id='menu_org_casalib_transitions_Tween' class=''>				<a href="org_casalib_transitions_Tween.html"><span class='packagePath'>org.casalib.transitions.</span>Tween</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_ui' class='package'>
+																	<a href="package_org_casalib_ui.html">org.casalib.ui</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_ui_Key' class=''>				<a href="org_casalib_ui_Key.html"><span class='packagePath'>org.casalib.ui.</span>Key</a>
+</li>
+							<li id='menu_org_casalib_ui_KeyCombo' class=''>				<a href="org_casalib_ui_KeyCombo.html"><span class='packagePath'>org.casalib.ui.</span>KeyCombo</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_util' class='package'>
+																	<a href="package_org_casalib_util.html">org.casalib.util</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_util_AlignUtil' class=''>				<a href="org_casalib_util_AlignUtil.html"><span class='packagePath'>org.casalib.util.</span>AlignUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ArrayUtil' class=''>				<a href="org_casalib_util_ArrayUtil.html"><span class='packagePath'>org.casalib.util.</span>ArrayUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ClassUtil' class=''>				<a href="org_casalib_util_ClassUtil.html"><span class='packagePath'>org.casalib.util.</span>ClassUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ColorUtil' class=''>				<a href="org_casalib_util_ColorUtil.html"><span class='packagePath'>org.casalib.util.</span>ColorUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ConversionUtil' class=''>				<a href="org_casalib_util_ConversionUtil.html"><span class='packagePath'>org.casalib.util.</span>ConversionUtil</a>
+</li>
+							<li id='menu_org_casalib_util_DateUtil' class=''>				<a href="org_casalib_util_DateUtil.html"><span class='packagePath'>org.casalib.util.</span>DateUtil</a>
+</li>
+							<li id='menu_org_casalib_util_DisplayObjectUtil' class=''>				<a href="org_casalib_util_DisplayObjectUtil.html"><span class='packagePath'>org.casalib.util.</span>DisplayObjectUtil</a>
+</li>
+							<li id='menu_org_casalib_util_DrawUtil' class=''>				<a href="org_casalib_util_DrawUtil.html"><span class='packagePath'>org.casalib.util.</span>DrawUtil</a>
+</li>
+							<li id='menu_org_casalib_util_FlashVarUtil' class=''>				<a href="org_casalib_util_FlashVarUtil.html"><span class='packagePath'>org.casalib.util.</span>FlashVarUtil</a>
+</li>
+							<li id='menu_org_casalib_util_FrameUtil' class=''>				<a href="org_casalib_util_FrameUtil.html"><span class='packagePath'>org.casalib.util.</span>FrameUtil</a>
+</li>
+							<li id='menu_org_casalib_util_GeomUtil' class=''>				<a href="org_casalib_util_GeomUtil.html"><span class='packagePath'>org.casalib.util.</span>GeomUtil</a>
+</li>
+							<li id='menu_org_casalib_util_LibraryManager' class=''>				<a href="org_casalib_util_LibraryManager.html"><span class='packagePath'>org.casalib.util.</span>LibraryManager</a>
+</li>
+							<li id='menu_org_casalib_util_LoadItemUtil' class=''>				<a href="org_casalib_util_LoadItemUtil.html"><span class='packagePath'>org.casalib.util.</span>LoadItemUtil</a>
+</li>
+							<li id='menu_org_casalib_util_LoadUtil' class=''>				<a href="org_casalib_util_LoadUtil.html"><span class='packagePath'>org.casalib.util.</span>LoadUtil</a>
+</li>
+							<li id='menu_org_casalib_util_LocationUtil' class=''>				<a href="org_casalib_util_LocationUtil.html"><span class='packagePath'>org.casalib.util.</span>LocationUtil</a>
+</li>
+							<li id='menu_org_casalib_util_NavigateUtil' class=''>				<a href="org_casalib_util_NavigateUtil.html"><span class='packagePath'>org.casalib.util.</span>NavigateUtil</a>
+</li>
+							<li id='menu_org_casalib_util_NumberUtil' class=''>				<a href="org_casalib_util_NumberUtil.html"><span class='packagePath'>org.casalib.util.</span>NumberUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ObjectUtil' class=''>				<a href="org_casalib_util_ObjectUtil.html"><span class='packagePath'>org.casalib.util.</span>ObjectUtil</a>
+</li>
+							<li id='menu_org_casalib_util_PropertySetter' class=''>				<a href="org_casalib_util_PropertySetter.html"><span class='packagePath'>org.casalib.util.</span>PropertySetter</a>
+</li>
+							<li id='menu_org_casalib_util_QueryStringUtil' class=''>				<a href="org_casalib_util_QueryStringUtil.html"><span class='packagePath'>org.casalib.util.</span>QueryStringUtil</a>
+</li>
+							<li id='menu_org_casalib_util_RatioUtil' class=''>				<a href="org_casalib_util_RatioUtil.html"><span class='packagePath'>org.casalib.util.</span>RatioUtil</a>
+</li>
+							<li id='menu_org_casalib_util_SingletonUtil' class=''>				<a href="org_casalib_util_SingletonUtil.html"><span class='packagePath'>org.casalib.util.</span>SingletonUtil</a>
+</li>
+							<li id='menu_org_casalib_util_StageReference' class=''>				<a href="org_casalib_util_StageReference.html"><span class='packagePath'>org.casalib.util.</span>StageReference</a>
+</li>
+							<li id='menu_org_casalib_util_StringUtil' class=''>				<a href="org_casalib_util_StringUtil.html"><span class='packagePath'>org.casalib.util.</span>StringUtil</a>
+</li>
+							<li id='menu_org_casalib_util_TextFieldUtil' class=''>				<a href="org_casalib_util_TextFieldUtil.html"><span class='packagePath'>org.casalib.util.</span>TextFieldUtil</a>
+</li>
+							<li id='menu_org_casalib_util_UrlVariablesUtil' class=''>				<a href="org_casalib_util_UrlVariablesUtil.html"><span class='packagePath'>org.casalib.util.</span>UrlVariablesUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ValidationUtil' class=''>				<a href="org_casalib_util_ValidationUtil.html"><span class='packagePath'>org.casalib.util.</span>ValidationUtil</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+				</li>
+</ul>
+
+			</div>					<div class="globalNav">
+							<ul>
+									<li>
+						<li id='menu_all-packages' class=''>				<a href="all-packages.html">Package tree</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-classes' class=''>				<a href="all-classes.html">Classes</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-methods' class=''>				<a href="all-methods.html">Methods</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-constants' class=''>				<a href="all-constants.html">Constants</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-properties' class=''>				<a href="all-properties.html">Properties</a>
+</li>					</li>
+									<li>
+						<li class=''></li>					</li>
+							</ul>	</div>
+		</div>
+	</div>
+
+					</div>
+					<div class='clear'>&nbsp;</div> 
+				</div>
+			</div>
+			<div id='header'>
+				<div id='headerContentWrapper'>
+					<div id='headerContent'>
+						<ul id='headerButtons'>
+															<li id='toggleTocButton'><a href="#"><span class='disclosure'>&#9660;</span><span class='closure'>&#9658;</span>Navigation</a></li>													</ul>
+					</div>
+				</div>
+			</div>
+			<div id="footer">
+	<div id="footerContent">
+		<ul>
+						<li class="copyright">
+				&copy; 2011 Aaron Clinger and the CASA Lib Team
+			</li>		</ul>
+	</div>
+</div>
+		</div>
+     </body>
+</html>

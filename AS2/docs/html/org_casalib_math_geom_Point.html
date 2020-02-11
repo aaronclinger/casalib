@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Point</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_math_geom_Point"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Instanceproperties" accesskey="l">Instance <span class="accessKey">p</span>roperties</a></li><li><a href="#Classmethods" accesskey="a">Cl<span class="accessKey">a</span>ss methods</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li></ul><br class="clear" /></div><h1>Point</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></td></tr><tr><th align="left">Implements:</th><td><ul><li><a class="className" href="org_casalib_math_geom_PointInterface.html">PointInterface</a></li></ul></td></tr><tr><th align="left">Known subclasses:</th><td><ul><li><a class="className" href="org_casalib_math_geom_Point3d.html">Point3d</a></li></ul></td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">03/21/08</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger, David Bliss</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.math.geom.Point</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.core.CoreObject;
+import org.casalib.math.geom.PointInterface;
+import org.casalib.util.ConversionUtil;
+
+/**
+    Stores location of a point in a two-dimensional coordinate system, where x represents the horizontal axis and y represents the vertical axis.
+    
+    @author Aaron Clinger
+    @author David Bliss
+    @version 03/21/08
+*/
+
+class org.casalib.math.geom.Point extends CoreObject implements PointInterface {
+    private var $x:Number;
+    private var $y:Number;
+    
+    /**
+        Creates point object.
+        
+        @param x: The horizontal coordinate of the point.
+        @param y: The vertical coordinate of the point.
+    */
+    public function Point(x:Number, y:Number) {
+        super();
+        
+        this.setX((x == undefined) ? 0 : x);
+        this.setY((y == undefined) ? 0 : y);
+        
+        this.$setClassDescription('org.casalib.math.geom.Point');
+    }
+    
+    public function getX():Number {
+        return this.$x;
+    }
+    
+    public function setX(x:Number):Void {
+        this.$x = x;
+    }
+    
+    public function getY():Number {
+        return this.$y;
+    }
+    
+    public function setY(y:Number):Void {
+        this.$y = y;
+    }
+    
+    /**
+        Offsets the Point object by the specified amount.
+        
+        @param x: The amount by which to offset the horizontal coordinate.
+        @param y: The amount by which to offset the vertical coordinate.
+    */
+    public function offset(x:Number, y:Number):Void {
+        this.$x += x;
+        this.$y += y;
+    }
+    
+    /**
+        Rotate the Point object around another point by the specified angle.
+        
+        @param pointObject: The Point to rotate this point around.
+        @param angle: The angle (in degrees) to rotate this point.
+    */
+    public function rotate ( pointObject:Point, angle:Number ):Void {
+        var radians:Number = ConversionUtil.degreesToRadians(angle);    
+        
+        var baseX:Number = this.$x - pointObject.getX();
+        var baseY:Number = this.$y - pointObject.getY();
+            
+        this.$x = (Math.cos(radians)*baseX)-(Math.sin(radians)*baseY)+pointObject.getX();
+        this.$y = (Math.sin(radians)*baseX)+(Math.cos(radians)*baseY)+pointObject.getY();    
+    }
+    
+    /**
+        Determines whether the point specified in the &lt;code>pointObject&lt;/code> parameter is equal to this point object.
+
+        @param pointObject: A defined {@link Point} object.
+        @return Returns &lt;code>true&lt;/code> if shape's location is identical; otherwise &lt;code>false&lt;/code>.
+    */
+    public function equals(pointObject:Point):Boolean {
+        return this.getX() == pointObject.getX() &amp;&amp; this.getY() == pointObject.getY();
+    }
+    
+    /**
+        @return A new point object with the same values as this point.
+    */
+    public function clone():Point {
+        return new Point(this.getX(), this.getY());
+    }
+    
+    /**
+        Determines the distance between the first and second points.
+        
+        @param firstPoint: The first point.
+        @param secondPoint: The second point.
+    */
+    public static function distance(firstPoint:Point, secondPoint:Point):Number {
+        var x:Number = secondPoint.getX() - firstPoint.getX();
+        var y:Number = secondPoint.getY() - firstPoint.getY();
+        
+        return Math.sqrt(x * x + y * y);
+    }
+    
+    /**
+        Determines the angle/degree between the first and second point.
+        
+        @param firstPoint: The first point.
+        @param secondPoint: The second point.
+    */
+    public static function angle(firstPoint:Point, secondPoint:Point):Number {
+        return Math.atan((firstPoint.getY() - secondPoint.getY()) / (firstPoint.getX() - secondPoint.getX())) / (Math.PI / 180);
+    }
+    
+    public function destroy():Void {
+        delete this.$x;
+        delete this.$y;
+        
+        super.destroy();
+    }
+}
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Stores location of a point in a two-dimensional coordinate system, where x represents the horizontal axis and y represents the vertical axis.</span></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Constructor</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#Point">Point</a><span class="typeInfo"> (x:Number, y:Number)</span><ul class="summary"><li>Creates point object.</li></ul></li></ul></div><div class="memberSummaryPart"><span class="title">Class methods</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#distance">distance</a><span class="typeInfo"> (firstPoint:<a class="className" href="org_casalib_math_geom_Point.html">Point</a>) : Number</span><ul class="summary"><li>Determines the distance between the first and second points.</li></ul></li><li class="sortli listnum2"><a href="#angle">angle</a><span class="typeInfo"> (firstPoint:<a class="className" href="org_casalib_math_geom_Point.html">Point</a>) : Number</span><ul class="summary"><li>Determines the angle/degree between the first and second point.</li></ul></li></ul></div><div class="memberSummaryPart"><span class="title">Instance methods</span><ul class="sortable" id="sortul3"><li class="sortli listnum1"><a href="#getX">getX</a><span class="typeInfo">  : Number</span></li><li class="sortli listnum2"><a href="#setX">setX</a><span class="typeInfo"> (x:Number) : Void</span><ul class="summary"><li><div class="inheritDoc">Sets the X coordinate.</li></ul></li><li class="sortli listnum3"><a href="#getY">getY</a><span class="typeInfo">  : Number</span></li><li class="sortli listnum4"><a href="#setY">setY</a><span class="typeInfo"> (y:Number) : Void</span><ul class="summary"><li><div class="inheritDoc">Sets the Y coordinate.</li></ul></li><li class="sortli listnum5"><a href="#offset">offset</a><span class="typeInfo"> (x:Number, y:Number) : Void</span><ul class="summary"><li>Offsets the Point object by the specified amount.</li></ul></li><li class="sortli listnum6"><a href="#rotate">rotate</a><span class="typeInfo"> (pointObject:<a class="className" href="org_casalib_math_geom_Point.html">Point</a>, angle:Number) : Void</span><ul class="summary"><li>Rotate the Point object around another point by the specified angle.</li></ul></li><li class="sortli listnum7"><a href="#equals">equals</a><span class="typeInfo"> (pointObject:<a class="className" href="org_casalib_math_geom_Point.html">Point</a>) : Boolean</span><ul class="summary"><li>Determines whether the point specified in the pointObject parameter is equal to this point object.</li></ul></li><li class="sortli listnum8"><a href="#clone">clone</a><span class="typeInfo">  : <a class="className" href="org_casalib_math_geom_Point.html">Point</a></span></li><li class="sortli listnum9"><a href="#destroy">destroy</a><span class="typeInfo">  : Void</span><ul class="summary"><li><div class="inheritDoc">Removes any internal variables, intervals, enter frames, internal MovieClips and event observers to allow the object to be garbage collected.</li></ul></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_core_CoreObject.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_core_CoreObject.html#destroy">destroy</a>  <a href="org_casalib_core_CoreObject.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Constructor">Constructor</h2><div class="member" id="Point"><h3>Point</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>Point</b> (
+
+</div><div class="code">x:Number,
+y:Number)</div><br class="clear" /></div></div><div class="description"> Creates point object. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">x<span class="itemSeparator">:</span></div><div>The horizontal coordinate of the point.</div></div><div class="item"><div class="floatbox code colorizedCode">y<span class="itemSeparator">:</span></div><div>The vertical coordinate of the point.</div></div></div></div></div></div></div><div class="memberSection"><h2 id="Classmethods">Class methods</h2><div class="member" id="angle"><h3>angle</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>angle</b> (
+
+</div><div class="code">firstPoint:<a class="className" href="org_casalib_math_geom_Point.html">Point</a>,
+secondPoint:<a class="className" href="org_casalib_math_geom_Point.html">Point</a>) : Number</div><br class="clear" /></div></div><div class="description"> Determines the angle/degree between the first and second point. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">firstPoint <span class="itemSeparator">:</span></div><div>The first point.</div></div><div class="item"><div class="floatbox code colorizedCode">secondPoint<span class="itemSeparator">:</span></div><div>The second point.</div></div></div></div></div></div><div class="member" id="distance"><h3>distance</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>distance</b> (
+
+</div><div class="code">firstPoint:<a class="className" href="org_casalib_math_geom_Point.html">Point</a>,
+secondPoint:<a class="className" href="org_casalib_math_geom_Point.html">Point</a>) : Number</div><br class="clear" /></div></div><div class="description"> Determines the distance between the first and second points. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">firstPoint <span class="itemSeparator">:</span></div><div>The first point.</div></div><div class="item"><div class="floatbox code colorizedCode">secondPoint<span class="itemSeparator">:</span></div><div>The second point.</div></div></div></div></div></div></div><div class="memberSection"><h2 id="Instancemethods">Instance methods</h2><div class="member" id="clone"><h3>clone</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>clone</b> (
+</div><div class="code">) : <a class="className" href="org_casalib_math_geom_Point.html">Point</a></div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> A new point object with the same values as this point. </li></ul></div></div></div></div></div><div class="member" id="destroy"><h3>destroy</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>destroy</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Removes any internal variables, intervals, enter frames, internal MovieClips and event observers to allow the object to be garbage collected.<br />		<br />		<strong>Always call <code>pointObject</code> before deleting last object pointer.</strong></div><a class="followInheritDoc" href="org_casalib_core_CoreInterface.html#destroy">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Overrides:</span><div class="item"><ul><li> <a href="org_casalib_core_CoreObject.html#destroy">org.casalib.core.CoreObject.destroy</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_core_CoreInterface.html#destroy">org.casalib.core.CoreInterface.destroy</a> </li></ul></div></div></div></div></div><div class="member" id="equals"><h3>equals</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>equals</b> (
+</div><div class="code">pointObject:<a class="className" href="org_casalib_math_geom_Point.html">Point</a>) : Boolean</div><br class="clear" /></div></div><div class="description"> Determines whether the point specified in the <code>pointObject</code> parameter is equal to this point object. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">pointObject<span class="itemSeparator">:</span></div><div>A defined <a class="className" href="org_casalib_math_geom_Point.html">Point</a> object.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if shape's location is identical; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div><div class="member" id="getX"><h3>getX</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>getX</b> (
+</div><div class="code">) : Number</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> <div class="inheritDoc">The left X position.</div><a class="followInheritDoc" href="org_casalib_math_geom_PointInterface.html#getX">#</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_math_geom_PointInterface.html#getX">PointInterface.getX</a> </li></ul></div></div></div></div></div><div class="member" id="getY"><h3>getY</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>getY</b> (
+</div><div class="code">) : Number</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> <div class="inheritDoc">The top Y position.</div><a class="followInheritDoc" href="org_casalib_math_geom_PointInterface.html#getY">#</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_math_geom_PointInterface.html#getY">PointInterface.getY</a> </li></ul></div></div></div></div></div><div class="member" id="offset"><h3>offset</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>offset</b> (
+
+</div><div class="code">x:Number,
+y:Number) : Void</div><br class="clear" /></div></div><div class="description"> Offsets the Point object by the specified amount. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">x<span class="itemSeparator">:</span></div><div>The amount by which to offset the horizontal coordinate.</div></div><div class="item"><div class="floatbox code colorizedCode">y<span class="itemSeparator">:</span></div><div>The amount by which to offset the vertical coordinate.</div></div></div></div></div></div><div class="member" id="rotate"><h3>rotate</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>rotate</b> (
+
+</div><div class="code">pointObject:<a class="className" href="org_casalib_math_geom_Point.html">Point</a>,
+angle:Number) : Void</div><br class="clear" /></div></div><div class="description"> Rotate the Point object around another point by the specified angle. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">pointObject<span class="itemSeparator">:</span></div><div>The Point to rotate this point around.</div></div><div class="item"><div class="floatbox code colorizedCode">angle      <span class="itemSeparator">:</span></div><div>The angle (in degrees) to rotate this point.</div></div></div></div></div></div><div class="member" id="setX"><h3>setX</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>setX</b> (
+</div><div class="code">x:Number) : Void</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Sets the X coordinate.</div><a class="followInheritDoc" href="org_casalib_math_geom_PointInterface.html#setX">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">x<span class="itemSeparator">:</span></div><div><div class="inheritDoc">The horizontal coordinate of the point.</div><a class="followInheritDoc" href="org_casalib_math_geom_PointInterface.html#setX">#</a></div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_math_geom_PointInterface.html#setX">PointInterface.setX</a> </li></ul></div></div></div></div></div><div class="member" id="setY"><h3>setY</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>setY</b> (
+</div><div class="code">y:Number) : Void</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Sets the Y coordinate.</div><a class="followInheritDoc" href="org_casalib_math_geom_PointInterface.html#setY">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">y<span class="itemSeparator">:</span></div><div><div class="inheritDoc">The vertical coordinate of the point.</div><a class="followInheritDoc" href="org_casalib_math_geom_PointInterface.html#setY">#</a></div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_math_geom_PointInterface.html#setY">PointInterface.setY</a> </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

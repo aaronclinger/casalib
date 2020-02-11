@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>VarsLoad</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_load_data_VarsLoad"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Instanceproperties" accesskey="l">Instance <span class="accessKey">p</span>roperties</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li></ul><br class="clear" /></div><h1>VarsLoad</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_load_base_DataLoad.html">DataLoad</a> &lt; <a class="className" href="org_casalib_load_base_BytesLoad.html">BytesLoad</a> &lt; <a class="className" href="org_casalib_load_base_RetryableLoad.html">RetryableLoad</a> &lt; <a class="className" href="org_casalib_load_base_Load.html">Load</a> &lt; <a class="className" href="org_casalib_event_EventDispatcher.html">EventDispatcher</a> &lt; <a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">07/17/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.load.data.VarsLoad</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.load.base.DataLoad;
+
+/**
+    Creates an easy way to load or send and load variables.
+    
+    @author Aaron Clinger
+    @version 07/17/07
+    @since Flash Player 7
+    @example
+        To load data:
+        &lt;code>
+            function onVarsLoad(sender:VarsLoad):Void {
+                trace(this.myVarsLoad.getValue("name"));
+            }
+            
+            var myVarsLoad:VarsLoad = new VarsLoad("http://example.com/getData.php");
+            myVarsLoad.addEventObserver(this, VarsLoad.EVENT_LOAD_COMPLETE, "onVarsLoad");
+            myVarsLoad.start();
+        &lt;/code>
+        
+        To send and load data:
+        &lt;code>
+            function onVarsLoad(sender:VarsLoad):Void {
+                trace(this.myVarsLoad.getValue("city"));
+            }
+            
+            var myVarsLoad:VarsLoad = new VarsLoad("http://example.com/getData.php");
+            myVarsLoad.addEventObserver(this, VarsLoad.EVENT_LOAD_COMPLETE, "onVarsLoad");
+            myVarsLoad.setValue("zip", "94109");
+            myVarsLoad.setValue("state", "CA");
+            myVarsLoad.start();
+        &lt;/code>
+*/
+
+class org.casalib.load.data.VarsLoad extends DataLoad {
+    private var $target:LoadVars;
+    private var $receive:LoadVars;
+    
+    
+    /**
+        Defines file and location of load triggered by {@link Load#start start}.
+        
+        @param path: The absolute or relative URL of the variables to be loaded.
+        @param method: &lt;strong>[optional]&lt;/strong> Defines the method of the HTTP protocol, either &lt;code>"GET"&lt;/code> of &lt;code>"POST"&lt;/code>; defaults to &lt;code>"POST"&lt;/code>.
+    */
+    public function VarsLoad(path:String, method:String) {
+        super(path, method);
+        
+        this.$target  = new LoadVars();
+        this.$receive = new LoadVars();
+        
+        this.$setClassDescription('org.casalib.load.data.VarsLoad');
+    }
+    
+    /**
+        Sets a name-value pair to send to the server side script.
+        
+        @param name: The name of the variable.
+        @param value: The value of the variable.
+    */
+    public function setValue(name:String, value:String):Void {
+        this.$target[name]  = value;
+        this.$passingValues = true;
+    }
+    
+    /**
+        Gets the value of a name-value pair defined by loaded variables, if any; or defined by {@link #setValue}.
+        
+        @param name: The name of the variable.
+        @return The value of the variable.
+    */
+    public function getValue(name:String):String {
+        return (this.$receive[name] != undefined) ? this.$receive[name] : this.$target[name];
+    }
+    
+    /**
+        Gets the LoadVars object defined by the loaded variables, if loaded; or the the LoadVars object populated by {@link #setValue}, if not loaded.
+        
+        @return Returns the LoadVars object.
+    */
+    public function getLoadVars():LoadVars {
+        return (this.$receive.loaded) ? this.$receive : this.$target;
+    }
+    
+    private function $onData(src:String):Void {
+        if (src != undefined) {
+            if (this.$passingValues)
+                this.$receive.decode(src);
+            else
+                this.$target.decode(src);
+        }
+        
+        super.$onData(src);
+    }
+}
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Creates an easy way to load or send and load variables.</span><div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Since:</span><div class="item"><ul><li> Flash Player 7 </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> To load data:<br />		<pre>
+<span class="codeKeyword">function</span> onVarsLoad(sender:VarsLoad):<span class="codeIdentifier">Void</span> {
+    <span class="codeIdentifier">trace</span>(<span class="codeIdentifier">this</span>.myVarsLoad.getValue(<span class="codeString">"name"</span>));
+}
+
+<span class="codeKeyword">var</span> myVarsLoad:VarsLoad = <span class="codeKeyword">new</span> VarsLoad(<span class="codeString">"http://example.com/getData.php"</span>);
+myVarsLoad.addEventObserver(<span class="codeIdentifier">this</span>, VarsLoad.EVENT_LOAD_COMPLETE, <span class="codeString">"onVarsLoad"</span>);
+myVarsLoad<span class="codeIdentifier">.start</span>();</pre>		<br />		To send and load data:<br />		<pre>
+<span class="codeKeyword">function</span> onVarsLoad(sender:VarsLoad):<span class="codeIdentifier">Void</span> {
+    <span class="codeIdentifier">trace</span>(<span class="codeIdentifier">this</span>.myVarsLoad.getValue(<span class="codeString">"city"</span>));
+}
+
+<span class="codeKeyword">var</span> myVarsLoad:VarsLoad = <span class="codeKeyword">new</span> VarsLoad(<span class="codeString">"http://example.com/getData.php"</span>);
+myVarsLoad.addEventObserver(<span class="codeIdentifier">this</span>, VarsLoad.EVENT_LOAD_COMPLETE, <span class="codeString">"onVarsLoad"</span>);
+myVarsLoad.setValue(<span class="codeString">"zip"</span>, <span class="codeString">"94109"</span>);
+myVarsLoad.setValue(<span class="codeString">"state"</span>, <span class="codeString">"CA"</span>);
+myVarsLoad<span class="codeIdentifier">.start</span>();</pre> </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Constructor</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#VarsLoad">VarsLoad</a><span class="typeInfo"> (path:String, method:String)</span><ul class="summary"><li>Defines file and location of load triggered by start.</li></ul></li></ul></div><div class="memberSummaryPart"><span class="title">Class properties</span><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Class properties inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_DataLoad.html">DataLoad</a></span></span><div class="item inheritedList"><a href="org_casalib_load_base_DataLoad.html#EVENT_DATA">EVENT_DATA</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Class properties inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_BytesLoad.html">BytesLoad</a></span></span><div class="item inheritedList"><a href="org_casalib_load_base_BytesLoad.html#EVENT_INSTANTIATE">EVENT_INSTANTIATE</a>  <a href="org_casalib_load_base_BytesLoad.html#EVENT_LOAD_PROGRESS">EVENT_LOAD_PROGRESS</a>  <a href="org_casalib_load_base_BytesLoad.html#loadTimeout">loadTimeout</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Class properties inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_RetryableLoad.html">RetryableLoad</a></span></span><div class="item inheritedList"><a href="org_casalib_load_base_RetryableLoad.html#EVENT_LOAD_RETRY">EVENT_LOAD_RETRY</a>  <a href="org_casalib_load_base_RetryableLoad.html#loadRetries">loadRetries</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Class properties inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_Load.html">Load</a></span></span><div class="item inheritedList"><a href="org_casalib_load_base_Load.html#EVENT_LOAD_COMPLETE">EVENT_LOAD_COMPLETE</a>  <a href="org_casalib_load_base_Load.html#EVENT_LOAD_ERROR">EVENT_LOAD_ERROR</a>  <a href="org_casalib_load_base_Load.html#EVENT_LOAD_INIT">EVENT_LOAD_INIT</a>  <a href="org_casalib_load_base_Load.html#EVENT_LOAD_START">EVENT_LOAD_START</a></div></div></div></div></div><div class="memberSummaryPart"><span class="title">Instance methods</span><ul class="sortable" id="sortul3"><li class="sortli listnum1"><a href="#setValue">setValue</a><span class="typeInfo"> (name:String, value:String) : Void</span><ul class="summary"><li>Sets a name-value pair to send to the server side script.</li></ul></li><li class="sortli listnum2"><a href="#getValue">getValue</a><span class="typeInfo"> (name:String) : String</span><ul class="summary"><li>Gets the value of a name-value pair defined by loaded variables, if any; or defined by setValue.</li></ul></li><li class="sortli listnum3"><a href="#getLoadVars">getLoadVars</a><span class="typeInfo">  : LoadVars</span><ul class="summary"><li>Gets the LoadVars object defined by the loaded variables, if loaded; or the the LoadVars object populated by setValue, if not loaded.</li></ul></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_DataLoad.html">DataLoad</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_load_base_DataLoad.html#$checkForLoadComplete">$checkForLoadComplete</a>  <a class="private" href="org_casalib_load_base_DataLoad.html#$onData">$onData</a>  <a class="private" href="org_casalib_load_base_DataLoad.html#$onLoad">$onLoad</a>  <a class="private" href="org_casalib_load_base_DataLoad.html#$remapOnDataHandler">$remapOnDataHandler</a>  <a class="private" href="org_casalib_load_base_DataLoad.html#$startLoad">$startLoad</a>  <a class="private" href="org_casalib_load_base_DataLoad.html#$stopLoad">$stopLoad</a>  <a href="org_casalib_load_base_DataLoad.html#addRequestHeader">addRequestHeader</a>  <a href="org_casalib_load_base_DataLoad.html#destroy">destroy</a>  <a href="org_casalib_load_base_DataLoad.html#getBytesLoaded">getBytesLoaded</a>  <a href="org_casalib_load_base_DataLoad.html#getBytesTotal">getBytesTotal</a>  <a href="org_casalib_load_base_DataLoad.html#hasLoaded">hasLoaded</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_BytesLoad.html">BytesLoad</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_load_base_BytesLoad.html#$checkForLoadComplete">$checkForLoadComplete</a>  <a class="private" href="org_casalib_load_base_BytesLoad.html#$checkLoadProgress">$checkLoadProgress</a>  <a class="private" href="org_casalib_load_base_BytesLoad.html#$clean">$clean</a>  <a class="private" href="org_casalib_load_base_BytesLoad.html#$loadProgress">$loadProgress</a>  <a class="private" href="org_casalib_load_base_BytesLoad.html#$onComplete">$onComplete</a>  <a class="private" href="org_casalib_load_base_BytesLoad.html#$retryLoad">$retryLoad</a>  <a class="private" href="org_casalib_load_base_BytesLoad.html#$startLoad">$startLoad</a>  <a href="org_casalib_load_base_BytesLoad.html#destroy">destroy</a>  <a href="org_casalib_load_base_BytesLoad.html#getBytesLoaded">getBytesLoaded</a>  <a href="org_casalib_load_base_BytesLoad.html#getBytesTotal">getBytesTotal</a>  <a href="org_casalib_load_base_BytesLoad.html#setLoadTimeout">setLoadTimeout</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_RetryableLoad.html">RetryableLoad</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_load_base_RetryableLoad.html#$clean">$clean</a>  <a class="private" href="org_casalib_load_base_RetryableLoad.html#$onLoad">$onLoad</a>  <a class="private" href="org_casalib_load_base_RetryableLoad.html#$retryLoad">$retryLoad</a>  <a class="private" href="org_casalib_load_base_RetryableLoad.html#$startLoad">$startLoad</a>  <a href="org_casalib_load_base_RetryableLoad.html#destroy">destroy</a>  <a href="org_casalib_load_base_RetryableLoad.html#setLoadRetries">setLoadRetries</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_Load.html">Load</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_load_base_Load.html#$clean">$clean</a>  <a class="private" href="org_casalib_load_base_Load.html#$onComplete">$onComplete</a>  <a class="private" href="org_casalib_load_base_Load.html#$onInitialized">$onInitialized</a>  <a class="private" href="org_casalib_load_base_Load.html#$onLoad">$onLoad</a>  <a class="private" href="org_casalib_load_base_Load.html#$remapOnLoadHandler">$remapOnLoadHandler</a>  <a class="private" href="org_casalib_load_base_Load.html#$startLoad">$startLoad</a>  <a class="private" href="org_casalib_load_base_Load.html#$stopLoad">$stopLoad</a>  <a href="org_casalib_load_base_Load.html#destroy">destroy</a>  <a href="org_casalib_load_base_Load.html#getFilePath">getFilePath</a>  <a href="org_casalib_load_base_Load.html#hasLoaded">hasLoaded</a>  <a href="org_casalib_load_base_Load.html#isLoading">isLoading</a>  <a href="org_casalib_load_base_Load.html#start">start</a>  <a href="org_casalib_load_base_Load.html#stop">stop</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_event_EventDispatcher.html">EventDispatcher</a></span></span><div class="item inheritedList"><a href="org_casalib_event_EventDispatcher.html#addEventObserver">addEventObserver</a>  <a href="org_casalib_event_EventDispatcher.html#destroy">destroy</a>  <a href="org_casalib_event_EventDispatcher.html#dispatchEvent">dispatchEvent</a>  <a href="org_casalib_event_EventDispatcher.html#removeAllEventObservers">removeAllEventObservers</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserver">removeEventObserver</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForEvent">removeEventObserversForEvent</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForScope">removeEventObserversForScope</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_core_CoreObject.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_core_CoreObject.html#destroy">destroy</a>  <a href="org_casalib_core_CoreObject.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Constructor">Constructor</h2><div class="member" id="VarsLoad"><h3>VarsLoad</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>VarsLoad</b> (
+
+</div><div class="code">path:String,
+method:String)</div><br class="clear" /></div></div><div class="description"> Defines file and location of load triggered by <a href="org_casalib_load_base_Load.html#start">start</a>. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">path  <span class="itemSeparator">:</span></div><div>The absolute or relative URL of the variables to be loaded.</div></div><div class="item"><div class="floatbox code colorizedCode">method<span class="itemSeparator">:</span></div><div><strong>[optional]</strong> Defines the method of the HTTP protocol, either <code><span class="codeString">"GET"</span></code> of <code><span class="codeString">"POST"</span></code>; defaults to <code><span class="codeString">"POST"</span></code>.</div></div></div></div></div></div></div><div class="memberSection"><h2 id="Instancemethods">Instance methods</h2><div class="member" id="getLoadVars"><h3>getLoadVars</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>getLoadVars</b> (
+</div><div class="code">) : LoadVars</div><br class="clear" /></div></div><div class="description"> Gets the LoadVars object defined by the loaded variables, if loaded; or the the LoadVars object populated by <a href="org_casalib_load_data_VarsLoad.html#setValue">setValue</a>, if not loaded. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the LoadVars object. </li></ul></div></div></div></div></div><div class="member" id="getValue"><h3>getValue</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>getValue</b> (
+</div><div class="code">name:String) : String</div><br class="clear" /></div></div><div class="description"> Gets the value of a name-value pair defined by loaded variables, if any; or defined by <a href="org_casalib_load_data_VarsLoad.html#setValue">setValue</a>. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">name<span class="itemSeparator">:</span></div><div>The name of the variable.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> The value of the variable. </li></ul></div></div></div></div></div><div class="member" id="setValue"><h3>setValue</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>setValue</b> (
+
+</div><div class="code">name:String,
+value:String) : Void</div><br class="clear" /></div></div><div class="description"> Sets a name-value pair to send to the server side script. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">name <span class="itemSeparator">:</span></div><div>The name of the variable.</div></div><div class="item"><div class="floatbox code colorizedCode">value<span class="itemSeparator">:</span></div><div>The value of the variable.</div></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

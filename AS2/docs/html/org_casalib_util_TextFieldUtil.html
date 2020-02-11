@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>TextFieldUtil</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_util_TextFieldUtil"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classmethods" accesskey="a">Cl<span class="accessKey">a</span>ss methods</a></li></ul><br class="clear" /></div><h1>TextFieldUtil</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td>none</td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">08/02/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger, Mike Creighton</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.util.TextFieldUtil</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+/**
+    @author Aaron Clinger
+    @author Mike Creighton
+    @version 08/02/07
+*/
+
+class org.casalib.util.TextFieldUtil {
+    
+    /**
+        Determines if textfield has more text than can be displayed at once.
+        
+        @param target_txt: Textfield or {@link CoreTextField} to check for text overflow.
+        @return Returns &lt;code>true&lt;/code> if textfield has overflow text; otherwise &lt;code>false&lt;/code>.
+    */
+    public static function hasOverFlow(target_txt:Object):Boolean {
+        return target_txt.maxscroll > 1;
+    }
+    
+    /**
+        Removes text overflow on a plain text textfield with the option of an ommission indicator.
+        
+        @param target_txt: Textfield or {@link CoreTextField} to remove overflow.
+        @param omissionIndicator: &lt;strong>[optional]&lt;/strong> Text indication that an omission has occured; normally &lt;code>"..."&lt;/code>; defaults to no indication.
+        @return Returns the omitted text; if there was no text ommitted function returns a empty String (&lt;code>""&lt;/code>).
+    */
+    public static function removeOverFlow(target_txt:Object, omissionIndicator:String):String {
+        if (!TextFieldUtil.hasOverFlow(target_txt))
+            return '';
+        
+        if (omissionIndicator == undefined)
+            omissionIndicator = '';
+        
+        var originalCopy:String        = target_txt.text;
+        var lines:Array                = target_txt.text.split('. ');
+        var isStillOverflowing:Boolean = false;
+        var words:Array;
+        var lastSentence:String;
+        var sentences:String;
+        var overFlow:String;
+        
+        while (TextFieldUtil.hasOverFlow(target_txt)) {
+            lastSentence    = String(lines.pop());
+            target_txt.text = (lines.length == 0) ? '' : lines.join('. ') + '. ';
+        }
+        
+        sentences         = (lines.length == 0) ? '' : lines.join('. ') + '. ';
+        words             = lastSentence.split(' ');
+        target_txt.text  += lastSentence;
+        
+        while (TextFieldUtil.hasOverFlow(target_txt)) {
+            if (words.length == 0) {
+                isStillOverflowing = true;
+                break;
+            } else {
+                words.pop();
+                
+                if (words.length == 0)
+                    target_txt.text = sentences.substr(0, -1) + omissionIndicator;
+                else
+                    target_txt.text = sentences + words.join(' ') + omissionIndicator;
+            }
+        }
+        
+        if (isStillOverflowing) {
+            words = target_txt.text.split(' ');
+            
+            while (TextFieldUtil.hasOverFlow(target_txt)) {
+                words.pop();
+                target_txt.text = words.join(' ') + omissionIndicator;
+            }
+        }
+        
+        overFlow = originalCopy.substring(target_txt.text.length);
+        
+        return (overFlow.charAt(0) == ' ') ? overFlow.substring(1) : overFlow;
+    }
+    
+    private function TextFieldUtil() {} // Prevents instance creation
+}
+
+</textarea></div></div></div><div class="classDescription"></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class methods</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#hasOverFlow">hasOverFlow</a><span class="typeInfo"> (target_txt:Object) : Boolean</span><ul class="summary"><li>	Determines if textfield has more text than can be displayed at once.</li></ul></li><li class="sortli listnum2"><a href="#removeOverFlow">removeOverFlow</a><span class="typeInfo"> (target_txt:Object, omissionIndicator:String) : String</span><ul class="summary"><li>Removes text overflow on a plain text textfield with the option of an ommission indicator.</li></ul></li></ul></div></div></div><div class="memberSection"><h2 id="Classmethods">Class methods</h2><div class="member" id="hasOverFlow"><h3>hasOverFlow</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>hasOverFlow</b> (
+</div><div class="code">target_txt:Object) : Boolean</div><br class="clear" /></div></div><div class="description"> 	Determines if textfield has more text than can be displayed at once. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">target_txt<span class="itemSeparator">:</span></div><div>Textfield or <a class="className" href="org_casalib_textfield_CoreTextField.html">org.casalib.textfield.CoreTextField</a> to check for text overflow.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if textfield has overflow text; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div><div class="member" id="removeOverFlow"><h3>removeOverFlow</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>removeOverFlow</b> (
+
+</div><div class="code">target_txt:Object,
+omissionIndicator:String) : String</div><br class="clear" /></div></div><div class="description"> Removes text overflow on a plain text textfield with the option of an ommission indicator. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">target_txt       <span class="itemSeparator">:</span></div><div>Textfield or <a class="className" href="org_casalib_textfield_CoreTextField.html">org.casalib.textfield.CoreTextField</a> to remove overflow.</div></div><div class="item"><div class="floatbox code colorizedCode">omissionIndicator<span class="itemSeparator">:</span></div><div><strong>[optional]</strong> Text indication that an omission has occured; normally <code><span class="codeString">"..."</span></code>; defaults to no indication.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the omitted text; if there was no text ommitted function returns a empty String (<code>""</code>). </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

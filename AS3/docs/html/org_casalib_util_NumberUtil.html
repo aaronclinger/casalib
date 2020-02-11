@@ -1,0 +1,2164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" encoding="utf-8">
+	<head>
+		<title>NumberUtil | CASA Lib AS3 Docs</title>
+		<link rel="stylesheet" type="text/css" href="../css/shCoreDefault.min.css" />
+		<link rel="stylesheet" type="text/css" href="../css/VisDoc.min.css" />
+		<script type="text/javascript" src="../js/1_jquery.min.js"></script>
+		<script type="text/javascript" src="../js/2_jquery.cookie.min.js"></script>
+		<script type="text/javascript" src="../js/3_jquery.simpletreeview.min.js"></script>
+		<script type="text/javascript" src="../js/4_shCore.min.js"></script>
+		<script type="text/javascript" src="../js/5_shBrushAS3.min.js"></script>
+		<script type="text/javascript" src="../js/6_shBrushJava.min.js"></script>
+		<script type="text/javascript" src="../js/7_VisDoc.min.js"></script>
+	</head>
+	<body class='isShowingNavigation' id='page_org_casalib_util_NumberUtil'>
+	    <div id='page'> 
+			<div id='wrapper'>
+				<div id='outer'> 
+					<div id='floatWrap'> 
+						<div id='main'>
+							<div id='clearHeaderCenter'></div> 
+							<div id='mainContent'>
+																<h1>NumberUtil</h1>									<div class='classProperties'>
+		<table cellspacing='0'>
+				<tr>
+		<th>Kind of class:</th>
+		<td>public class</td>
+	</tr>
+							<tr>
+		<th>Package:</th>
+		<td>
+			<ul>
+								<li>			<a href="package_org_casalib_util.html">org.casalib.util</a>
+</li>
+							</ul>
+		</td>
+	</tr>
+							<tr>
+		<th>Inherits from:</th>
+		<td>
+			<ul>
+								<li>			none</li>
+							</ul>
+		</td>
+	</tr>
+																<tr>
+		<th class='classDetails'>Version:</th>
+		<td class='classDetails'>05/19/11</td>
+	</tr>
+	<tr>
+		<th class='classDetails'>Author:</th>
+		<td class='classDetails'>Aaron Clinger, David Nelson, Mike Creighton</td>
+	</tr>
+	<tr>
+		<th class='classDetails'>Classpath:</th>
+		<td class='classDetails'>org.casalib.util.NumberUtil</td>
+	</tr>
+	<tr>
+		<th class='classDetails'>File last modified:</th>
+		<td class='classDetails'>Friday, 20 May 2011, 00:59:45</td>
+	</tr>
+		</table>
+	</div>
+	<div class='sourceCode'>
+				<span class='sourceCodeShow'><a href="#"><span class='closure'>&#9658;&nbsp;</span><span class='linkLabel'>View source</span></a></span><span class='sourceCodeHide'><a href="#"><span class='disclosure'>&#9660;&nbsp;</span><span class='linkLabel'>Hide source</span></a></span>	<pre id="source" class="brush:as3">/*
+    CASA Lib for ActionScript 3.0
+    Copyright (c) 2011, Aaron Clinger & Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+package org.casalib.util {
+    import org.casalib.math.Percent;
+    
+    
+    /**
+        Provides utility functions for manipulating numbers.
+        
+        @author Aaron Clinger
+        @author David Nelson
+        @author Mike Creighton
+        @version 05/19/11
+    */
+    public class NumberUtil {
+        
+        /**
+            Determines if the two values are equal, with the option to define the precision.
+            
+            @param val1: A value to compare.
+            @param val2: A value to compare.
+            @param precision: The maximum amount the two values can differ and still be considered equal.
+            @return Returns <code>true</code> the values are equal; otherwise <code>false</code>.
+            @example
+                <code>
+                    trace(NumberUtil.isEqual(3.042, 3, 0)); // Traces false
+                    trace(NumberUtil.isEqual(3.042, 3, 0.5)); // Traces true
+                </code>
+        */
+        public static function isEqual(val1:Number, val2:Number, precision:Number = 0):Boolean {
+            return Math.abs(val1 - val2) <= Math.abs(precision);
+        }
+        
+        /**
+            Evaluates <code>val1</code> and <code>val2</code> and returns the smaller value. Unlike <code>Math.min</code> this method will return the defined value if the other value is <code>null</code> or not a number.
+            
+            @param val1: A value to compare.
+            @param val2: A value to compare.
+            @return Returns the smallest value, or the value out of the two that is defined and valid.
+            @example
+                <code>
+                    trace(NumberUtil.min(5, null)); // Traces 5
+                    trace(NumberUtil.min(5, "CASA")); // Traces 5
+                    trace(NumberUtil.min(5, 13)); // Traces 5
+                </code>
+        */
+        public static function min(val1:*, val2:*):Number {
+            if (isNaN(val1) && isNaN(val2) || val1 == null && val2 == null)
+                return NaN;
+            
+            if (val1 == null || val2 == null)
+                return (val2 == null) ? val1 : val2;
+            
+            if (isNaN(val1) || isNaN(val2))
+                return isNaN(val2) ? val1 : val2;
+            
+            return Math.min(val1, val2);
+        }
+        
+        /**
+            Evaluates <code>val1</code> and <code>val2</code> and returns the larger value. Unlike <code>Math.max</code> this method will return the defined value if the other value is <code>null</code> or not a number.
+            
+            @param val1: A value to compare.
+            @param val2: A value to compare.
+            @return Returns the largest value, or the value out of the two that is defined and valid.
+            @example
+                <code>
+                    trace(NumberUtil.max(-5, null)); // Traces -5
+                    trace(NumberUtil.max(-5, "CASA")); // Traces -5
+                    trace(NumberUtil.max(-5, -13)); // Traces -5
+                </code>
+        */
+        public static function max(val1:*, val2:*):Number {
+            if (isNaN(val1) && isNaN(val2) || val1 == null && val2 == null)
+                return NaN;
+            
+            if (val1 == null || val2 == null)
+                return (val2 == null) ? val1 : val2;
+            
+            if (isNaN(val1) || isNaN(val2))
+                return (isNaN(val2)) ? val1 : val2;
+            
+            return Math.max(val1, val2);
+        }
+        
+        /**
+            Creates a random number within the defined range.
+            
+            @param min: The minimum value the random number can be.
+            @param min: The maximum value the random number can be.
+            @return Returns a random number within the range.
+        */
+        public static function randomWithinRange(min:Number, max:Number):Number {
+            return min + (Math.random() * (max - min));
+        }
+        
+        /**
+            Creates a random integer within the defined range.
+            
+            @param min: The minimum value the random integer can be.
+            @param min: The maximum value the random integer can be.
+            @return Returns a random integer within the range.
+        */
+        public static function randomIntegerWithinRange(min:int, max:int):int {
+            return Math.floor(Math.random() * (1 + max - min) + min);
+        }
+        
+        /**
+            Determines if the number is even.
+            
+            @param value: A number to determine if it is divisible by <code>2</code>.
+            @return Returns <code>true</code> if the number is even; otherwise <code>false</code>.
+            @example
+                <code>
+                    trace(NumberUtil.isEven(7)); // Traces false
+                    trace(NumberUtil.isEven(12)); // Traces true
+                </code>
+        */
+        public static function isEven(value:Number):Boolean {
+            return (value & 1) == 0;
+        }
+        
+        /**
+            Determines if the number is odd.
+            
+            @param value: A number to determine if it is not divisible by <code>2</code>.
+            @return Returns <code>true</code> if the number is odd; otherwise <code>false</code>.
+            @example
+                <code>
+                    trace(NumberUtil.isOdd(7)); // Traces true
+                    trace(NumberUtil.isOdd(12)); // Traces false
+                </code>
+        */
+        public static function isOdd(value:Number):Boolean {
+            return !NumberUtil.isEven(value);
+        }
+        
+        /**
+            Determines if the number is an integer.
+            
+            @param value: A number to determine if it contains no decimal values.
+            @return Returns <code>true</code> if the number is an integer; otherwise <code>false</code>.
+            @example
+                <code>
+                    trace(NumberUtil.isInteger(13)); // Traces true
+                    trace(NumberUtil.isInteger(1.2345)); // Traces false
+                </code>
+        */
+        public static function isInteger(value:Number):Boolean {
+            return (value % 1) == 0;
+        }
+        
+        /**
+            Determines if the number is prime.
+            
+            @param value: A number to determine if it is only divisible by <code>1</code> and itself.
+            @return Returns <code>true</code> if the number is prime; otherwise <code>false</code>.
+            @example
+                <code>
+                    trace(NumberUtil.isPrime(13)); // Traces true
+                    trace(NumberUtil.isPrime(4)); // Traces false
+                </code>
+        */
+        public static function isPrime(value:Number):Boolean {
+            if (value == 1 || value == 2)
+                return true;
+            
+            if (NumberUtil.isEven(value))
+                return false;
+            
+            var s:Number = Math.sqrt(value);
+            for (var i:Number = 3; i <= s; i++)
+                if (value % i == 0)
+                    return false;
+            
+            return true;
+        }
+        
+        /**
+            Rounds a number's decimal value to a specific place.
+            
+            @param value: The number to round.
+            @param place: The decimal place to round.
+            @return Returns the value rounded to the defined place. 
+            @example
+                <code>
+                    trace(NumberUtil.roundToPlace(3.14159, 2)); // Traces 3.14
+                    trace(NumberUtil.roundToPlace(3.14159, 3)); // Traces 3.142
+                </code>
+        */
+        public static function roundDecimalToPlace(value:Number, place:uint):Number {
+            var p:Number = Math.pow(10, place);
+            
+            return Math.round(value * p) / p;
+        }
+        
+        /**
+            Determines if index is included within the collection length otherwise the index loops to the beginning or end of the range and continues.
+            
+            @param index: Index to loop if needed.
+            @param length: The total elements in the collection.
+            @return A valid zero-based index.
+            @example
+                <code>
+                    var colors:Array = new Array("Red", "Green", "Blue");
+                    
+                    trace(colors[NumberUtil.loopIndex(2, colors.length)]); // Traces Blue
+                    trace(colors[NumberUtil.loopIndex(4, colors.length)]); // Traces Green
+                    trace(colors[NumberUtil.loopIndex(-6, colors.length)]); // Traces Red
+                </code>
+        */
+        public static function loopIndex(index:int, length:uint):uint {
+            if (index < 0)
+                index = length + index % length;
+            
+            if (index >= length)
+                return index % length;
+            
+            return index;
+        }
+        
+        /**
+            Determines if the value is included within a range.
+            
+            @param value: Number to determine if it is included in the range.
+            @param firstValue: First value of the range.
+            @param secondValue: Second value of the range.
+            @return Returns <code>true</code> if the number falls within the range; otherwise <code>false</code>.
+            @usageNote The range values do not need to be in order.
+            @example
+                <code>
+                    trace(NumberUtil.isBetween(3, 0, 5)); // Traces true
+                    trace(NumberUtil.isBetween(7, 0, 5)); // Traces false
+                </code>
+        */
+        public static function isBetween(value:Number, firstValue:Number, secondValue:Number):Boolean {
+            return !(value < Math.min(firstValue, secondValue) || value > Math.max(firstValue, secondValue));
+        }
+        
+        /**
+            Determines if value falls within a range; if not it is snapped to the nearest range value.
+            
+            @param value: Number to determine if it is included in the range.
+            @param firstValue: First value of the range.
+            @param secondValue: Second value of the range.
+            @return Returns either the number as passed, or its value once snapped to nearest range value.
+            @usageNote The constraint values do not need to be in order.
+            @example
+                <code>
+                    trace(NumberUtil.constrain(3, 0, 5)); // Traces 3
+                    trace(NumberUtil.constrain(7, 0, 5)); // Traces 5
+                </code>
+        */
+        public static function constrain(value:Number, firstValue:Number, secondValue:Number):Number {
+            return Math.min(Math.max(value, Math.min(firstValue, secondValue)), Math.max(firstValue, secondValue));
+        }
+        
+        /**
+            Creates evenly spaced numerical increments between two numbers.
+            
+            @param begin: The starting value.
+            @param end: The ending value.
+            @param steps: The number of increments between the starting and ending values.
+            @return Returns an Array comprised of the increments between the two values.
+            @example
+                <code>
+                    trace(NumberUtil.createStepsBetween(0, 5, 4)); // Traces 1,2,3,4
+                    trace(NumberUtil.createStepsBetween(1, 3, 3)); // Traces 1.5,2,2.5
+                </code>
+        */
+        public static function createStepsBetween(begin:Number, end:Number, steps:Number):Array {
+            steps++;
+            
+            var i:uint = 0;
+            var stepsBetween:Array = new Array();
+            var increment:Number = (end - begin) / steps;
+            
+            while (++i < steps)
+                stepsBetween.push((i * increment) + begin);
+            
+            return stepsBetween;
+        }
+        
+        /**
+            Determines a value between two specified values.
+            
+            @param amount: The level of interpolation between the two values. If <code>0%</code>, <code>begin</code> value is returned; if <code>100%</code>, <code>end</code> value is returned.
+            @param begin: The starting value.
+            @param end: The ending value.
+            @example
+                <code>
+                    trace(NumberUtil.interpolate(new Percent(0.5), 0, 10)); // Traces 5
+                </code>
+        */
+        public static function interpolate(amount:Percent, begin:Number, end:Number):Number {
+            return begin + (end - begin) * amount.decimalPercentage;
+        }
+        
+        /**
+            Determines a percentage of a value in a given range.
+            
+            @param value: The value to be converted.
+            @param minimum: The lower value of the range.
+            @param maximum: The upper value of the range.
+            @example
+                <code>
+                    trace(NumberUtil.normalize(8, 4, 20).decimalPercentage); // Traces 0.25
+                </code>
+        */
+        public static function normalize(value:Number, minimum:Number, maximum:Number):Percent {
+            return new Percent((value - minimum) / (maximum - minimum));
+        }
+        
+        /**
+            Maps a value from one coordinate space to another.
+            
+            @param value: Value from the input coordinate space to map to the output coordinate space.
+            @param min1: Starting value of the input coordinate space.
+            @param max1: Ending value of the input coordinate space.
+            @param min2: Starting value of the output coordinate space.
+            @param max2: Ending value of the output coordinate space.
+            @example
+                <code>
+                    trace(NumberUtil.map(0.75, 0, 1, 0, 100)); // Traces 75
+                </code>
+        */
+        public static function map(value:Number, min1:Number, max1:Number, min2:Number, max2:Number):Number {
+            return min2 + (max2 - min2) * ((value - min1) / (max1 - min1));
+        }
+        
+        /**
+            Low pass filter alogrithm for easing a value toward a destination value. Works best for tweening values when no definite time duration exists and when the destination value changes.
+            
+            If <code>(0.5 < n < 1)</code>, then the resulting values will overshoot (ping-pong) until they reach the destination value. When <code>n</code> is greater than 1, as its value increases, the time it takes to reach the destination also increases. A pleasing value for <code>n</code> is 5.
+            
+            @param value: The current value.
+            @param dest: The destination value.
+            @param n: The slowdown factor.
+            @return The weighted average.
+        */
+        public static function getWeightedAverage(value:Number, dest:Number, n:Number):Number {
+            return value + (dest - value) / n;
+        }
+        
+        /**
+            Formats a number as a string.
+            
+            @param value: The number you wish to format.
+            @param kDelim: The character used to seperate thousands; defaults to <code>""</code>.
+            @param minLength: The minimum length of the number; defaults to <code>0 </code>.
+            @param fillChar: The leading character used to make the number the minimum length; defaults to <code>"0"</code>.
+            @return Returns the formatted number as a String.
+            @example
+                <code>
+                    trace(NumberUtil.format(1234567, ",", 8)); // Traces 01,234,567
+                </code>
+        */
+        public static function format(value:Number, kDelim:String = ",", minLength:uint = 0, fillChar:String = "0"):String {
+            const remainder:Number = value % 1;
+            var num:String         = Math.floor(value).toString();
+            const len:uint         = num.length;
+            
+            if (minLength != 0 && minLength > len) {
+                minLength -= len;
+                
+                const addChar:String = fillChar || '0';
+                
+                while (minLength--)
+                    num = addChar + num;
+            }
+            
+            if (kDelim != null && num.length > 3) {
+                const totalDelim:uint  = Math.floor(num.length / 3);
+                const totalRemain:uint = num.length % 3;
+                const numSplit:Array   = num.split('');
+                var i:int              = -1;
+                
+                while (++i < totalDelim)
+                    numSplit.splice(totalRemain + (4 * i), 0, kDelim);
+                
+                if (totalRemain == 0)
+                    numSplit.shift();
+                
+                num = numSplit.join('');
+            }
+            
+            if (remainder != 0)
+                num += remainder.toString().substr(1);
+            
+            return num;
+        }
+        
+        /**
+            Formats a number as a currency string.
+            
+            @param value: The number you wish to format.
+            @param forceDecimals: If the number should always have two decimal places <code>true</code>, or only show decimals is there is a decimals value <code>false</code>; defaults to <code>true</code>.
+            @param kDelim: The character used to seperate thousands; defaults to <code>","</code>.
+            @return Returns the formatted number as a String.
+            @example
+                <code>
+                    trace(NumberUtil.formatCurrency(1234.5)); // Traces "1,234.50"
+                </code>
+        */
+        public static function formatCurrency(value:Number, forceDecimals:Boolean = true, kDelim:String = ","):String {
+            const remainder:Number = value % 1;
+            var currency:String    = NumberUtil.format(Math.floor(value), kDelim);
+            
+            if (remainder != 0 || forceDecimals)
+                currency += remainder.toFixed(2).substr(1);
+            
+            return currency;
+        } 
+        
+        /**
+            Finds the english ordinal suffix for the number given.
+            
+            @param value: Number to find the ordinal suffix of.
+            @return Returns the suffix for the number, 2 characters.
+            @example
+                <code>
+                    trace(32 + NumberUtil.getOrdinalSuffix(32)); // Traces 32nd
+                </code>
+        */
+        public static function getOrdinalSuffix(value:int):String {
+            if (value >= 10 && value <= 20)
+                return 'th';
+            
+            if (value == 0)
+                return '';
+            
+            switch (value % 10) {
+                case 3 :
+                    return 'rd';
+                case 2 :
+                    return 'nd';
+                case 1 :
+                    return 'st';
+                default :
+                    return 'th';
+            }
+        }
+        
+        /**
+            Adds a leading zero for numbers less than ten.
+            
+            @param value: Number to add leading zero.
+            @return Number as a String; if the number was less than ten the number will have a leading zero.
+            @example
+                <code>
+                    trace(NumberUtil.addLeadingZero(7)); // Traces 07
+                    trace(NumberUtil.addLeadingZero(11)); // Traces 11
+                </code>
+        */
+        public static function addLeadingZero(value:Number):String {
+            return (value < 10) ? '0' + value : value.toString();
+        }
+        
+        /**
+            Spells the provided number.
+            
+            @param value: Number to spell. Needs to be less than 999999999.
+            @return The number spelled out as a String.
+            @throws <code>Error</code> if <code>value</code> is greater than 999999999.
+            @example
+                <code>
+                    trace(NumberUtil.spell(0)); // Traces Zero
+                    trace(NumberUtil.spell(23)); // Traces Twenty-Three
+                    trace(NumberUtil.spell(2005678)); // Traces Two Million, Five Thousand, Six Hundred Seventy-Eight
+                </code>
+        */
+        public static function spell(value:uint):String {
+            if (value > 999999999)
+                throw new Error('Value too large for this method.');
+            
+            const onesSpellings:Array = new Array('', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen');
+            const tensSpellings:Array = new Array('', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety');
+            var spelling:String       = '';
+            
+            const millions:uint = value / 1000000;
+            value              %= 1000000;
+            
+            const thousands:uint = value / 1000;
+            value               %= 1000;
+            
+            const hundreds:uint = value / 100;
+            value              %= 100;
+            
+            const tens:uint = value / 10;
+            value          %= 10;
+            
+            const ones:uint = value % 10;
+            
+            if (millions != 0) {
+                spelling += (spelling.length == 0) ? '' : ', ';
+                spelling += NumberUtil.spell(millions) + ' Million';
+            }
+            
+            if (thousands != 0) {
+                spelling += (spelling.length == 0) ? '' : ', ';
+                spelling += NumberUtil.spell(thousands) + ' Thousand';
+            }
+            
+            if (hundreds != 0) {
+                spelling += (spelling.length == 0) ? '' : ', ';
+                spelling += NumberUtil.spell(hundreds) + ' Hundred';
+            }
+            
+            if (tens != 0 || ones != 0) {
+                spelling += (spelling.length == 0) ? '' : ' ';
+                
+                if (tens < 2)
+                    spelling += onesSpellings[tens * 10 + ones];
+                else {
+                    spelling += tensSpellings[tens];
+                    
+                    if (ones != 0)
+                        spelling += '-' + onesSpellings[ones];
+                }
+            }
+            
+            if (spelling.length == 0)
+                return 'Zero';
+            
+            return spelling;
+        }
+    }
+}</pre>
+</div>
+	<div class='classDescription'>
+	<span class='descriptionSummary'>Provides utility functions for manipulating numbers.</span></div>
+
+									<div class='toc'>
+		<h2 id='Summary'>Summary</h2>
+		<div class='docNav'>
+			<ul>
+									<li>
+						<span class='typeInfoHide'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>&times;</span>Hide type info</a></span>
+						<span class='typeInfoShow'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>+</span>Show type info</a></span>
+					</li>									<li>
+						<span class='summariesHide'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>&times;</span>Hide summaries</a></span>
+						<span class='summariesShow'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>+</span>Show summaries</a></span>
+					</li>			</ul>
+			<div class='clear'></div>
+		</div>
+				<div class='memberList'>
+							<div class='memberSummaryPart'>
+					<span class='title'>Class methods</span>
+					<ul>
+													<li class=''>								
+								<a href="#isEqual">isEqual</a>
+																<span class='typeInfo'>(val1:Number, val2:Number, precision:Number) : Boolean</span>																<ul class='summary'>
+									<li>Determines if the two values are equal, with the option to define the precision.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#min">min</a>
+																<span class='typeInfo'>(val1 = *, val2 = *) : Number</span>																<ul class='summary'>
+									<li>Evaluates val1 and val2 and returns the smaller value. </li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#max">max</a>
+																<span class='typeInfo'>(val1 = *, val2 = *) : Number</span>																<ul class='summary'>
+									<li>Evaluates val1 and val2 and returns the larger value. </li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#randomWithinRange">randomWithinRange</a>
+																<span class='typeInfo'>(min:Number, max:Number) : Number</span>																<ul class='summary'>
+									<li>Creates a random number within the defined range.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#randomIntegerWithinRange">randomIntegerWithinRange</a>
+																<span class='typeInfo'>(min:int, max:int) : int</span>																<ul class='summary'>
+									<li>Creates a random integer within the defined range.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#isEven">isEven</a>
+																<span class='typeInfo'>(value:Number) : Boolean</span>																<ul class='summary'>
+									<li>Determines if the number is even.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#isOdd">isOdd</a>
+																<span class='typeInfo'>(value:Number) : Boolean</span>																<ul class='summary'>
+									<li>Determines if the number is odd.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#isInteger">isInteger</a>
+																<span class='typeInfo'>(value:Number) : Boolean</span>																<ul class='summary'>
+									<li>Determines if the number is an integer.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#isPrime">isPrime</a>
+																<span class='typeInfo'>(value:Number) : Boolean</span>																<ul class='summary'>
+									<li>Determines if the number is prime.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#roundDecimalToPlace">roundDecimalToPlace</a>
+																<span class='typeInfo'>(value:Number, place:uint) : Number</span>																<ul class='summary'>
+									<li>Rounds a number's decimal value to a specific place.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#loopIndex">loopIndex</a>
+																<span class='typeInfo'>(index:int, length:uint) : uint</span>																<ul class='summary'>
+									<li>Determines if index is included within the collection length otherwise the index loops to the beginning or end of the range and continues.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#isBetween">isBetween</a>
+																<span class='typeInfo'>(value:Number, firstValue:Number, secondValue:Number) : Boolean</span>																<ul class='summary'>
+									<li>Determines if the value is included within a range.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#constrain">constrain</a>
+																<span class='typeInfo'>(value:Number, firstValue:Number, secondValue:Number) : Number</span>																<ul class='summary'>
+									<li>Determines if value falls within a range; if not it is snapped to the nearest range value.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#createStepsBetween">createStepsBetween</a>
+																<span class='typeInfo'>(begin:Number, end:Number, steps:Number) : Array</span>																<ul class='summary'>
+									<li>Creates evenly spaced numerical increments between two numbers.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#interpolate">interpolate</a>
+																<span class='typeInfo'>(amount:<a href="org_casalib_math_Percent.html">Percent</a>, begin:Number, end:Number) : Number</span>																<ul class='summary'>
+									<li>Determines a value between two specified values.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#normalize">normalize</a>
+																<span class='typeInfo'>(value:Number, minimum:Number, maximum:Number) : <a href="org_casalib_math_Percent.html">Percent</a></span>																<ul class='summary'>
+									<li>Determines a percentage of a value in a given range.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#map">map</a>
+																<span class='typeInfo'>(value:Number, min1:Number, max1:Number, min2:Number, max2:Number) : Number</span>																<ul class='summary'>
+									<li>Maps a value from one coordinate space to another.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#getWeightedAverage">getWeightedAverage</a>
+																<span class='typeInfo'>(value:Number, dest:Number, n:Number) : Number</span>																<ul class='summary'>
+									<li>Low pass filter alogrithm for easing a value toward a destination value. </li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#format">format</a>
+																<span class='typeInfo'>(value:Number, kDelim:String = ",", minLength:uint, fillChar:String = "0") : String</span>																<ul class='summary'>
+									<li>Formats a number as a string.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#formatCurrency">formatCurrency</a>
+																<span class='typeInfo'>(value:Number, forceDecimals:Boolean = true, kDelim:String = ",") : String</span>																<ul class='summary'>
+									<li>Formats a number as a currency string.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#getOrdinalSuffix">getOrdinalSuffix</a>
+																<span class='typeInfo'>(value:int) : String</span>																<ul class='summary'>
+									<li>Finds the english ordinal suffix for the number given.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#addLeadingZero">addLeadingZero</a>
+																<span class='typeInfo'>(value:Number) : String</span>																<ul class='summary'>
+									<li>Adds a leading zero for numbers less than ten.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#spell">spell</a>
+																<span class='typeInfo'>(value:uint) : String</span>																<ul class='summary'>
+									<li>Spells the provided number.</li>
+								</ul>							</li>
+											</ul>
+									</div>
+					</div>	</div>
+																					<div class='memberSection'>
+			<h2 id='Classmethods'>Class methods</h2>
+							<div class='member' id='addLeadingZero'>
+									<h3>addLeadingZero</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>addLeadingZero</strong>(value:Number) : String</span>						</div>											<div class='description'>
+																			<p>Adds a leading zero for numbers less than ten.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>value<span class='itemSeparator'>:</span></span>Number to add leading zero.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<pre>
+trace(NumberUtil.addLeadingZero(7)); <span class="codeComment">// Traces 07</span>
+trace(NumberUtil.addLeadingZero(11)); <span class="codeComment">// Traces 11</span>
+</pre>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Number as a String; if the number was less than ten the number will have a leading zero.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='constrain'>
+									<h3>constrain</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>constrain</strong>(value:Number,
+                          firstValue:Number,
+                          secondValue:Number) : Number</span>						</div>											<div class='description'>
+																			<p>Determines if value falls within a range; if not it is snapped to the nearest range value.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>value      <span class='itemSeparator'>:</span></span>Number to determine if it is included in the range.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>firstValue <span class='itemSeparator'>:</span></span>First value of the range.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>secondValue<span class='itemSeparator'>:</span></span>Second value of the range.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<pre>
+trace(NumberUtil.constrain(3, 0, 5)); <span class="codeComment">// Traces 3</span>
+trace(NumberUtil.constrain(7, 0, 5)); <span class="codeComment">// Traces 5</span>
+</pre>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns either the number as passed, or its value once snapped to nearest range value.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Usage note</span>
+					<div class='item'>
+					<ul>
+								<li>
+					The constraint values do not need to be in order.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='createStepsBetween'>
+									<h3>createStepsBetween</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>createStepsBetween</strong>(begin:Number,
+                                   end:Number,
+                                   steps:Number) : Array</span>						</div>											<div class='description'>
+																			<p>Creates evenly spaced numerical increments between two numbers.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>begin<span class='itemSeparator'>:</span></span>The starting value.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>end  <span class='itemSeparator'>:</span></span>The ending value.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>steps<span class='itemSeparator'>:</span></span>The number of increments between the starting and ending values.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<pre>
+trace(NumberUtil.createStepsBetween(0, 5, 4)); <span class="codeComment">// Traces 1,2,3,4</span>
+trace(NumberUtil.createStepsBetween(1, 3, 3)); <span class="codeComment">// Traces 1.5,2,2.5</span>
+</pre>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns an Array comprised of the increments between the two values.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='format'>
+									<h3>format</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>format</strong>(value:Number,
+                       kDelim:String = ",",
+                       minLength:uint,
+                       fillChar:String = "0") : String</span>						</div>											<div class='description'>
+																			<p>Formats a number as a string.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>value    <span class='itemSeparator'>:</span></span>The number you wish to format.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>kDelim   <span class='itemSeparator'>:</span></span>The character used to seperate thousands; defaults to <code><span class="codeString">&quot;&quot;</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>minLength<span class='itemSeparator'>:</span></span>The minimum length of the number; defaults to <code><span class="codeNumber">0</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>fillChar <span class='itemSeparator'>:</span></span>The leading character used to make the number the minimum length; defaults to <code><span class="codeString">&quot;<span class="codeNumber">0</span>&quot;</span></code>.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<code>trace(NumberUtil.format(1234567, &quot;,&quot;, 8)); <span class="codeComment">// Traces 01,234,567</span></code>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns the formatted number as a String.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='formatCurrency'>
+									<h3>formatCurrency</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>formatCurrency</strong>(value:Number,
+                               forceDecimals:Boolean = true,
+                               kDelim:String = ",") : String</span>						</div>											<div class='description'>
+																			<p>Formats a number as a currency string.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>value        <span class='itemSeparator'>:</span></span>The number you wish to format.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>forceDecimals<span class='itemSeparator'>:</span></span>If the number should always have two decimal places <code><span class="codeIdentifier">true</span></code>, or only show decimals is there is a decimals value <code><span class="codeIdentifier">false</span></code>; defaults to <code><span class="codeIdentifier">true</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>kDelim       <span class='itemSeparator'>:</span></span>The character used to seperate thousands; defaults to <code><span class="codeString">&quot;,&quot;</span></code>.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<code>trace(NumberUtil.formatCurrency(1234.5)); <span class="codeComment">// Traces &quot;1,234.50&quot;</span></code>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns the formatted number as a String.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='getOrdinalSuffix'>
+									<h3>getOrdinalSuffix</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>getOrdinalSuffix</strong>(value:int) : String</span>						</div>											<div class='description'>
+																			<p>Finds the english ordinal suffix for the number given.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>value<span class='itemSeparator'>:</span></span>Number to find the ordinal suffix of.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<code>trace(32 + NumberUtil.getOrdinalSuffix(32)); <span class="codeComment">// Traces 32nd</span></code>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns the suffix for the number, 2 characters.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='getWeightedAverage'>
+									<h3>getWeightedAverage</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>getWeightedAverage</strong>(value:Number,
+                                   dest:Number,
+                                   n:Number) : Number</span>						</div>											<div class='description'>
+																			<p>Low pass filter alogrithm for easing a value toward a destination value. Works best for tweening values when no definite time duration exists and when the destination value changes.
+			
+			If <code>(<span class="codeNumber">0</span>.<span class="codeNumber">5</span> &lt; n &lt; <span class="codeNumber">1</span>)</code>, then the resulting values will overshoot (ping-pong) until they reach the destination value. When <code>n</code> is greater than 1, as its value increases, the time it takes to reach the destination also increases. A pleasing value for <code>n</code> is 5.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>value<span class='itemSeparator'>:</span></span>The current value.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>dest <span class='itemSeparator'>:</span></span>The destination value.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>n    <span class='itemSeparator'>:</span></span>The slowdown factor.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					The weighted average.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='interpolate'>
+									<h3>interpolate</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>interpolate</strong>(amount:<a href="org_casalib_math_Percent.html">Percent</a>,
+                            begin:Number,
+                            end:Number) : Number</span>						</div>											<div class='description'>
+																			<p>Determines a value between two specified values.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>amount<span class='itemSeparator'>:</span></span>The level of interpolation between the two values. If <code><span class="codeNumber">0</span>%</code>, <code>begin</code> value is returned; if <code><span class="codeNumber">100</span>%</code>, <code>end</code> value is returned.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>begin <span class='itemSeparator'>:</span></span>The starting value.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>end   <span class='itemSeparator'>:</span></span>The ending value.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<code>trace(NumberUtil.interpolate(new Percent(0.5), 0, 10)); <span class="codeComment">// Traces 5</span></code>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='isBetween'>
+									<h3>isBetween</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>isBetween</strong>(value:Number,
+                          firstValue:Number,
+                          secondValue:Number) : Boolean</span>						</div>											<div class='description'>
+																			<p>Determines if the value is included within a range.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>value      <span class='itemSeparator'>:</span></span>Number to determine if it is included in the range.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>firstValue <span class='itemSeparator'>:</span></span>First value of the range.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>secondValue<span class='itemSeparator'>:</span></span>Second value of the range.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<pre>
+trace(NumberUtil.isBetween(3, 0, 5)); <span class="codeComment">// Traces true</span>
+trace(NumberUtil.isBetween(7, 0, 5)); <span class="codeComment">// Traces false</span>
+</pre>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns <code><span class="codeIdentifier">true</span></code> if the number falls within the range; otherwise <code><span class="codeIdentifier">false</span></code>.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Usage note</span>
+					<div class='item'>
+					<ul>
+								<li>
+					The range values do not need to be in order.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='isEqual'>
+									<h3>isEqual</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>isEqual</strong>(val1:Number,
+                        val2:Number,
+                        precision:Number) : Boolean</span>						</div>											<div class='description'>
+																			<p>Determines if the two values are equal, with the option to define the precision.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>val1     <span class='itemSeparator'>:</span></span>A value to compare.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>val2     <span class='itemSeparator'>:</span></span>A value to compare.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>precision<span class='itemSeparator'>:</span></span>The maximum amount the two values can differ and still be considered equal.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<pre>
+trace(NumberUtil.isEqual(3.042, 3, 0)); <span class="codeComment">// Traces false</span>
+trace(NumberUtil.isEqual(3.042, 3, 0.5)); <span class="codeComment">// Traces true</span>
+</pre>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns <code><span class="codeIdentifier">true</span></code> the values are equal; otherwise <code><span class="codeIdentifier">false</span></code>.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='isEven'>
+									<h3>isEven</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>isEven</strong>(value:Number) : Boolean</span>						</div>											<div class='description'>
+																			<p>Determines if the number is even.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>value<span class='itemSeparator'>:</span></span>A number to determine if it is divisible by <code><span class="codeNumber">2</span></code>.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<pre>
+trace(NumberUtil.isEven(7)); <span class="codeComment">// Traces false</span>
+trace(NumberUtil.isEven(12)); <span class="codeComment">// Traces true</span>
+</pre>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns <code><span class="codeIdentifier">true</span></code> if the number is even; otherwise <code><span class="codeIdentifier">false</span></code>.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='isInteger'>
+									<h3>isInteger</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>isInteger</strong>(value:Number) : Boolean</span>						</div>											<div class='description'>
+																			<p>Determines if the number is an integer.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>value<span class='itemSeparator'>:</span></span>A number to determine if it contains no decimal values.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<pre>
+trace(NumberUtil.isInteger(13)); <span class="codeComment">// Traces true</span>
+trace(NumberUtil.isInteger(1.2345)); <span class="codeComment">// Traces false</span>
+</pre>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns <code><span class="codeIdentifier">true</span></code> if the number is an integer; otherwise <code><span class="codeIdentifier">false</span></code>.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='isOdd'>
+									<h3>isOdd</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>isOdd</strong>(value:Number) : Boolean</span>						</div>											<div class='description'>
+																			<p>Determines if the number is odd.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>value<span class='itemSeparator'>:</span></span>A number to determine if it is not divisible by <code><span class="codeNumber">2</span></code>.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<pre>
+trace(NumberUtil.isOdd(7)); <span class="codeComment">// Traces true</span>
+trace(NumberUtil.isOdd(12)); <span class="codeComment">// Traces false</span>
+</pre>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns <code><span class="codeIdentifier">true</span></code> if the number is odd; otherwise <code><span class="codeIdentifier">false</span></code>.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='isPrime'>
+									<h3>isPrime</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>isPrime</strong>(value:Number) : Boolean</span>						</div>											<div class='description'>
+																			<p>Determines if the number is prime.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>value<span class='itemSeparator'>:</span></span>A number to determine if it is only divisible by <code><span class="codeNumber">1</span></code> and itself.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<pre>
+trace(NumberUtil.isPrime(13)); <span class="codeComment">// Traces true</span>
+trace(NumberUtil.isPrime(4)); <span class="codeComment">// Traces false</span>
+</pre>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns <code><span class="codeIdentifier">true</span></code> if the number is prime; otherwise <code><span class="codeIdentifier">false</span></code>.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='loopIndex'>
+									<h3>loopIndex</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>loopIndex</strong>(index:int,
+                          length:uint) : uint</span>						</div>											<div class='description'>
+																			<p>Determines if index is included within the collection length otherwise the index loops to the beginning or end of the range and continues.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>index <span class='itemSeparator'>:</span></span>Index to loop if needed.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>length<span class='itemSeparator'>:</span></span>The total elements in the collection.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<pre>
+<span class="codeKeyword">var</span> colors:<span class="codeIdentifier">Array</span> = <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeString">&quot;Red&quot;</span>, <span class="codeString">&quot;Green&quot;</span>, <span class="codeString">&quot;Blue&quot;</span>);
+
+trace(colors[NumberUtil.loopIndex(2, colors.length)]); <span class="codeComment">// Traces Blue</span>
+trace(colors[NumberUtil.loopIndex(4, colors.length)]); <span class="codeComment">// Traces Green</span>
+trace(colors[NumberUtil.loopIndex(-6, colors.length)]); <span class="codeComment">// Traces Red</span>
+</pre>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					A valid zero-based index.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='map'>
+									<h3>map</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>map</strong>(value:Number,
+                    min1:Number,
+                    max1:Number,
+                    min2:Number,
+                    max2:Number) : Number</span>						</div>											<div class='description'>
+																			<p>Maps a value from one coordinate space to another.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>value<span class='itemSeparator'>:</span></span>Value from the input coordinate space to map to the output coordinate space.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>min1 <span class='itemSeparator'>:</span></span>Starting value of the input coordinate space.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>max1 <span class='itemSeparator'>:</span></span>Ending value of the input coordinate space.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>min2 <span class='itemSeparator'>:</span></span>Starting value of the output coordinate space.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>max2 <span class='itemSeparator'>:</span></span>Ending value of the output coordinate space.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<code>trace(NumberUtil.map(0.75, 0, 1, 0, 100)); <span class="codeComment">// Traces 75</span></code>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='max'>
+									<h3>max</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>max</strong>(val1 = *,
+                    val2 = *) : Number</span>						</div>											<div class='description'>
+																			<p>Evaluates <code>val1</code> and <code>val2</code> and returns the larger value. Unlike <code><span class="codeIdentifier">Math.max</span></code> this method will return the defined value if the other value is <code><span class="codeIdentifier">null</span></code> or not a number.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>val1<span class='itemSeparator'>:</span></span>A value to compare.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>val2<span class='itemSeparator'>:</span></span>A value to compare.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<pre>
+trace(NumberUtil.max(-5, null)); <span class="codeComment">// Traces -5</span>
+trace(NumberUtil.max(-5, &quot;CASA&quot;)); <span class="codeComment">// Traces -5</span>
+trace(NumberUtil.max(-5, -13)); <span class="codeComment">// Traces -5</span>
+</pre>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns the largest value, or the value out of the two that is defined and valid.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='min'>
+									<h3>min</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>min</strong>(val1 = *,
+                    val2 = *) : Number</span>						</div>											<div class='description'>
+																			<p>Evaluates <code>val1</code> and <code>val2</code> and returns the smaller value. Unlike <code><span class="codeIdentifier">Math.min</span></code> this method will return the defined value if the other value is <code><span class="codeIdentifier">null</span></code> or not a number.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>val1<span class='itemSeparator'>:</span></span>A value to compare.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>val2<span class='itemSeparator'>:</span></span>A value to compare.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<pre>
+trace(NumberUtil.min(5, null)); <span class="codeComment">// Traces 5</span>
+trace(NumberUtil.min(5, &quot;CASA&quot;)); <span class="codeComment">// Traces 5</span>
+trace(NumberUtil.min(5, 13)); <span class="codeComment">// Traces 5</span>
+</pre>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns the smallest value, or the value out of the two that is defined and valid.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='normalize'>
+									<h3>normalize</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>normalize</strong>(value:Number,
+                          minimum:Number,
+                          maximum:Number) : <a href="org_casalib_math_Percent.html">Percent</a></span>						</div>											<div class='description'>
+																			<p>Determines a percentage of a value in a given range.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>value  <span class='itemSeparator'>:</span></span>The value to be converted.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>minimum<span class='itemSeparator'>:</span></span>The lower value of the range.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>maximum<span class='itemSeparator'>:</span></span>The upper value of the range.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<code>trace(NumberUtil.normalize(8, 4, 20).decimalPercentage); <span class="codeComment">// Traces 0.25</span></code>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='randomIntegerWithinRange'>
+									<h3>randomIntegerWithinRange</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>randomIntegerWithinRange</strong>(min:int,
+                                         max:int) : int</span>						</div>											<div class='description'>
+																			<p>Creates a random integer within the defined range.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>min<span class='itemSeparator'>:</span></span>The minimum value the random integer can be.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>min<span class='itemSeparator'>:</span></span>The maximum value the random integer can be.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns a random integer within the range.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='randomWithinRange'>
+									<h3>randomWithinRange</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>randomWithinRange</strong>(min:Number,
+                                  max:Number) : Number</span>						</div>											<div class='description'>
+																			<p>Creates a random number within the defined range.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>min<span class='itemSeparator'>:</span></span>The minimum value the random number can be.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>min<span class='itemSeparator'>:</span></span>The maximum value the random number can be.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns a random number within the range.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='roundDecimalToPlace'>
+									<h3>roundDecimalToPlace</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>roundDecimalToPlace</strong>(value:Number,
+                                    place:uint) : Number</span>						</div>											<div class='description'>
+																			<p>Rounds a number's decimal value to a specific place.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>value<span class='itemSeparator'>:</span></span>The number to round.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>place<span class='itemSeparator'>:</span></span>The decimal place to round.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<pre>
+trace(NumberUtil.roundToPlace(3.14159, 2)); <span class="codeComment">// Traces 3.14</span>
+trace(NumberUtil.roundToPlace(3.14159, 3)); <span class="codeComment">// Traces 3.142</span>
+</pre>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns the value rounded to the defined place.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='spell'>
+									<h3>spell</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>spell</strong>(value:uint) : String</span>						</div>											<div class='description'>
+																			<p>Spells the provided number.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>value<span class='itemSeparator'>:</span></span>Number to spell. Needs to be less than 999999999.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<pre>
+trace(NumberUtil.spell(0)); <span class="codeComment">// Traces Zero</span>
+trace(NumberUtil.spell(23)); <span class="codeComment">// Traces Twenty-Three</span>
+trace(NumberUtil.spell(2005678)); <span class="codeComment">// Traces Two Million, Five Thousand, Six Hundred Seventy-Eight</span>
+</pre>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					The number spelled out as a String.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Throws</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<a href="org_casalib_util_NumberUtil.html"></a>  <code><span class="codeIdentifier">Error</span></code> if <code>value</code> is greater than 999999999.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+					</div>
+		
+							</div>
+						</div>
+											<div id='sidebar'>
+		<div id='clearHeaderLeft'></div> 
+		<div id='sidebarContent'>
+				<div class="list">
+							<ul>
+		<li  class=''>											<li id='menu_index' class=''>				<a href="index.html">CASA Lib AS3 Docs</a>
+</li>
+						</li>
+</ul>
+
+					<ul id='treemenu'>
+		<li  class=''>									<h2>Packages and classes</h2>											<ul>
+		<li  id='menu_package_org_casalib_collection' class='package'>
+																	<a href="package_org_casalib_collection.html">org.casalib.collection</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_collection_IList' class='interface'>				<a href="org_casalib_collection_IList.html"><span class='packagePath'>org.casalib.collection.</span>IList</a>
+</li>
+							<li id='menu_org_casalib_collection_List' class=''>				<a href="org_casalib_collection_List.html"><span class='packagePath'>org.casalib.collection.</span>List</a>
+</li>
+							<li id='menu_org_casalib_collection_UniqueList' class=''>				<a href="org_casalib_collection_UniqueList.html"><span class='packagePath'>org.casalib.collection.</span>UniqueList</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_control' class='package'>
+																	<a href="package_org_casalib_control.html">org.casalib.control</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_control_IResumable' class='interface'>				<a href="org_casalib_control_IResumable.html"><span class='packagePath'>org.casalib.control.</span>IResumable</a>
+</li>
+							<li id='menu_org_casalib_control_IRunnable' class='interface'>				<a href="org_casalib_control_IRunnable.html"><span class='packagePath'>org.casalib.control.</span>IRunnable</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_core' class='package'>
+																	<a href="package_org_casalib_core.html">org.casalib.core</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_core_Destroyable' class=''>				<a href="org_casalib_core_Destroyable.html"><span class='packagePath'>org.casalib.core.</span>Destroyable</a>
+</li>
+							<li id='menu_org_casalib_core_IDestroyable' class='interface'>				<a href="org_casalib_core_IDestroyable.html"><span class='packagePath'>org.casalib.core.</span>IDestroyable</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_display' class='package'>
+																	<a href="package_org_casalib_display.html">org.casalib.display</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_display_CasaBitmap' class=''>				<a href="org_casalib_display_CasaBitmap.html"><span class='packagePath'>org.casalib.display.</span>CasaBitmap</a>
+</li>
+							<li id='menu_org_casalib_display_CasaMovieClip' class=''>				<a href="org_casalib_display_CasaMovieClip.html"><span class='packagePath'>org.casalib.display.</span>CasaMovieClip</a>
+</li>
+							<li id='menu_org_casalib_display_CasaShape' class=''>				<a href="org_casalib_display_CasaShape.html"><span class='packagePath'>org.casalib.display.</span>CasaShape</a>
+</li>
+							<li id='menu_org_casalib_display_CasaSimpleButton' class=''>				<a href="org_casalib_display_CasaSimpleButton.html"><span class='packagePath'>org.casalib.display.</span>CasaSimpleButton</a>
+</li>
+							<li id='menu_org_casalib_display_CasaSprite' class=''>				<a href="org_casalib_display_CasaSprite.html"><span class='packagePath'>org.casalib.display.</span>CasaSprite</a>
+</li>
+							<li id='menu_org_casalib_display_CasaTextField' class=''>				<a href="org_casalib_display_CasaTextField.html"><span class='packagePath'>org.casalib.display.</span>CasaTextField</a>
+</li>
+							<li id='menu_org_casalib_display_ReversibleMovieClip' class=''>				<a href="org_casalib_display_ReversibleMovieClip.html"><span class='packagePath'>org.casalib.display.</span>ReversibleMovieClip</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_errors' class='package'>
+																	<a href="package_org_casalib_errors.html">org.casalib.errors</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_errors_ArguementTypeError' class=''>				<a href="org_casalib_errors_ArguementTypeError.html"><span class='packagePath'>org.casalib.errors.</span>ArguementTypeError</a>
+</li>
+							<li id='menu_org_casalib_errors_ArrayContentsError' class=''>				<a href="org_casalib_errors_ArrayContentsError.html"><span class='packagePath'>org.casalib.errors.</span>ArrayContentsError</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_events' class='package'>
+																	<a href="package_org_casalib_events.html">org.casalib.events</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_events_InactivityEvent' class=''>				<a href="org_casalib_events_InactivityEvent.html"><span class='packagePath'>org.casalib.events.</span>InactivityEvent</a>
+</li>
+							<li id='menu_org_casalib_events_IRemovableEventDispatcher' class='interface'>				<a href="org_casalib_events_IRemovableEventDispatcher.html"><span class='packagePath'>org.casalib.events.</span>IRemovableEventDispatcher</a>
+</li>
+							<li id='menu_org_casalib_events_KeyComboEvent' class=''>				<a href="org_casalib_events_KeyComboEvent.html"><span class='packagePath'>org.casalib.events.</span>KeyComboEvent</a>
+</li>
+							<li id='menu_org_casalib_events_ListenerManager' class=''>				<a href="org_casalib_events_ListenerManager.html"><span class='packagePath'>org.casalib.events.</span>ListenerManager</a>
+</li>
+							<li id='menu_org_casalib_events_LoadEvent' class=''>				<a href="org_casalib_events_LoadEvent.html"><span class='packagePath'>org.casalib.events.</span>LoadEvent</a>
+</li>
+							<li id='menu_org_casalib_events_ProcessEvent' class=''>				<a href="org_casalib_events_ProcessEvent.html"><span class='packagePath'>org.casalib.events.</span>ProcessEvent</a>
+</li>
+							<li id='menu_org_casalib_events_RemovableEventDispatcher' class=''>				<a href="org_casalib_events_RemovableEventDispatcher.html"><span class='packagePath'>org.casalib.events.</span>RemovableEventDispatcher</a>
+</li>
+							<li id='menu_org_casalib_events_RetryEvent' class=''>				<a href="org_casalib_events_RetryEvent.html"><span class='packagePath'>org.casalib.events.</span>RetryEvent</a>
+</li>
+							<li id='menu_org_casalib_events_SequenceEvent' class=''>				<a href="org_casalib_events_SequenceEvent.html"><span class='packagePath'>org.casalib.events.</span>SequenceEvent</a>
+</li>
+							<li id='menu_org_casalib_events_StageEventProxy' class=''>				<a href="org_casalib_events_StageEventProxy.html"><span class='packagePath'>org.casalib.events.</span>StageEventProxy</a>
+</li>
+							<li id='menu_org_casalib_events_TweenEvent' class=''>				<a href="org_casalib_events_TweenEvent.html"><span class='packagePath'>org.casalib.events.</span>TweenEvent</a>
+</li>
+							<li id='menu_org_casalib_events_VideoInfoEvent' class=''>				<a href="org_casalib_events_VideoInfoEvent.html"><span class='packagePath'>org.casalib.events.</span>VideoInfoEvent</a>
+</li>
+							<li id='menu_org_casalib_events_VideoLoadEvent' class=''>				<a href="org_casalib_events_VideoLoadEvent.html"><span class='packagePath'>org.casalib.events.</span>VideoLoadEvent</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_layout' class='package'>
+																	<a href="package_org_casalib_layout.html">org.casalib.layout</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_layout_Distribution' class=''>				<a href="org_casalib_layout_Distribution.html"><span class='packagePath'>org.casalib.layout.</span>Distribution</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_load' class='package'>
+																	<a href="package_org_casalib_load.html">org.casalib.load</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_load_AudioLoad' class=''>				<a href="org_casalib_load_AudioLoad.html"><span class='packagePath'>org.casalib.load.</span>AudioLoad</a>
+</li>
+							<li id='menu_org_casalib_load_CasaLoader' class=''>				<a href="org_casalib_load_CasaLoader.html"><span class='packagePath'>org.casalib.load.</span>CasaLoader</a>
+</li>
+							<li id='menu_org_casalib_load_DataLoad' class=''>				<a href="org_casalib_load_DataLoad.html"><span class='packagePath'>org.casalib.load.</span>DataLoad</a>
+</li>
+							<li id='menu_org_casalib_load_GroupLoad' class=''>				<a href="org_casalib_load_GroupLoad.html"><span class='packagePath'>org.casalib.load.</span>GroupLoad</a>
+</li>
+							<li id='menu_org_casalib_load_ImageLoad' class=''>				<a href="org_casalib_load_ImageLoad.html"><span class='packagePath'>org.casalib.load.</span>ImageLoad</a>
+</li>
+							<li id='menu_org_casalib_load_LoadItem' class=''>				<a href="org_casalib_load_LoadItem.html"><span class='packagePath'>org.casalib.load.</span>LoadItem</a>
+</li>
+							<li id='menu_org_casalib_load_SwfLoad' class=''>				<a href="org_casalib_load_SwfLoad.html"><span class='packagePath'>org.casalib.load.</span>SwfLoad</a>
+</li>
+							<li id='menu_org_casalib_load_VideoLoad' class=''>				<a href="org_casalib_load_VideoLoad.html"><span class='packagePath'>org.casalib.load.</span>VideoLoad</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_math' class='package'>
+																	<a href="package_org_casalib_math.html">org.casalib.math</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_math_Percent' class=''>				<a href="org_casalib_math_Percent.html"><span class='packagePath'>org.casalib.math.</span>Percent</a>
+</li>
+							<li id='menu_org_casalib_math_Range' class=''>				<a href="org_casalib_math_Range.html"><span class='packagePath'>org.casalib.math.</span>Range</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_math_geom' class='package'>
+																	<a href="package_org_casalib_math_geom.html">org.casalib.math.geom</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_math_geom_Ellipse' class=''>				<a href="org_casalib_math_geom_Ellipse.html"><span class='packagePath'>org.casalib.math.geom.</span>Ellipse</a>
+</li>
+							<li id='menu_org_casalib_math_geom_Point3d' class=''>				<a href="org_casalib_math_geom_Point3d.html"><span class='packagePath'>org.casalib.math.geom.</span>Point3d</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_process' class='package'>
+																	<a href="package_org_casalib_process.html">org.casalib.process</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_process_Process' class=''>				<a href="org_casalib_process_Process.html"><span class='packagePath'>org.casalib.process.</span>Process</a>
+</li>
+							<li id='menu_org_casalib_process_ProcessGroup' class=''>				<a href="org_casalib_process_ProcessGroup.html"><span class='packagePath'>org.casalib.process.</span>ProcessGroup</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_time' class='package'>
+																	<a href="package_org_casalib_time.html">org.casalib.time</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_time_EnterFrame' class=''>				<a href="org_casalib_time_EnterFrame.html"><span class='packagePath'>org.casalib.time.</span>EnterFrame</a>
+</li>
+							<li id='menu_org_casalib_time_FrameDelay' class=''>				<a href="org_casalib_time_FrameDelay.html"><span class='packagePath'>org.casalib.time.</span>FrameDelay</a>
+</li>
+							<li id='menu_org_casalib_time_FrameTime' class=''>				<a href="org_casalib_time_FrameTime.html"><span class='packagePath'>org.casalib.time.</span>FrameTime</a>
+</li>
+							<li id='menu_org_casalib_time_FrameTimeStopwatch' class=''>				<a href="org_casalib_time_FrameTimeStopwatch.html"><span class='packagePath'>org.casalib.time.</span>FrameTimeStopwatch</a>
+</li>
+							<li id='menu_org_casalib_time_Inactivity' class=''>				<a href="org_casalib_time_Inactivity.html"><span class='packagePath'>org.casalib.time.</span>Inactivity</a>
+</li>
+							<li id='menu_org_casalib_time_Interval' class=''>				<a href="org_casalib_time_Interval.html"><span class='packagePath'>org.casalib.time.</span>Interval</a>
+</li>
+							<li id='menu_org_casalib_time_Sequence' class=''>				<a href="org_casalib_time_Sequence.html"><span class='packagePath'>org.casalib.time.</span>Sequence</a>
+</li>
+							<li id='menu_org_casalib_time_Stopwatch' class=''>				<a href="org_casalib_time_Stopwatch.html"><span class='packagePath'>org.casalib.time.</span>Stopwatch</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_transitions' class='package'>
+																	<a href="package_org_casalib_transitions.html">org.casalib.transitions</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_transitions_PropertyTween' class=''>				<a href="org_casalib_transitions_PropertyTween.html"><span class='packagePath'>org.casalib.transitions.</span>PropertyTween</a>
+</li>
+							<li id='menu_org_casalib_transitions_Tween' class=''>				<a href="org_casalib_transitions_Tween.html"><span class='packagePath'>org.casalib.transitions.</span>Tween</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_ui' class='package'>
+																	<a href="package_org_casalib_ui.html">org.casalib.ui</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_ui_Key' class=''>				<a href="org_casalib_ui_Key.html"><span class='packagePath'>org.casalib.ui.</span>Key</a>
+</li>
+							<li id='menu_org_casalib_ui_KeyCombo' class=''>				<a href="org_casalib_ui_KeyCombo.html"><span class='packagePath'>org.casalib.ui.</span>KeyCombo</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_util' class='package'>
+																	<a href="package_org_casalib_util.html">org.casalib.util</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_util_AlignUtil' class=''>				<a href="org_casalib_util_AlignUtil.html"><span class='packagePath'>org.casalib.util.</span>AlignUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ArrayUtil' class=''>				<a href="org_casalib_util_ArrayUtil.html"><span class='packagePath'>org.casalib.util.</span>ArrayUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ClassUtil' class=''>				<a href="org_casalib_util_ClassUtil.html"><span class='packagePath'>org.casalib.util.</span>ClassUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ColorUtil' class=''>				<a href="org_casalib_util_ColorUtil.html"><span class='packagePath'>org.casalib.util.</span>ColorUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ConversionUtil' class=''>				<a href="org_casalib_util_ConversionUtil.html"><span class='packagePath'>org.casalib.util.</span>ConversionUtil</a>
+</li>
+							<li id='menu_org_casalib_util_DateUtil' class=''>				<a href="org_casalib_util_DateUtil.html"><span class='packagePath'>org.casalib.util.</span>DateUtil</a>
+</li>
+							<li id='menu_org_casalib_util_DisplayObjectUtil' class=''>				<a href="org_casalib_util_DisplayObjectUtil.html"><span class='packagePath'>org.casalib.util.</span>DisplayObjectUtil</a>
+</li>
+							<li id='menu_org_casalib_util_DrawUtil' class=''>				<a href="org_casalib_util_DrawUtil.html"><span class='packagePath'>org.casalib.util.</span>DrawUtil</a>
+</li>
+							<li id='menu_org_casalib_util_FlashVarUtil' class=''>				<a href="org_casalib_util_FlashVarUtil.html"><span class='packagePath'>org.casalib.util.</span>FlashVarUtil</a>
+</li>
+							<li id='menu_org_casalib_util_FrameUtil' class=''>				<a href="org_casalib_util_FrameUtil.html"><span class='packagePath'>org.casalib.util.</span>FrameUtil</a>
+</li>
+							<li id='menu_org_casalib_util_GeomUtil' class=''>				<a href="org_casalib_util_GeomUtil.html"><span class='packagePath'>org.casalib.util.</span>GeomUtil</a>
+</li>
+							<li id='menu_org_casalib_util_LibraryManager' class=''>				<a href="org_casalib_util_LibraryManager.html"><span class='packagePath'>org.casalib.util.</span>LibraryManager</a>
+</li>
+							<li id='menu_org_casalib_util_LoadItemUtil' class=''>				<a href="org_casalib_util_LoadItemUtil.html"><span class='packagePath'>org.casalib.util.</span>LoadItemUtil</a>
+</li>
+							<li id='menu_org_casalib_util_LoadUtil' class=''>				<a href="org_casalib_util_LoadUtil.html"><span class='packagePath'>org.casalib.util.</span>LoadUtil</a>
+</li>
+							<li id='menu_org_casalib_util_LocationUtil' class=''>				<a href="org_casalib_util_LocationUtil.html"><span class='packagePath'>org.casalib.util.</span>LocationUtil</a>
+</li>
+							<li id='menu_org_casalib_util_NavigateUtil' class=''>				<a href="org_casalib_util_NavigateUtil.html"><span class='packagePath'>org.casalib.util.</span>NavigateUtil</a>
+</li>
+							<li id='menu_org_casalib_util_NumberUtil' class=''>				<a href="org_casalib_util_NumberUtil.html"><span class='packagePath'>org.casalib.util.</span>NumberUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ObjectUtil' class=''>				<a href="org_casalib_util_ObjectUtil.html"><span class='packagePath'>org.casalib.util.</span>ObjectUtil</a>
+</li>
+							<li id='menu_org_casalib_util_PropertySetter' class=''>				<a href="org_casalib_util_PropertySetter.html"><span class='packagePath'>org.casalib.util.</span>PropertySetter</a>
+</li>
+							<li id='menu_org_casalib_util_QueryStringUtil' class=''>				<a href="org_casalib_util_QueryStringUtil.html"><span class='packagePath'>org.casalib.util.</span>QueryStringUtil</a>
+</li>
+							<li id='menu_org_casalib_util_RatioUtil' class=''>				<a href="org_casalib_util_RatioUtil.html"><span class='packagePath'>org.casalib.util.</span>RatioUtil</a>
+</li>
+							<li id='menu_org_casalib_util_SingletonUtil' class=''>				<a href="org_casalib_util_SingletonUtil.html"><span class='packagePath'>org.casalib.util.</span>SingletonUtil</a>
+</li>
+							<li id='menu_org_casalib_util_StageReference' class=''>				<a href="org_casalib_util_StageReference.html"><span class='packagePath'>org.casalib.util.</span>StageReference</a>
+</li>
+							<li id='menu_org_casalib_util_StringUtil' class=''>				<a href="org_casalib_util_StringUtil.html"><span class='packagePath'>org.casalib.util.</span>StringUtil</a>
+</li>
+							<li id='menu_org_casalib_util_TextFieldUtil' class=''>				<a href="org_casalib_util_TextFieldUtil.html"><span class='packagePath'>org.casalib.util.</span>TextFieldUtil</a>
+</li>
+							<li id='menu_org_casalib_util_UrlVariablesUtil' class=''>				<a href="org_casalib_util_UrlVariablesUtil.html"><span class='packagePath'>org.casalib.util.</span>UrlVariablesUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ValidationUtil' class=''>				<a href="org_casalib_util_ValidationUtil.html"><span class='packagePath'>org.casalib.util.</span>ValidationUtil</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+				</li>
+</ul>
+
+			</div>					<div class="globalNav">
+							<ul>
+									<li>
+						<li id='menu_all-packages' class=''>				<a href="all-packages.html">Package tree</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-classes' class=''>				<a href="all-classes.html">Classes</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-methods' class=''>				<a href="all-methods.html">Methods</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-constants' class=''>				<a href="all-constants.html">Constants</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-properties' class=''>				<a href="all-properties.html">Properties</a>
+</li>					</li>
+									<li>
+						<li class=''></li>					</li>
+							</ul>	</div>
+		</div>
+	</div>
+
+					</div>
+					<div class='clear'>&nbsp;</div> 
+				</div>
+			</div>
+			<div id='header'>
+				<div id='headerContentWrapper'>
+					<div id='headerContent'>
+						<ul id='headerButtons'>
+															<li id='toggleTocButton'><a href="#"><span class='disclosure'>&#9660;</span><span class='closure'>&#9658;</span>Navigation</a></li>													</ul>
+					</div>
+				</div>
+			</div>
+			<div id="footer">
+	<div id="footerContent">
+		<ul>
+						<li class="copyright">
+				&copy; 2011 Aaron Clinger and the CASA Lib Team
+			</li>		</ul>
+	</div>
+</div>
+		</div>
+     </body>
+</html>

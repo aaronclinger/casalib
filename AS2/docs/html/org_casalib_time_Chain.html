@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Chain</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_time_Chain"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classproperties" accesskey="l">C<span class="accessKey">l</span>ass properties</a></li><li><a href="#Instanceproperties" accesskey="l">Instance <span class="accessKey">p</span>roperties</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li></ul><br class="clear" /></div><h1>Chain</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_event_EventDispatcher.html">EventDispatcher</a> &lt; <a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></td></tr><tr><th align="left">Implements:</th><td><ul><li><a class="className" href="org_casalib_control_ResumeableInterface.html">ResumeableInterface</a></li></ul></td></tr><tr><th align="left">Known subclasses:</th><td><ul><li><a class="className" href="org_casalib_time_Sequence.html">Sequence</a></li></ul></td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">03/16/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.time.Chain</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.event.EventDispatcher;
+import org.casalib.control.ResumeableInterface;
+import org.casalib.event.DispatchableInterface;
+import org.casalib.time.Interval;
+
+/**
+    Creates a chain of sequenced methods calls that wait for a specified event before continuing.
+    
+    @author Aaron Clinger
+    @version 03/16/07
+    @example
+        &lt;code>
+            var boxMoveRight:PropertyTween = new PropertyTween(this.box_mc, "_x", com.robertpenner.easing.Bounce.easeOut, 400, 1.5);
+            var boxMoveLeft:PropertyTween = new PropertyTween(this.box_mc, "_x", com.robertpenner.easing.Bounce.easeOut, 0, 1.5);
+            
+            var chain:Chain = new Chain(true);
+            chain.addTask(this.boxMoveRight, "start", Tween.EVENT_COMPLETE);
+            chain.addTask(this.boxMoveLeft, "start", Tween.EVENT_COMPLETE);
+            chain.start();
+        &lt;/code>
+*/
+
+class org.casalib.time.Chain extends EventDispatcher implements ResumeableInterface {
+    public static var EVENT_START:String    = 'onStart';
+    public static var EVENT_STOP:String     = 'onStop';
+    public static var EVENT_RESUME:String   = 'onResume';
+    public static var EVENT_LOOP:String     = 'onLoop';
+    public static var EVENT_COMPLETE:String = 'onComplete';
+    
+    private var $isRunning:Boolean;
+    private var $isLooping:Boolean;
+    private var $completeFired:Boolean;
+    private var $interval:Interval;
+    private var $sequence:Array;
+    private var $current:Number;
+    
+    
+    /**
+        Creates a new chain.
+        
+        @param isLooping: &lt;strong>[optional]&lt;/strong> Indicates the sequence replays once completed &lt;code>true&lt;/code>, or stops &lt;code>false&lt;/code>; defaults to &lt;code>false&lt;/code>.
+    */
+    public function Chain(isLooping:Boolean) {
+        super();
+        
+        this.$isLooping = (isLooping == undefined) ? false : isLooping;
+        this.$sequence  = new Array();
+        this.$interval  = Interval.setTimeout(this, '$triggerEvent', 1);
+        
+        this.$setClassDescription('org.casalib.time.Chain');
+    }
+    
+    /**
+        Adds a task to the sequence.
+        
+        @param scope: An object that contains the method specified by "startMethodName" and that will dispatch "completeEventName" using {@link EventDispatcher}.
+        @param startMethodName: A method that exists in the scope of the object specified by "scope".
+        @param completeEventName: The event the class waits to receive before continuing.
+        @param delay: The time in milliseconds between when the complete event was recieved until the next start method will be called.
+        @param position: &lt;strong>[optional]&lt;/strong> Specifies the index of the insertion in the sequence order; defaults to the next position.
+    */
+    public function addTask(scope:DispatchableInterface, startMethodName:String, completeEventName:String, delay:Number, position:Number):Void {
+        this.$createNewTask(scope, startMethodName, completeEventName, delay, position);
+    }
+    
+    /**
+        Removes task from the sequence.
+        
+        @param scope: An object that contains the method specified by "methodName".
+        @param methodName: A method that exists in the scope of the object specified by "scope".
+        @return Returns &lt;code>true&lt;/code> if task was successfully found and removed; otherwise &lt;code>false&lt;/code>.
+    */
+    public function removeTask(scope:Object, methodName:String):Boolean {
+        var i:Number = -1;
+        var event:Object;
+        
+        while (++i &lt; this.$sequence.length) {
+            event = this.$sequence[i];
+            
+            if (event.scope == scope) {
+                if (event.method == methodName) {
+                    this.$removeObserversForSequenceItem(i);
+                    this.$sequence.splice(i, 1);
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+        Starts the sequence from the beginning.
+        
+        @sends onStart = function(sender:Chain) {}
+    */
+    public function start():Void {
+        this.dispatchEvent(Chain.EVENT_START, this);
+        this.$startSequence();
+    }
+    
+    /**
+        Stops the sequence at its current position.
+        
+        @sends onStop = function(sender:Chain) {}
+    */
+    public function stop():Void {
+        if (!this.$isRunning)
+            return;
+        
+        this.$interval.stop();
+        this.$completeFired = this.$isRunning = false;
+        this.dispatchEvent(Chain.EVENT_STOP, this);
+    }
+    
+    /**
+        Resumes sequence from {@link #stop stopped} position or restarts the sequence from the beginning.
+        
+        @sends onResume = function(sender:Chain) {}
+    */
+    public function resume():Void {
+        if (this.$isRunning)
+            return;
+        
+        if (this.$current == -1 || this.$current == undefined) {
+            this.start();
+            return;
+        }
+        
+        this.$isRunning = true;
+        
+        this.dispatchEvent(Chain.EVENT_RESUME, this);
+        
+        if (this.$completeFired)
+            this.$startDelay();
+        else
+            this.$interval.start();
+    }
+    
+    public function destroy():Void {
+        this.$interval.destroy();
+        
+        this.$removeObserversForSequenceItem(this.$current);
+        
+        this.$sequence.splice(0);
+        
+        delete this.$isRunning;
+        delete this.$isLooping;
+        delete this.$interval;
+        delete this.$sequence;
+        delete this.$current;
+        
+        super.destroy();
+    }
+    
+    private function $createNewTask(scope:Object, startMethodName:String, completeEventName:String, delay:Number, position:Number):Void {
+        var event:Object = new Object();
+        event.scope      = scope;
+        event.method     = startMethodName;
+        event.complete   = completeEventName;
+        event.delay      = (delay == undefined) ? 0 : delay;
+        
+        if (position == undefined)
+            this.$sequence.push(event);
+        else
+            this.$sequence.splice(position, 0, event);
+    }
+    
+    private function $startSequence():Void {
+        this.$interval.stop();
+        
+        this.$isRunning = true;
+        this.$current   = -1;
+        
+        this.$startDelay();
+    }
+    
+    /**
+        @sends onComplete = function(sender:Chain) {}
+        @sends onLoop = function(sender:Chain) {}
+    */
+    private function $startDelay():Void {
+        if (this.$current != -1)
+            this.$removeObserversForSequenceItem(this.$current);
+            
+        if (!this.$isRunning) {
+            this.$completeFired = true;
+            return;
+        }
+        
+        if (++this.$current >= this.$sequence.length) {
+            if (this.$isLooping) {
+                this.dispatchEvent(Chain.EVENT_LOOP, this);
+                this.$startSequence();
+            } else {
+                this.dispatchEvent(Chain.EVENT_COMPLETE, this);
+            }
+            
+            return;
+        }
+        
+        this.$interval.changeDelay(this.$sequence[this.$current].delay);
+        this.$interval.start();
+    }
+    
+    private function $triggerEvent():Void {
+        this.$addObserverForSequenceItem(this.$current);
+        
+        var event:Object = this.$sequence[this.$current];
+        event.scope[event.method].apply(event.scope);
+    }
+    
+    private function $addObserverForSequenceItem(position:Number):Void {
+        var event:Object = this.$sequence[position];
+        event.scope.addEventObserver(this, event.complete, '$startDelay');
+    }
+    
+    private function $removeObserversForSequenceItem(position:Number):Void {
+        this.$sequence[position].scope.removeEventObserversForScope(this);
+    }
+}
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Creates a chain of sequenced methods calls that wait for a specified event before continuing.</span><div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> boxMoveRight:PropertyTween = <span class="codeKeyword">new</span> PropertyTween(<span class="codeIdentifier">this</span>.box_mc, <span class="codeString">"_x"</span>, com.robertpenner.easing.Bounce.easeOut, <span class="codeNumber">400</span>, <span class="codeNumber">1.5</span>);
+<span class="codeKeyword">var</span> boxMoveLeft:PropertyTween = <span class="codeKeyword">new</span> PropertyTween(<span class="codeIdentifier">this</span>.box_mc, <span class="codeString">"_x"</span>, com.robertpenner.easing.Bounce.easeOut, <span class="codeNumber">0</span>, <span class="codeNumber">1.5</span>);
+
+<span class="codeKeyword">var</span> chain:Chain = <span class="codeKeyword">new</span> Chain(<span class="codeIdentifier">true</span>);
+chain.addTask(<span class="codeIdentifier">this</span>.boxMoveRight, <span class="codeString">"start"</span>, Tween.EVENT_COMPLETE);
+chain.addTask(<span class="codeIdentifier">this</span>.boxMoveLeft, <span class="codeString">"start"</span>, Tween.EVENT_COMPLETE);
+chain<span class="codeIdentifier">.start</span>();</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Events broadcasted to listeners:</span><div class="item"><ul><li><code>onStart = function (sender:Chain) {}</code> </li><li><code>onStop = function (sender:Chain) {}</code> </li><li><code>onResume = function (sender:Chain) {}</code> </li><li><code>onComplete = function (sender:Chain) {}</code> </li><li><code>onLoop = function (sender:Chain) {}</code> </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Constructor</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#Chain">Chain</a><span class="typeInfo"> (isLooping:Boolean)</span><ul class="summary"><li>Creates a new chain.</li></ul></li></ul></div><div class="memberSummaryPart"><span class="title">Class properties</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#EVENT_START">EVENT_START</a><span class="typeInfo">  : String</span></li><li class="sortli listnum2"><a href="#EVENT_STOP">EVENT_STOP</a><span class="typeInfo">  : String</span></li><li class="sortli listnum3"><a href="#EVENT_RESUME">EVENT_RESUME</a><span class="typeInfo">  : String</span></li><li class="sortli listnum4"><a href="#EVENT_LOOP">EVENT_LOOP</a><span class="typeInfo">  : String</span></li><li class="sortli listnum5"><a href="#EVENT_COMPLETE">EVENT_COMPLETE</a><span class="typeInfo">  : String</span></li></ul></div><div class="memberSummaryPart"><span class="title">Instance methods</span><ul class="sortable" id="sortul3"><li class="sortli listnum1"><a href="#addTask">addTask</a><span class="typeInfo"> (scope:<a class="className" href="org_casalib_event_DispatchableInterface.html">DispatchableInterface</a>, startMethodName:String, completeEventName:String, delay:Number, position:Number) : Void</span><ul class="summary"><li>Adds a task to the sequence.</li></ul></li><li class="sortli listnum2"><a href="#removeTask">removeTask</a><span class="typeInfo"> (scope:Object, methodName:String) : Boolean</span><ul class="summary"><li>Removes task from the sequence.</li></ul></li><li class="sortli listnum3"><a href="#start">start</a><span class="typeInfo">  : Void</span><ul class="summary"><li>Starts the sequence from the beginning.</li></ul></li><li class="sortli listnum4"><a href="#stop">stop</a><span class="typeInfo">  : Void</span><ul class="summary"><li>Stops the sequence at its current position.</li></ul></li><li class="sortli listnum5"><a href="#resume">resume</a><span class="typeInfo">  : Void</span><ul class="summary"><li>Resumes sequence from stopped position or restarts the sequence from the beginning.</li></ul></li><li class="sortli listnum6"><a href="#destroy">destroy</a><span class="typeInfo">  : Void</span><ul class="summary"><li><div class="inheritDoc">Removes any internal variables, intervals, enter frames, internal MovieClips and event observers to allow the object to be garbage collected.</li></ul></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_event_EventDispatcher.html">EventDispatcher</a></span></span><div class="item inheritedList"><a href="org_casalib_event_EventDispatcher.html#addEventObserver">addEventObserver</a>  <a href="org_casalib_event_EventDispatcher.html#destroy">destroy</a>  <a href="org_casalib_event_EventDispatcher.html#dispatchEvent">dispatchEvent</a>  <a href="org_casalib_event_EventDispatcher.html#removeAllEventObservers">removeAllEventObservers</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserver">removeEventObserver</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForEvent">removeEventObserversForEvent</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForScope">removeEventObserversForScope</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_core_CoreObject.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_core_CoreObject.html#destroy">destroy</a>  <a href="org_casalib_core_CoreObject.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Constructor">Constructor</h2><div class="member" id="Chain"><h3>Chain</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>Chain</b> (
+</div><div class="code">isLooping:Boolean)</div><br class="clear" /></div></div><div class="description"> Creates a new chain. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">isLooping<span class="itemSeparator">:</span></div><div><strong>[optional]</strong> Indicates the sequence replays once completed <code><span class="codeIdentifier">true</span></code>, or stops <code><span class="codeIdentifier">false</span></code>; defaults to <code><span class="codeIdentifier">false</span></code>.</div></div></div></div></div></div></div><div class="memberSection"><h2 id="Classproperties">Class properties</h2><div class="member" id="EVENT_COMPLETE"><h3>EVENT_COMPLETE</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_COMPLETE</b>:String = <span class="codeString">'onComplete'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_LOOP"><h3>EVENT_LOOP</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_LOOP</b>:String = <span class="codeString">'onLoop'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_RESUME"><h3>EVENT_RESUME</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_RESUME</b>:String = <span class="codeString">'onResume'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_START"><h3>EVENT_START</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_START</b>:String = <span class="codeString">'onStart'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_STOP"><h3>EVENT_STOP</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_STOP</b>:String = <span class="codeString">'onStop'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div></div><div class="memberSection"><h2 id="Instancemethods">Instance methods</h2><div class="member" id="addTask"><h3>addTask</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>addTask</b> (
+
+
+
+
+</div><div class="code">scope:<a class="className" href="org_casalib_event_DispatchableInterface.html">DispatchableInterface</a>,
+startMethodName:String,
+completeEventName:String,
+delay:Number,
+position:Number) : Void</div><br class="clear" /></div></div><div class="description"> Adds a task to the sequence. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">scope            <span class="itemSeparator">:</span></div><div>An object that contains the method specified by "startMethodName" and that will dispatch "completeEventName" using <a class="className" href="org_casalib_event_EventDispatcher.html">org.casalib.event.EventDispatcher</a>.</div></div><div class="item"><div class="floatbox code colorizedCode">startMethodName  <span class="itemSeparator">:</span></div><div>A method that exists in the scope of the object specified by "scope".</div></div><div class="item"><div class="floatbox code colorizedCode">completeEventName<span class="itemSeparator">:</span></div><div>The event the class waits to receive before continuing.</div></div><div class="item"><div class="floatbox code colorizedCode">delay            <span class="itemSeparator">:</span></div><div>The time in milliseconds between when the complete event was recieved until the next start method will be called.</div></div><div class="item"><div class="floatbox code colorizedCode">position         <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> Specifies the index of the insertion in the sequence order; defaults to the next position.</div></div></div></div></div></div><div class="member" id="destroy"><h3>destroy</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>destroy</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Removes any internal variables, intervals, enter frames, internal MovieClips and event observers to allow the object to be garbage collected.<br />		<br />		<strong>Always call <pre>
+<span class="codeKeyword">var</span> boxMoveRight:PropertyTween = <span class="codeKeyword">new</span> PropertyTween(<span class="codeIdentifier">this</span>.box_mc, <span class="codeString">"_x"</span>, com.robertpenner.easing.Bounce.easeOut, <span class="codeNumber">400</span>, <span class="codeNumber">1.5</span>);
+<span class="codeKeyword">var</span> boxMoveLeft:PropertyTween = <span class="codeKeyword">new</span> PropertyTween(<span class="codeIdentifier">this</span>.box_mc, <span class="codeString">"_x"</span>, com.robertpenner.easing.Bounce.easeOut, <span class="codeNumber">0</span>, <span class="codeNumber">1.5</span>);
+
+<span class="codeKeyword">var</span> chain:Chain = <span class="codeKeyword">new</span> Chain(<span class="codeIdentifier">true</span>);
+chain.addTask(<span class="codeIdentifier">this</span>.boxMoveRight, <span class="codeString">"start"</span>, Tween.EVENT_COMPLETE);
+chain.addTask(<span class="codeIdentifier">this</span>.boxMoveLeft, <span class="codeString">"start"</span>, Tween.EVENT_COMPLETE);
+chain<span class="codeIdentifier">.start</span>();</pre> before deleting last object pointer.</strong></div><a class="followInheritDoc" href="org_casalib_core_CoreInterface.html#destroy">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Overrides:</span><div class="item"><ul><li> <a href="org_casalib_event_EventDispatcher.html#destroy">org.casalib.event.EventDispatcher.destroy</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_core_CoreInterface.html#destroy">org.casalib.core.CoreInterface.destroy</a> </li></ul></div></div></div></div></div><div class="member" id="removeTask"><h3>removeTask</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>removeTask</b> (
+
+</div><div class="code">scope:Object,
+methodName:String) : Boolean</div><br class="clear" /></div></div><div class="description"> Removes task from the sequence. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">scope     <span class="itemSeparator">:</span></div><div>An object that contains the method specified by "methodName".</div></div><div class="item"><div class="floatbox code colorizedCode">methodName<span class="itemSeparator">:</span></div><div>A method that exists in the scope of the object specified by "scope".</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if task was successfully found and removed; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div><div class="member" id="resume"><h3>resume</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>resume</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> Resumes sequence from <a href="org_casalib_time_Chain.html#stop">stopped</a> position or restarts the sequence from the beginning. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Events broadcasted to listeners:</span><div class="item"><ul><li><code>onResume = function (sender:Chain) {}</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_control_ResumeableInterface.html#resume">org.casalib.control.ResumeableInterface.resume</a> </li></ul></div></div></div></div></div><div class="member" id="start"><h3>start</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>start</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> Starts the sequence from the beginning. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Events broadcasted to listeners:</span><div class="item"><ul><li><code>onStart = function (sender:Chain) {}</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_control_RunnableInterface.html#start">org.casalib.control.RunnableInterface.start</a> </li></ul></div></div></div></div></div><div class="member" id="stop"><h3>stop</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>stop</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> Stops the sequence at its current position. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Events broadcasted to listeners:</span><div class="item"><ul><li><code>onStop = function (sender:Chain) {}</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_control_RunnableInterface.html#stop">org.casalib.control.RunnableInterface.stop</a> </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

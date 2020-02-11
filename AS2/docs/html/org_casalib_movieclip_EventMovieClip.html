@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>EventMovieClip</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_movieclip_EventMovieClip"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classproperties" accesskey="l">C<span class="accessKey">l</span>ass properties</a></li><li><a href="#Classmethods" accesskey="a">Cl<span class="accessKey">a</span>ss methods</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li><li><a href="#Eventhandlers" accesskey="e"><span class="accessKey">E</span>vent handlers</a></li></ul><br class="clear" /></div><h1>EventMovieClip</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_movieclip_DispatchableMovieClip.html">DispatchableMovieClip</a> &lt; <a class="className" href="org_casalib_movieclip_CoreMovieClip.html">CoreMovieClip</a> &lt; MovieClip</td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">05/13/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.movieclip.EventMovieClip</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.movieclip.DispatchableMovieClip;
+import org.casalib.util.MovieClipUtil;
+
+/**
+    Dispatches MovieClip event handler notification using {@link EventDispatcher}.
+    
+    @author Aaron Clinger
+    @version 05/13/07
+    @example
+        &lt;code>
+            import org.casalib.movieclip.EventMovieClip;
+            import org.casalib.util.MovieClipUtil;
+            
+            function movieClipLoad(sender_mc:MovieClip):Void {
+                trace(sender_mc + " has loaded.");
+            }
+            
+            function movieClipPress(sender_mc:MovieClip):Void {
+                trace(sender_mc + " was pressed.");
+            }
+            
+            MovieClipUtil.attachMovieRegisterClass(org.casalib.movieclip.EventMovieClip, this, "linkageMovieClip", "event_mc");
+            
+            this.event_mc.addEventObserver(this, EventMovieClip.EVENT_LOAD, "movieClipLoad");
+            this.event_mc.addEventObserver(this, EventMovieClip.EVENT_PRESS, "movieClipPress");
+        &lt;/code>
+*/
+
+class org.casalib.movieclip.EventMovieClip extends DispatchableMovieClip {
+    public static var EVENT_DATA:String            = 'onData';
+    public static var EVENT_DRAG_OUT:String        = 'onDragOut';
+    public static var EVENT_DRAG_OVER:String       = 'onDragOver';
+    public static var EVENT_ENTER_FRAME:String     = 'onEnterFrame';
+    public static var EVENT_KEY_DOWN:String        = 'onKeyDown';
+    public static var EVENT_KEY_UP:String          = 'onKeyUp';
+    public static var EVENT_KILL_FOCUS:String      = 'onKillFocus';
+    public static var EVENT_LOAD:String            = 'onLoad';
+    public static var EVENT_MOUSE_DOWN:String      = 'onMouseDown';
+    public static var EVENT_MOUSE_MOVE:String      = 'onMouseMove';
+    public static var EVENT_MOUSE_UP:String        = 'onMouseUp';
+    public static var EVENT_PRESS:String           = 'onPress';
+    public static var EVENT_RELEASE:String         = 'onRelease';
+    public static var EVENT_RELEASE_OUTSIDE:String = 'onReleaseOutside';
+    public static var EVENT_ROLL_OUT:String        = 'onRollOut';
+    public static var EVENT_ROLL_OVER:String       = 'onRollOver';
+    public static var EVENT_SET_FOCUS:String       = 'onSetFocus';
+    public static var EVENT_UNLOAD:String          = 'onUnload';
+    
+    
+    /**
+        Creates an empty instance of the EventMovieClip class. Use this instead of a traditional &lt;code>new&lt;/code> constructor statement due to limitations of ActionScript 2.0.
+        
+        @param target: Location where the MovieClip should be attached.
+        @param instanceName: A unique instance name for the MovieClip.
+        @param depth: &lt;strong>[optional]&lt;/strong> The depth level where the MovieClip is placed; defaults to next highest open depth.
+        @param initObject: &lt;strong>[optional]&lt;/strong> An object that contains properties with which to populate the newly attached MovieClip.
+        @return Returns a reference to the created instance.
+        @example &lt;code>var myEvent_mc:EventMovieClip = EventMovieClip.create(this, "example_mc");&lt;/code>
+        @usageNote If you want to extend a non empty MovieClip you can either define the ActionScript 2.0 class in the Flash IDE library or use {@link MovieClipUtil#attachMovieRegisterClass}.
+        @since Flash Player 7
+    */
+    public static function create(target:MovieClip, instanceName:String, depth:Number, initObject:Object):EventMovieClip {
+        return EventMovieClip(MovieClipUtil.createMovieRegisterClass('org.casalib.movieclip.EventMovieClip', target, instanceName, depth, initObject));
+    }
+    
+    
+    private function EventMovieClip() {
+        super();
+        
+        this.$setClassDescription('org.casalib.movieclip.EventMovieClip');
+    }
+    
+    /**
+        @exclude
+        @sends onData = function(sender_mc:MovieClip) {}
+    */
+    public function onData():Void {
+        this.dispatchEvent(EventMovieClip.EVENT_DATA, this);
+    }
+    
+    /**
+        @exclude
+        @sends onDragOut = function(sender_mc:MovieClip) {}
+    */
+    public function onDragOut():Void {
+        this.dispatchEvent(EventMovieClip.EVENT_DRAG_OUT, this);
+    }
+    
+    /**
+        @exclude
+        @sends onDragOver = function(sender_mc:MovieClip) {}
+    */
+    public function onDragOver():Void {
+        this.dispatchEvent(EventMovieClip.EVENT_DRAG_OVER, this);
+    }
+    
+    /**
+        @exclude
+        @sends onEnterFrame = function(sender_mc:MovieClip) {}
+    */
+    public function onEnterFrame():Void {
+        this.dispatchEvent(EventMovieClip.EVENT_ENTER_FRAME, this);
+    }
+    
+    /**
+        @exclude
+        @sends onKeyDown = function(sender_mc:MovieClip) {}
+    */
+    public function onKeyDown():Void {
+        this.dispatchEvent(EventMovieClip.EVENT_KEY_DOWN, this);
+    }
+    
+    /**
+        @exclude
+        @sends onKeyUp = function(sender_mc:MovieClip) {}
+    */
+    public function onKeyUp():Void {
+        this.dispatchEvent(EventMovieClip.EVENT_KEY_UP, this);
+    }
+    
+    /**
+        @exclude
+        @sends onKillFocus = function(sender_mc:MovieClip, newFocus:Object) {}
+    */
+    public function onKillFocus(newFocus:Object):Void {
+        this.dispatchEvent(EventMovieClip.EVENT_KILL_FOCUS, this, newFocus);
+    }
+    
+    /**
+        @exclude
+        @sends onLoad = function(sender_mc:MovieClip) {}
+    */
+    public function onLoad():Void {
+        this.dispatchEvent(EventMovieClip.EVENT_LOAD, this);
+    }
+    
+    /**
+        @exclude
+        @sends onMouseDown = function(sender_mc:MovieClip) {}
+    */
+    public function onMouseDown():Void {
+        this.dispatchEvent(EventMovieClip.EVENT_MOUSE_DOWN, this);
+    }
+    
+    /**
+        @exclude
+        @sends onMouseMove = function(sender_mc:MovieClip) {}
+    */
+    public function onMouseMove():Void {
+        this.dispatchEvent(EventMovieClip.EVENT_MOUSE_MOVE, this);
+    }
+    
+    /**
+        @exclude
+        @sends onMouseUp = function(sender_mc:MovieClip) {}
+    */
+    public function onMouseUp():Void {
+        this.dispatchEvent(EventMovieClip.EVENT_MOUSE_UP, this);
+    }
+    
+    /**
+        @exclude
+        @sends onPress = function(sender_mc:MovieClip) {}
+    */
+    public function onPress():Void {
+        this.dispatchEvent(EventMovieClip.EVENT_PRESS, this);
+    }
+    
+    /**
+        @exclude
+        @sends onRelease = function(sender_mc:MovieClip) {}
+    */
+    public function onRelease():Void {
+        this.dispatchEvent(EventMovieClip.EVENT_RELEASE, this);
+    }
+    
+    /**
+        @exclude
+        @sends onReleaseOutside = function(sender_mc:MovieClip) {}
+    */
+    public function onReleaseOutside():Void {
+        this.dispatchEvent(EventMovieClip.EVENT_RELEASE_OUTSIDE, this);
+    }
+    
+    /**
+        @exclude
+        @sends onRollOut = function(sender_mc:MovieClip) {}
+    */
+    public function onRollOut():Void {
+        this.dispatchEvent(EventMovieClip.EVENT_ROLL_OUT, this);
+    }
+    
+    /**
+        @exclude
+        @sends onRollOver = function(sender_mc:MovieClip) {}
+    */
+    public function onRollOver():Void {
+        this.dispatchEvent(EventMovieClip.EVENT_ROLL_OVER, this);
+    }
+    
+    /**
+        @exclude
+        @sends onSetFocus = function(sender_mc:MovieClip, oldFocus:Object) {}
+    */
+    public function onSetFocus(oldFocus:Object):Void {
+        this.dispatchEvent(EventMovieClip.EVENT_SET_FOCUS, this, oldFocus);
+    }
+    
+    /**
+        @exclude
+        @sends onUnload = function(sender_mc:MovieClip) {}
+    */
+    public function onUnload():Void {
+        this.dispatchEvent(EventMovieClip.EVENT_UNLOAD, this);
+    }
+}
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Dispatches MovieClip event handler notification using <a class="className" href="org_casalib_event_EventDispatcher.html">org.casalib.event.EventDispatcher</a>.</span><div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">import</span> org.casalib.movieclip.EventMovieClip;
+<span class="codeKeyword">import</span> org.casalib.util.MovieClipUtil;
+
+<span class="codeKeyword">function</span> movieClipLoad(sender_mc:<span class="codeIdentifier">MovieClip</span>):<span class="codeIdentifier">Void</span> {
+    <span class="codeIdentifier">trace</span>(sender_mc + <span class="codeString">" has loaded."</span>);
+}
+
+<span class="codeKeyword">function</span> movieClipPress(sender_mc:<span class="codeIdentifier">MovieClip</span>):<span class="codeIdentifier">Void</span> {
+    <span class="codeIdentifier">trace</span>(sender_mc + <span class="codeString">" was pressed."</span>);
+}
+
+MovieClipUtil.attachMovieRegisterClass(org.casalib.movieclip.EventMovieClip, <span class="codeIdentifier">this</span>, <span class="codeString">"linkageMovieClip"</span>, <span class="codeString">"event_mc"</span>);
+
+<span class="codeIdentifier">this</span>.event_mc.addEventObserver(<span class="codeIdentifier">this</span>, EventMovieClip.EVENT_LOAD, <span class="codeString">"movieClipLoad"</span>);
+<span class="codeIdentifier">this</span>.event_mc.addEventObserver(<span class="codeIdentifier">this</span>, EventMovieClip.EVENT_PRESS, <span class="codeString">"movieClipPress"</span>);</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Events broadcasted to listeners:</span><div class="item"><ul><li><code>onData = function (sender_mc:MovieClip) {}</code> </li><li><code>onDragOut = function (sender_mc:MovieClip) {}</code> </li><li><code>onDragOver = function (sender_mc:MovieClip) {}</code> </li><li><code>onEnterFrame = function (sender_mc:MovieClip) {}</code> </li><li><code>onKeyDown = function (sender_mc:MovieClip) {}</code> </li><li><code>onKeyUp = function (sender_mc:MovieClip) {}</code> </li><li><code>onKillFocus = function (sender_mc:MovieClip, newFocus:Object) {}</code> </li><li><code>onLoad = function (sender_mc:MovieClip) {}</code> </li><li><code>onMouseDown = function (sender_mc:MovieClip) {}</code> </li><li><code>onMouseMove = function (sender_mc:MovieClip) {}</code> </li><li><code>onMouseUp = function (sender_mc:MovieClip) {}</code> </li><li><code>onPress = function (sender_mc:MovieClip) {}</code> </li><li><code>onRelease = function (sender_mc:MovieClip) {}</code> </li><li><code>onReleaseOutside = function (sender_mc:MovieClip) {}</code> </li><li><code>onRollOut = function (sender_mc:MovieClip) {}</code> </li><li><code>onRollOver = function (sender_mc:MovieClip) {}</code> </li><li><code>onSetFocus = function (sender_mc:MovieClip, oldFocus:Object) {}</code> </li><li><code>onUnload = function (sender_mc:MovieClip) {}</code> </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class properties</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#EVENT_DATA">EVENT_DATA</a><span class="typeInfo">  : String</span></li><li class="sortli listnum2"><a href="#EVENT_DRAG_OUT">EVENT_DRAG_OUT</a><span class="typeInfo">  : String</span></li><li class="sortli listnum3"><a href="#EVENT_DRAG_OVER">EVENT_DRAG_OVER</a><span class="typeInfo">  : String</span></li><li class="sortli listnum4"><a href="#EVENT_ENTER_FRAME">EVENT_ENTER_FRAME</a><span class="typeInfo">  : String</span></li><li class="sortli listnum5"><a href="#EVENT_KEY_DOWN">EVENT_KEY_DOWN</a><span class="typeInfo">  : String</span></li><li class="sortli listnum6"><a href="#EVENT_KEY_UP">EVENT_KEY_UP</a><span class="typeInfo">  : String</span></li><li class="sortli listnum7"><a href="#EVENT_KILL_FOCUS">EVENT_KILL_FOCUS</a><span class="typeInfo">  : String</span></li><li class="sortli listnum8"><a href="#EVENT_LOAD">EVENT_LOAD</a><span class="typeInfo">  : String</span></li><li class="sortli listnum9"><a href="#EVENT_MOUSE_DOWN">EVENT_MOUSE_DOWN</a><span class="typeInfo">  : String</span></li><li class="sortli listnum10"><a href="#EVENT_MOUSE_MOVE">EVENT_MOUSE_MOVE</a><span class="typeInfo">  : String</span></li><li class="sortli listnum11"><a href="#EVENT_MOUSE_UP">EVENT_MOUSE_UP</a><span class="typeInfo">  : String</span></li><li class="sortli listnum12"><a href="#EVENT_PRESS">EVENT_PRESS</a><span class="typeInfo">  : String</span></li><li class="sortli listnum13"><a href="#EVENT_RELEASE">EVENT_RELEASE</a><span class="typeInfo">  : String</span></li><li class="sortli listnum14"><a href="#EVENT_RELEASE_OUTSIDE">EVENT_RELEASE_OUTSIDE</a><span class="typeInfo">  : String</span></li><li class="sortli listnum15"><a href="#EVENT_ROLL_OUT">EVENT_ROLL_OUT</a><span class="typeInfo">  : String</span></li><li class="sortli listnum16"><a href="#EVENT_ROLL_OVER">EVENT_ROLL_OVER</a><span class="typeInfo">  : String</span></li><li class="sortli listnum17"><a href="#EVENT_SET_FOCUS">EVENT_SET_FOCUS</a><span class="typeInfo">  : String</span></li><li class="sortli listnum18"><a href="#EVENT_UNLOAD">EVENT_UNLOAD</a><span class="typeInfo">  : String</span></li></ul></div><div class="memberSummaryPart"><span class="title">Class methods</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#create">create</a><span class="typeInfo"> (target:MovieClip, instanceName:String, depth:Number, initObject:Object) : <a class="className" href="org_casalib_movieclip_EventMovieClip.html">EventMovieClip</a></span><ul class="summary"><li>Creates an empty instance of the EventMovieClip class.</li></ul></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Class methods inherited from <span class="superclass"><a class="className" href="org_casalib_movieclip_DispatchableMovieClip.html">DispatchableMovieClip</a></span></span><div class="item inheritedList"><a href="org_casalib_movieclip_DispatchableMovieClip.html#create">create</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Class methods inherited from <span class="superclass"><a class="className" href="org_casalib_movieclip_CoreMovieClip.html">CoreMovieClip</a></span></span><div class="item inheritedList"><a href="org_casalib_movieclip_CoreMovieClip.html#create">create</a></div></div></div></div></div><div class="memberSummaryPart"><span class="title">Instance methods</span><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_movieclip_DispatchableMovieClip.html">DispatchableMovieClip</a></span></span><div class="item inheritedList"><a href="org_casalib_movieclip_DispatchableMovieClip.html#addEventObserver">addEventObserver</a>  <a href="org_casalib_movieclip_DispatchableMovieClip.html#destroy">destroy</a>  <a href="org_casalib_movieclip_DispatchableMovieClip.html#dispatchEvent">dispatchEvent</a>  <a href="org_casalib_movieclip_DispatchableMovieClip.html#removeAllEventObservers">removeAllEventObservers</a>  <a href="org_casalib_movieclip_DispatchableMovieClip.html#removeEventObserver">removeEventObserver</a>  <a href="org_casalib_movieclip_DispatchableMovieClip.html#removeEventObserversForEvent">removeEventObserversForEvent</a>  <a href="org_casalib_movieclip_DispatchableMovieClip.html#removeEventObserversForScope">removeEventObserversForScope</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_movieclip_CoreMovieClip.html">CoreMovieClip</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_movieclip_CoreMovieClip.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_movieclip_CoreMovieClip.html#destroy">destroy</a>  <a href="org_casalib_movieclip_CoreMovieClip.html#removeMovieClip">removeMovieClip</a>  <a href="org_casalib_movieclip_CoreMovieClip.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Classproperties">Class properties</h2><div class="member" id="EVENT_DATA"><h3>EVENT_DATA</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_DATA</b>:String = <span class="codeString">'onData'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_DRAG_OUT"><h3>EVENT_DRAG_OUT</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_DRAG_OUT</b>:String = <span class="codeString">'onDragOut'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_DRAG_OVER"><h3>EVENT_DRAG_OVER</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_DRAG_OVER</b>:String = <span class="codeString">'onDragOver'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_ENTER_FRAME"><h3>EVENT_ENTER_FRAME</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_ENTER_FRAME</b>:String = <span class="codeString">'onEnterFrame'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_KEY_DOWN"><h3>EVENT_KEY_DOWN</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_KEY_DOWN</b>:String = <span class="codeString">'onKeyDown'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_KEY_UP"><h3>EVENT_KEY_UP</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_KEY_UP</b>:String = <span class="codeString">'onKeyUp'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_KILL_FOCUS"><h3>EVENT_KILL_FOCUS</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_KILL_FOCUS</b>:String = <span class="codeString">'onKillFocus'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_LOAD"><h3>EVENT_LOAD</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_LOAD</b>:String = <span class="codeString">'onLoad'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_MOUSE_DOWN"><h3>EVENT_MOUSE_DOWN</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_MOUSE_DOWN</b>:String = <span class="codeString">'onMouseDown'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_MOUSE_MOVE"><h3>EVENT_MOUSE_MOVE</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_MOUSE_MOVE</b>:String = <span class="codeString">'onMouseMove'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_MOUSE_UP"><h3>EVENT_MOUSE_UP</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_MOUSE_UP</b>:String = <span class="codeString">'onMouseUp'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_PRESS"><h3>EVENT_PRESS</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_PRESS</b>:String = <span class="codeString">'onPress'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_RELEASE"><h3>EVENT_RELEASE</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_RELEASE</b>:String = <span class="codeString">'onRelease'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_RELEASE_OUTSIDE"><h3>EVENT_RELEASE_OUTSIDE</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_RELEASE_OUTSIDE</b>:String = <span class="codeString">'onReleaseOutside'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_ROLL_OUT"><h3>EVENT_ROLL_OUT</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_ROLL_OUT</b>:String = <span class="codeString">'onRollOut'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_ROLL_OVER"><h3>EVENT_ROLL_OVER</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_ROLL_OVER</b>:String = <span class="codeString">'onRollOver'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_SET_FOCUS"><h3>EVENT_SET_FOCUS</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_SET_FOCUS</b>:String = <span class="codeString">'onSetFocus'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_UNLOAD"><h3>EVENT_UNLOAD</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_UNLOAD</b>:String = <span class="codeString">'onUnload'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div></div><div class="memberSection"><h2 id="Classmethods">Class methods</h2><div class="member" id="create"><h3>create</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>create</b> (
+
+
+
+</div><div class="code">target:MovieClip,
+instanceName:String,
+depth:Number,
+initObject:Object) : <a class="className" href="org_casalib_movieclip_EventMovieClip.html">EventMovieClip</a></div><br class="clear" /></div></div><div class="description"> Creates an empty instance of the EventMovieClip class. Use this instead of a traditional <code><span class="codeKeyword">new</span></code> constructor statement due to limitations of ActionScript 2.0. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">target      <span class="itemSeparator">:</span></div><div>Location where the MovieClip should be attached.</div></div><div class="item"><div class="floatbox code colorizedCode">instanceName<span class="itemSeparator">:</span></div><div>A unique instance name for the MovieClip.</div></div><div class="item"><div class="floatbox code colorizedCode">depth       <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> The depth level where the MovieClip is placed; defaults to next highest open depth.</div></div><div class="item"><div class="floatbox code colorizedCode">initObject  <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> An object that contains properties with which to populate the newly attached MovieClip.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns a reference to the created instance. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <code><span class="codeKeyword">var</span> myEvent_mc:EventMovieClip = EventMovieClip.create(<span class="codeIdentifier">this</span>, <span class="codeString">"example_mc"</span>);</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> If you want to extend a non empty MovieClip you can either define the ActionScript 2.0 class in the Flash IDE library or use <a href="org_casalib_util_MovieClipUtil.html#attachMovieRegisterClass">org.casalib.util.MovieClipUtil.attachMovieRegisterClass</a>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Since:</span><div class="item"><ul><li> Flash Player 7 </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>RetryableLoad</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_load_base_RetryableLoad"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classproperties" accesskey="l">C<span class="accessKey">l</span>ass properties</a></li><li><a href="#Instanceproperties" accesskey="l">Instance <span class="accessKey">p</span>roperties</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li></ul><br class="clear" /></div><h1>RetryableLoad</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_load_base_Load.html">Load</a> &lt; <a class="className" href="org_casalib_event_EventDispatcher.html">EventDispatcher</a> &lt; <a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></td></tr><tr><th align="left">Implements:</th><td><ul><li><a class="className" href="org_casalib_load_base_RetryableLoadInterface.html">RetryableLoadInterface</a></li></ul></td></tr><tr><th align="left">Known subclasses:</th><td><ul><li><a class="className" href="org_casalib_load_base_BytesLoad.html">BytesLoad</a></li><li><a class="className" href="org_casalib_load_data_stylesheet_StyleSheetLoad.html">StyleSheetLoad</a></li></ul></td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">12/22/06</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.load.base.RetryableLoad</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.load.base.Load;
+import org.casalib.load.base.RetryableLoadInterface;
+
+/**
+    Retryable load class. Class needs to be extended further to function properly.
+    
+    @author Aaron Clinger
+    @version 12/22/06
+    @since Flash Player 7
+*/
+
+class org.casalib.load.base.RetryableLoad extends Load implements RetryableLoadInterface {
+    public static var EVENT_LOAD_RETRY:String = 'onLoadRetry';
+    public static var loadRetries:Number = 2;
+    private var $attempts:Number;
+    private var $loadRetries:Number;
+    
+    
+    /**
+        @param target: A path to a container where the file specified by &lt;code>filePath&lt;/code> should be loaded into.
+        @param filePath: The absolute or relative URL of the file to be loaded.
+    */
+    private function RetryableLoad(target:Object, filePath:String) {
+        super(target, filePath);
+        
+        this.setLoadRetries(RetryableLoad.loadRetries);
+        
+        this.$setClassDescription('org.casalib.load.base.RetryableLoad');
+    }
+    
+    /**
+        {@inheritDoc}
+        
+        @usageNote Class defaults to &lt;code>2&lt;/code> additional retries / &lt;code>3&lt;/code> total load attempts.
+    */
+    public function setLoadRetries(loadRetries:Number):Void {
+        this.$loadRetries = loadRetries;
+    }
+    
+    public function destroy():Void {
+        this.$clean();
+        
+        delete this.$loadRetries;
+        
+        super.destroy();
+    }
+    
+    private function $startLoad():Void {
+        var loadAttempts:Number = isNaN(this.$attempts) ? 0 : this.$attempts;
+        this.$clean();
+        this.$attempts = loadAttempts;
+        
+        super.$startLoad();
+    }
+    
+    private function $onLoad(success:Boolean):Void {
+        if (success)
+            this.$onComplete();
+        else
+            this.$retryLoad();
+    }
+    
+    /**
+        @sends onLoadRetry = function(sends:RetryableLoad, attempts:Number) {}
+    */
+    private function $retryLoad():Void {
+        if (++this.$attempts > this.$loadRetries) {
+            this.stop();
+            return;
+        }
+        
+        this.dispatchEvent(RetryableLoad.EVENT_LOAD_RETRY, this, this.$attempts);
+        this.$startLoad();
+    }
+    
+    private function $clean():Void {
+        delete this.$attempts;
+        
+        super.$clean();
+    }
+}
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Retryable load class.</span> Class needs to be extended further to function properly.<div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Since:</span><div class="item"><ul><li> Flash Player 7 </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Events broadcasted to listeners:</span><div class="item"><ul><li><code>onLoadRetry = function (sends:RetryableLoad, attempts:Number) {}</code> </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class properties</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#EVENT_LOAD_RETRY">EVENT_LOAD_RETRY</a><span class="typeInfo">  : String</span></li><li class="sortli listnum2"><a href="#loadRetries">loadRetries</a><span class="typeInfo">  : Number</span></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Class properties inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_Load.html">Load</a></span></span><div class="item inheritedList"><a href="org_casalib_load_base_Load.html#EVENT_LOAD_COMPLETE">EVENT_LOAD_COMPLETE</a>  <a href="org_casalib_load_base_Load.html#EVENT_LOAD_ERROR">EVENT_LOAD_ERROR</a>  <a href="org_casalib_load_base_Load.html#EVENT_LOAD_INIT">EVENT_LOAD_INIT</a>  <a href="org_casalib_load_base_Load.html#EVENT_LOAD_START">EVENT_LOAD_START</a></div></div></div></div></div><div class="memberSummaryPart"><span class="title">Instance methods</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#setLoadRetries">setLoadRetries</a><span class="typeInfo"> (loadRetries:Number) : Void</span><ul class="summary"><li><div class="inheritDoc">	Sets the number of additional load attempts before failing.</li></ul></li><li class="sortli listnum2"><a href="#destroy">destroy</a><span class="typeInfo">  : Void</span><ul class="summary"><li><div class="inheritDoc">Removes any internal variables, intervals, enter frames, internal MovieClips and event observers to allow the object to be garbage collected.</li></ul></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_Load.html">Load</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_load_base_Load.html#$clean">$clean</a>  <a class="private" href="org_casalib_load_base_Load.html#$onComplete">$onComplete</a>  <a class="private" href="org_casalib_load_base_Load.html#$onInitialized">$onInitialized</a>  <a class="private" href="org_casalib_load_base_Load.html#$onLoad">$onLoad</a>  <a class="private" href="org_casalib_load_base_Load.html#$remapOnLoadHandler">$remapOnLoadHandler</a>  <a class="private" href="org_casalib_load_base_Load.html#$startLoad">$startLoad</a>  <a class="private" href="org_casalib_load_base_Load.html#$stopLoad">$stopLoad</a>  <a href="org_casalib_load_base_Load.html#destroy">destroy</a>  <a href="org_casalib_load_base_Load.html#getFilePath">getFilePath</a>  <a href="org_casalib_load_base_Load.html#hasLoaded">hasLoaded</a>  <a href="org_casalib_load_base_Load.html#isLoading">isLoading</a>  <a href="org_casalib_load_base_Load.html#start">start</a>  <a href="org_casalib_load_base_Load.html#stop">stop</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_event_EventDispatcher.html">EventDispatcher</a></span></span><div class="item inheritedList"><a href="org_casalib_event_EventDispatcher.html#addEventObserver">addEventObserver</a>  <a href="org_casalib_event_EventDispatcher.html#destroy">destroy</a>  <a href="org_casalib_event_EventDispatcher.html#dispatchEvent">dispatchEvent</a>  <a href="org_casalib_event_EventDispatcher.html#removeAllEventObservers">removeAllEventObservers</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserver">removeEventObserver</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForEvent">removeEventObserversForEvent</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForScope">removeEventObserversForScope</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_core_CoreObject.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_core_CoreObject.html#destroy">destroy</a>  <a href="org_casalib_core_CoreObject.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Classproperties">Class properties</h2><div class="member" id="EVENT_LOAD_RETRY"><h3>EVENT_LOAD_RETRY</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_LOAD_RETRY</b>:String = <span class="codeString">'onLoadRetry'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="loadRetries"><h3>loadRetries</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>loadRetries</b>:Number = <span class="codeNumber">2</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div></div><div class="memberSection"><h2 id="Instancemethods">Instance methods</h2><div class="member" id="destroy"><h3>destroy</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>destroy</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Removes any internal variables, intervals, enter frames, internal MovieClips and event observers to allow the object to be garbage collected.<br />		<br />		<strong>Always call <code>filePath</code> before deleting last object pointer.</strong></div><a class="followInheritDoc" href="org_casalib_core_CoreInterface.html#destroy">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Overrides:</span><div class="item"><ul><li> <a href="org_casalib_load_base_Load.html#destroy">Load.destroy</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_core_CoreInterface.html#destroy">org.casalib.core.CoreInterface.destroy</a> </li></ul></div></div></div></div></div><div class="member" id="setLoadRetries"><h3>setLoadRetries</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>setLoadRetries</b> (
+</div><div class="code">loadRetries:Number) : Void</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">	Sets the number of additional load attempts before failing.</div><a class="followInheritDoc" href="org_casalib_load_base_RetryableLoadInterface.html#setLoadRetries">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">loadRetries<span class="itemSeparator">:</span></div><div><div class="inheritDoc">Number of additional load retries.</div><a class="followInheritDoc" href="org_casalib_load_base_RetryableLoadInterface.html#setLoadRetries">#</a></div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> Class defaults to <code><span class="codeNumber">2</span></code> additional retries / <code><span class="codeNumber">3</span></code> total load attempts. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_load_base_RetryableLoadInterface.html#setLoadRetries">RetryableLoadInterface.setLoadRetries</a> </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

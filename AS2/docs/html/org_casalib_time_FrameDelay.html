@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>FrameDelay</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_time_FrameDelay"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Instanceproperties" accesskey="l">Instance <span class="accessKey">p</span>roperties</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li></ul><br class="clear" /></div><h1>FrameDelay</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></td></tr><tr><th align="left">Implements:</th><td><ul><li><a class="className" href="org_casalib_control_RunnableInterface.html">RunnableInterface</a></li></ul></td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">03/21/08</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.time.FrameDelay</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.core.CoreObject;
+import org.casalib.control.RunnableInterface;
+import org.casalib.time.EnterFrame;
+
+/**
+    Creates a callback after one or more frames have been fired. Helps prevent race conditions by allowing recently created MovieClips, Classed, etc... a frame to initialize before proceeding. Should only need a single frame because &lt;code>onEnterFrame&lt;/code> should only occur when all frame jobs are finished.
+    
+    @author Aaron Clinger
+    @version 03/21/08
+    @since Flash Player 7
+    @example
+        &lt;code>
+            class Example {
+                public function Example() {
+                    // A lot of inits, attachMovies, etc...
+                    
+                    var initDelay:FrameDelay = new FrameDelay(this, "initComplete");
+                    initDelay.start();
+                }
+                
+                public function initComplete():Void {
+                    // Safe to execute code
+                }
+            }
+        &lt;/code>
+        
+        When starting a SWF or after attaching a movie:
+        &lt;code>
+            var initDelay:FrameDelay = new FrameDelay(this, "initComplete", 1, "Aaron", 1984);
+            this.initDelay.start();
+            
+            function initComplete(firstName:String, birthYear:Number):Void {
+                trace(firstName + " was born in " + birthYear);
+            }
+        &lt;/code>
+*/
+
+class org.casalib.time.FrameDelay extends CoreObject implements RunnableInterface {
+    private var $scope:Object;
+    private var $methodName:String;
+    private var $frames:Number;
+    private var $fires:Number;
+    private var $arguments:Array;
+    private var $enterFrameInstance:EnterFrame;
+    
+    /**
+        Defines {@link FrameDelay} object.
+        
+        @param scope: An object that contains the method specified by "methodName".
+        @param methodName: A method that exists in the scope of the object specified by "scope".
+        @param frames: &lt;strong>[optional]&lt;/strong> The number of frames to wait before calling "methodName". &lt;code>frames&lt;/code> defaults to &lt;code>1&lt;/code>.
+        @param param(s): &lt;strong>[optional]&lt;/strong> Parameters passed to the function specified by "methodName". Multiple parameters are allowed and should be separated by commas: param1,param2, ...,paramN
+    */
+    public function FrameDelay(scope:Object, methodName:String, frames:Number, param:Object) {
+        super();
+        
+        this.$setClassDescription('org.casalib.time.FrameDelay');
+        
+        this.$scope      = scope;
+        this.$methodName = methodName;
+        this.$frames     = (frames == undefined || frames == null) ? 1 : frames;
+        this.$arguments  = arguments.slice(3);
+    }
+    
+    /**
+        Starts or restarts the frame delay.
+    */
+    public function start():Void {
+        this.$fires = 0;
+        this.$enterFrameInstance = EnterFrame.getInstance();
+        this.$enterFrameInstance.addEventObserver(this, EnterFrame.EVENT_ENTER_FRAME, '$onFrameFire');
+    }
+    
+    /**
+        Stops the frame delay from completing.
+    */
+    public function stop():Void {
+        this.$enterFrameInstance.removeEventObserver(this, EnterFrame.EVENT_ENTER_FRAME, '$onFrameFire');
+        delete this.$enterFrameInstance;
+        delete this.$fires;
+    }
+    
+    public function destroy():Void {
+        this.stop();
+        
+        delete this.$scope;
+        delete this.$methodName;
+        delete this.$frames;
+        delete this.$arguments;
+        
+        super.destroy();
+    }
+    
+    private function $onFrameFire():Void {
+        if (++this.$fires >= this.$frames) {
+            this.stop();
+            this.$scope[this.$methodName].apply(this.$scope, this.$arguments);
+        }
+    }
+}
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Creates a callback after one or more frames have been fired.</span> Helps prevent race conditions by allowing recently created MovieClips, Classed, etc... a frame to initialize before proceeding. Should only need a single frame because <code><span class="codeIdentifier">onEnterFrame</span></code> should only occur when all frame jobs are finished.<div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Since:</span><div class="item"><ul><li> Flash Player 7 </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">class</span> Example {
+    <span class="codeKeyword">public</span> <span class="codeKeyword">function</span> Example() {
+        <span class="codeComment">// A lot of inits, attachMovies, etc...</span>
+
+        <span class="codeKeyword">var</span> initDelay:FrameDelay = <span class="codeKeyword">new</span> FrameDelay(<span class="codeIdentifier">this</span>, <span class="codeString">"initComplete"</span>);
+        initDelay<span class="codeIdentifier">.start</span>();
+    }
+
+    <span class="codeKeyword">public</span> <span class="codeKeyword">function</span> initComplete():<span class="codeIdentifier">Void</span> {
+        <span class="codeComment">// Safe to execute code</span>
+    }
+}</pre>		<br />		When starting a SWF or after attaching a movie:<br />		<pre>
+<span class="codeKeyword">var</span> initDelay:FrameDelay = <span class="codeKeyword">new</span> FrameDelay(<span class="codeIdentifier">this</span>, <span class="codeString">"initComplete"</span>, <span class="codeNumber">1</span>, <span class="codeString">"Aaron"</span>, <span class="codeNumber">1984</span>);
+<span class="codeIdentifier">this</span>.initDelay<span class="codeIdentifier">.start</span>();
+
+<span class="codeKeyword">function</span> initComplete(firstName:<span class="codeIdentifier">String</span>, birthYear:<span class="codeIdentifier">Number</span>):<span class="codeIdentifier">Void</span> {
+    <span class="codeIdentifier">trace</span>(firstName + <span class="codeString">" was born in "</span> + birthYear);
+}</pre> </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Constructor</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#FrameDelay">FrameDelay</a><span class="typeInfo"> (scope:Object, methodName:String, frames:Number, param:Object)</span><ul class="summary"><li>Defines FrameDelay object.</li></ul></li></ul></div><div class="memberSummaryPart"><span class="title">Instance methods</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#start">start</a><span class="typeInfo">  : Void</span><ul class="summary"><li>Starts or restarts the frame delay.</li></ul></li><li class="sortli listnum2"><a href="#stop">stop</a><span class="typeInfo">  : Void</span><ul class="summary"><li>Stops the frame delay from completing.</li></ul></li><li class="sortli listnum3"><a href="#destroy">destroy</a><span class="typeInfo">  : Void</span><ul class="summary"><li><div class="inheritDoc">Removes any internal variables, intervals, enter frames, internal MovieClips and event observers to allow the object to be garbage collected.</li></ul></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_core_CoreObject.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_core_CoreObject.html#destroy">destroy</a>  <a href="org_casalib_core_CoreObject.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Constructor">Constructor</h2><div class="member" id="FrameDelay"><h3>FrameDelay</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>FrameDelay</b> (
+
+
+
+</div><div class="code">scope:Object,
+methodName:String,
+frames:Number,
+param:Object)</div><br class="clear" /></div></div><div class="description"> Defines <a class="className" href="org_casalib_time_FrameDelay.html">FrameDelay</a> object. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">scope     <span class="itemSeparator">:</span></div><div>An object that contains the method specified by "methodName".</div></div><div class="item"><div class="floatbox code colorizedCode">methodName<span class="itemSeparator">:</span></div><div>A method that exists in the scope of the object specified by "scope".</div></div><div class="item"><div class="floatbox code colorizedCode">frames    <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> The number of frames to wait before calling "methodName". <code>frames</code> defaults to <code><span class="codeNumber">1</span></code>.</div></div><div class="item"><div class="floatbox code colorizedCode">param(s)  <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> Parameters passed to the function specified by "methodName". Multiple parameters are allowed and should be separated by commas: param1,param2, ...,paramN</div></div></div></div></div></div></div><div class="memberSection"><h2 id="Instancemethods">Instance methods</h2><div class="member" id="destroy"><h3>destroy</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>destroy</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Removes any internal variables, intervals, enter frames, internal MovieClips and event observers to allow the object to be garbage collected.<br />		<br />		<strong>Always call <code><span class="codeIdentifier">onEnterFrame</span></code> before deleting last object pointer.</strong></div><a class="followInheritDoc" href="org_casalib_core_CoreInterface.html#destroy">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Overrides:</span><div class="item"><ul><li> <a href="org_casalib_core_CoreObject.html#destroy">org.casalib.core.CoreObject.destroy</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_core_CoreInterface.html#destroy">org.casalib.core.CoreInterface.destroy</a> </li></ul></div></div></div></div></div><div class="member" id="start"><h3>start</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>start</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> Starts or restarts the frame delay. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_control_RunnableInterface.html#start">org.casalib.control.RunnableInterface.start</a> </li></ul></div></div></div></div></div><div class="member" id="stop"><h3>stop</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>stop</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> Stops the frame delay from completing. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_control_RunnableInterface.html#stop">org.casalib.control.RunnableInterface.stop</a> </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

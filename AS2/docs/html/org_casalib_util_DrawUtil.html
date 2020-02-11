@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DrawUtil</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_util_DrawUtil"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classmethods" accesskey="a">Cl<span class="accessKey">a</span>ss methods</a></li></ul><br class="clear" /></div><h1>DrawUtil</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td>none</td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">09/19/08</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.util.DrawUtil</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.math.geom.Ellipse;
+import org.casalib.math.geom.Rectangle;
+
+/**
+    @author Aaron Clinger
+    @version 09/19/08
+*/
+
+class org.casalib.util.DrawUtil {
+    
+    /**
+        Draws a circular wedge into a MovieClip.
+        
+        @param target_mc: MovieClip in which to draw the wedge.
+        @param ellipse: Defined Ellipse object that contains the size and position of the shape.
+        @param startAngle: The starting angle of wedge in degrees.
+        @param arc: The sweep of the wedge in degrees.
+        @usage
+            &lt;code>
+                this.createEmptyMovieClip('wedge_mc', this.getNextHighestDepth());
+                var myOval:Ellipse = new Ellipse(10, 10, 150, 50);
+                
+                this.wedge_mc.beginFill(0xFF00FF);
+                DrawUtil.drawWedge(this.wedge_mc, myOval, 0, 270);
+                this.wedge_mc.endFill();
+            &lt;/code>
+    */
+    public static function drawWedge(target_mc:MovieClip, ellipse:Ellipse, startAngle:Number, arc:Number):Void {
+        if (Math.abs(arc) >= 360) {
+            DrawUtil.drawEllipse(target_mc, ellipse);
+            return;
+        }
+        
+        startAngle += 90;
+        
+        var radius:Number   = ellipse.getWidth() * .5;
+        var yRadius:Number  = ellipse.getHeight() * .5;
+        var x:Number        = ellipse.getX() + radius;
+        var y:Number        = ellipse.getY() + yRadius;
+        var segs:Number     = Math.ceil(Math.abs(arc) / 45);
+        var segAngle:Number = -arc / segs;
+        var theta:Number    = -(segAngle / 180) * Math.PI;
+        var angle:Number    = -(startAngle / 180) * Math.PI;
+        var ax:Number       = x + Math.cos(startAngle / 180 * Math.PI) * radius;
+        var ay:Number       = y + Math.sin(-startAngle / 180 * Math.PI) * yRadius;
+        var angleMid:Number;
+        
+        target_mc.moveTo(x, y);
+        target_mc.lineTo(ax, ay);
+        
+        var i:Number = -1;
+        while (++i &lt; segs) {
+            angle += theta;
+            angleMid = angle - (theta * .5);
+            
+            target_mc.curveTo(x + Math.cos(angleMid) * (radius / Math.cos(theta * .5)), y + Math.sin(angleMid) * (yRadius / Math.cos(theta * .5)), x + Math.cos(angle) * radius, y + Math.sin(angle) * yRadius);
+        }
+        
+        target_mc.lineTo(x, y);
+    }
+    
+    /**
+        Draws an ellipse (circle or oval) into a MovieClip.
+        
+        @param target_mc: MovieClip in which to draw the ellipse.
+        @param ellipse: Defined Ellipse object that contains the size and position of the shape.
+        @usage
+            &lt;code>
+                this.createEmptyMovieClip('oval_mc', this.getNextHighestDepth());
+                var myOval:Ellipse = new Ellipse(10, 10, 150, 50);
+                
+                this.oval_mc.beginFill(0xFF00FF);
+                DrawUtil.drawEllipse(this.oval_mc, myOval);
+                this.oval_mc.endFill();
+            &lt;/code>
+    */
+    public static function drawEllipse(target_mc:MovieClip, ellipse:Ellipse):Void {
+        var radius:Number  = ellipse.getWidth() * .5;
+        var yRadius:Number = ellipse.getHeight() * .5;
+        var x:Number       = radius + ellipse.getX();
+        var y:Number       = yRadius + ellipse.getY();
+        var theta:Number   = Math.PI * .25;
+        var xrCtrl:Number  = radius / Math.cos(theta * .5);
+        var yrCtrl:Number  = yRadius / Math.cos(theta * .5);
+        var angle:Number   = 0;
+        var angleMid:Number;
+        
+        target_mc.moveTo(x + radius, y);
+        
+        var i:Number = -1;
+        while (++i &lt; 8) {
+            angle += theta;
+            angleMid = angle - (theta * .5);
+            target_mc.curveTo(x + Math.cos(angleMid) *  xrCtrl, y + Math.sin(angleMid) * yrCtrl, x + Math.cos(angle) * radius, y + Math.sin(angle) * yRadius);
+        }
+    }
+    
+    /**
+        Draws a rectangle (or square) into a MovieClip.
+        
+        @param target_mc: MovieClip in which to draw the rectangle.
+        @param rectangle: Defined Rectangle object that contains the size and position of the shape.
+        @usage
+            &lt;code>
+                this.createEmptyMovieClip('rect_mc', this.getNextHighestDepth());
+                var myRect:Rectangle = new Rectangle(10, 10, 150, 50);
+                
+                this.rect_mc.beginFill(0xFF00FF);
+                DrawUtil.drawRectangle(this.rect_mc, myRect);
+                this.rect_mc.endFill();
+            &lt;/code>
+    */
+    public static function drawRectangle(target_mc:MovieClip, rectangle:Rectangle):Void {
+        var width:Number = rectangle.getX() + rectangle.getWidth();
+        var height:Number = rectangle.getY() + rectangle.getHeight();
+        
+        target_mc.moveTo(rectangle.getX(), rectangle.getY());
+        target_mc.lineTo(width, rectangle.getY());
+        target_mc.lineTo(width, height);
+        target_mc.lineTo(rectangle.getX(), height);
+        target_mc.lineTo(rectangle.getX(), rectangle.getY());
+    }
+    
+    /**
+        Draws a rectangle with rounded corners into a MovieClip.
+        
+        @param target_mc: MovieClip in which to draw the rectangle.
+        @param rectangle: Defined Rectangle object that contains the size and position of the shape.
+        @param cornerRadius: The rounded radius of the rectangle's corners.
+        @usage
+            &lt;code>
+                this.createEmptyMovieClip('rect_mc', this.getNextHighestDepth());
+                var myRect:Rectangle = new Rectangle(10, 10, 150, 50);
+                
+                this.rect_mc.beginFill(0xFF00FF);
+                DrawUtil.drawRoundedRectangle(this.rect_mc, myRect, 15);
+                this.rect_mc.endFill();
+            &lt;/code>
+    */
+    public static function drawRoundedRectangle(target_mc:MovieClip, rectangle:Rectangle, cornerRadius:Number):Void {
+        if (cornerRadius &lt;= 0 || cornerRadius == undefined) {
+            DrawUtil.drawRectangle(target_mc, rectangle);
+            return;
+        }
+        
+        var width:Number             = rectangle.getX() + rectangle.getWidth();
+        var height:Number            = rectangle.getY() + rectangle.getHeight();
+        var xPlusCorner:Number       = rectangle.getX() + cornerRadius;
+        var yPlusCorner:Number       = rectangle.getY() + cornerRadius;
+        var widthMinusCorner:Number  = width - cornerRadius;
+        var heightMinusCorner:Number = height - cornerRadius;
+        
+        target_mc.moveTo(xPlusCorner, rectangle.getY());
+        target_mc.lineTo(widthMinusCorner, rectangle.getY());
+        target_mc.curveTo(width, rectangle.getY(), width, yPlusCorner);
+        target_mc.lineTo(width, heightMinusCorner);
+        target_mc.curveTo(width, height, widthMinusCorner, height);
+        target_mc.lineTo(xPlusCorner, height);
+        target_mc.curveTo(rectangle.getX(), height, rectangle.getX(), heightMinusCorner);
+        target_mc.lineTo(rectangle.getX(), yPlusCorner);
+        target_mc.curveTo(rectangle.getX(), rectangle.getY(), xPlusCorner, rectangle.getY());
+    }
+    
+    private function DrawUtil() {} // Prevents instance creation
+}
+</textarea></div></div></div><div class="classDescription"></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class methods</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#drawWedge">drawWedge</a><span class="typeInfo"> (target_mc:MovieClip, ellipse:<a class="className" href="org_casalib_math_geom_Ellipse.html">Ellipse</a>, startAngle:Number, arc:Number) : Void</span><ul class="summary"><li>	Draws a circular wedge into a MovieClip.</li></ul></li><li class="sortli listnum2"><a href="#drawEllipse">drawEllipse</a><span class="typeInfo"> (target_mc:MovieClip, ellipse:<a class="className" href="org_casalib_math_geom_Ellipse.html">Ellipse</a>) : Void</span><ul class="summary"><li>Draws an ellipse (circle or oval) into a MovieClip.</li></ul></li><li class="sortli listnum3"><a href="#drawRectangle">drawRectangle</a><span class="typeInfo"> (target_mc:MovieClip, rectangle:<a class="className" href="org_casalib_math_geom_Rectangle.html">Rectangle</a>) : Void</span><ul class="summary"><li>Draws a rectangle (or square) into a MovieClip.</li></ul></li><li class="sortli listnum4"><a href="#drawRoundedRectangle">drawRoundedRectangle</a><span class="typeInfo"> (target_mc:MovieClip, rectangle:<a class="className" href="org_casalib_math_geom_Rectangle.html">Rectangle</a>, cornerRadius:Number) : Void</span><ul class="summary"><li>Draws a rectangle with rounded corners into a MovieClip.</li></ul></li></ul></div></div></div><div class="memberSection"><h2 id="Classmethods">Class methods</h2><div class="member" id="drawEllipse"><h3>drawEllipse</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>drawEllipse</b> (
+
+</div><div class="code">target_mc:MovieClip,
+ellipse:<a class="className" href="org_casalib_math_geom_Ellipse.html">Ellipse</a>) : Void</div><br class="clear" /></div></div><div class="description"> Draws an ellipse (circle or oval) into a MovieClip. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">target_mc<span class="itemSeparator">:</span></div><div>MovieClip in which to draw the ellipse.</div></div><div class="item"><div class="floatbox code colorizedCode">ellipse  <span class="itemSeparator">:</span></div><div>Defined Ellipse object that contains the size and position of the shape.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeIdentifier">this</span><span class="codeIdentifier">.createEmptyMovieClip</span>(<span class="codeString">'oval_mc'</span>, <span class="codeIdentifier">this</span><span class="codeIdentifier">.getNextHighestDepth</span>());
+<span class="codeKeyword">var</span> myOval:Ellipse = <span class="codeKeyword">new</span> Ellipse(<span class="codeNumber">10</span>, <span class="codeNumber">10</span>, <span class="codeNumber">150</span>, <span class="codeNumber">50</span>);
+
+<span class="codeIdentifier">this</span>.oval_mc<span class="codeIdentifier">.beginFill</span>(0xFF00FF);
+DrawUtil.drawEllipse(<span class="codeIdentifier">this</span>.oval_mc, myOval);
+<span class="codeIdentifier">this</span>.oval_mc<span class="codeIdentifier">.endFill</span>();</pre> </li></ul></div></div></div></div></div><div class="member" id="drawRectangle"><h3>drawRectangle</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>drawRectangle</b> (
+
+</div><div class="code">target_mc:MovieClip,
+rectangle:<a class="className" href="org_casalib_math_geom_Rectangle.html">Rectangle</a>) : Void</div><br class="clear" /></div></div><div class="description"> Draws a rectangle (or square) into a MovieClip. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">target_mc<span class="itemSeparator">:</span></div><div>MovieClip in which to draw the rectangle.</div></div><div class="item"><div class="floatbox code colorizedCode">rectangle<span class="itemSeparator">:</span></div><div>Defined Rectangle object that contains the size and position of the shape.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeIdentifier">this</span><span class="codeIdentifier">.createEmptyMovieClip</span>(<span class="codeString">'rect_mc'</span>, <span class="codeIdentifier">this</span><span class="codeIdentifier">.getNextHighestDepth</span>());
+<span class="codeKeyword">var</span> myRect:Rectangle = <span class="codeKeyword">new</span> Rectangle(<span class="codeNumber">10</span>, <span class="codeNumber">10</span>, <span class="codeNumber">150</span>, <span class="codeNumber">50</span>);
+
+<span class="codeIdentifier">this</span>.rect_mc<span class="codeIdentifier">.beginFill</span>(0xFF00FF);
+DrawUtil.drawRectangle(<span class="codeIdentifier">this</span>.rect_mc, myRect);
+<span class="codeIdentifier">this</span>.rect_mc<span class="codeIdentifier">.endFill</span>();</pre> </li></ul></div></div></div></div></div><div class="member" id="drawRoundedRectangle"><h3>drawRoundedRectangle</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>drawRoundedRectangle</b> (
+
+
+</div><div class="code">target_mc:MovieClip,
+rectangle:<a class="className" href="org_casalib_math_geom_Rectangle.html">Rectangle</a>,
+cornerRadius:Number) : Void</div><br class="clear" /></div></div><div class="description"> Draws a rectangle with rounded corners into a MovieClip. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">target_mc   <span class="itemSeparator">:</span></div><div>MovieClip in which to draw the rectangle.</div></div><div class="item"><div class="floatbox code colorizedCode">rectangle   <span class="itemSeparator">:</span></div><div>Defined Rectangle object that contains the size and position of the shape.</div></div><div class="item"><div class="floatbox code colorizedCode">cornerRadius<span class="itemSeparator">:</span></div><div>The rounded radius of the rectangle's corners.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeIdentifier">this</span><span class="codeIdentifier">.createEmptyMovieClip</span>(<span class="codeString">'rect_mc'</span>, <span class="codeIdentifier">this</span><span class="codeIdentifier">.getNextHighestDepth</span>());
+<span class="codeKeyword">var</span> myRect:Rectangle = <span class="codeKeyword">new</span> Rectangle(<span class="codeNumber">10</span>, <span class="codeNumber">10</span>, <span class="codeNumber">150</span>, <span class="codeNumber">50</span>);
+
+<span class="codeIdentifier">this</span>.rect_mc<span class="codeIdentifier">.beginFill</span>(0xFF00FF);
+DrawUtil.drawRoundedRectangle(<span class="codeIdentifier">this</span>.rect_mc, myRect, <span class="codeNumber">15</span>);
+<span class="codeIdentifier">this</span>.rect_mc<span class="codeIdentifier">.endFill</span>();</pre> </li></ul></div></div></div></div></div><div class="member" id="drawWedge"><h3>drawWedge</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>drawWedge</b> (
+
+
+
+</div><div class="code">target_mc:MovieClip,
+ellipse:<a class="className" href="org_casalib_math_geom_Ellipse.html">Ellipse</a>,
+startAngle:Number,
+arc:Number) : Void</div><br class="clear" /></div></div><div class="description"> 	Draws a circular wedge into a MovieClip. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">target_mc <span class="itemSeparator">:</span></div><div>MovieClip in which to draw the wedge.</div></div><div class="item"><div class="floatbox code colorizedCode">ellipse   <span class="itemSeparator">:</span></div><div>Defined Ellipse object that contains the size and position of the shape.</div></div><div class="item"><div class="floatbox code colorizedCode">startAngle<span class="itemSeparator">:</span></div><div>The starting angle of wedge in degrees.</div></div><div class="item"><div class="floatbox code colorizedCode">arc       <span class="itemSeparator">:</span></div><div>The sweep of the wedge in degrees.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeIdentifier">this</span><span class="codeIdentifier">.createEmptyMovieClip</span>(<span class="codeString">'wedge_mc'</span>, <span class="codeIdentifier">this</span><span class="codeIdentifier">.getNextHighestDepth</span>());
+<span class="codeKeyword">var</span> myOval:Ellipse = <span class="codeKeyword">new</span> Ellipse(<span class="codeNumber">10</span>, <span class="codeNumber">10</span>, <span class="codeNumber">150</span>, <span class="codeNumber">50</span>);
+
+<span class="codeIdentifier">this</span>.wedge_mc<span class="codeIdentifier">.beginFill</span>(0xFF00FF);
+DrawUtil.drawWedge(<span class="codeIdentifier">this</span>.wedge_mc, myOval, <span class="codeNumber">0</span>, <span class="codeNumber">270</span>);
+<span class="codeIdentifier">this</span>.wedge_mc<span class="codeIdentifier">.endFill</span>();</pre> </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

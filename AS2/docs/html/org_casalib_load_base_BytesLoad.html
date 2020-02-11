@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>BytesLoad</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_load_base_BytesLoad"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classproperties" accesskey="l">C<span class="accessKey">l</span>ass properties</a></li><li><a href="#Instanceproperties" accesskey="l">Instance <span class="accessKey">p</span>roperties</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li></ul><br class="clear" /></div><h1>BytesLoad</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_load_base_RetryableLoad.html">RetryableLoad</a> &lt; <a class="className" href="org_casalib_load_base_Load.html">Load</a> &lt; <a class="className" href="org_casalib_event_EventDispatcher.html">EventDispatcher</a> &lt; <a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></td></tr><tr><th align="left">Implements:</th><td><ul><li><a class="className" href="org_casalib_load_base_BytesLoadInterface.html">BytesLoadInterface</a></li></ul></td></tr><tr><th align="left">Known subclasses:</th><td><ul><li><a class="className" href="org_casalib_load_base_DataLoad.html">DataLoad</a></li><li><a class="className" href="org_casalib_load_media_video_FlvLoad.html">FlvLoad</a></li><li><a class="className" href="org_casalib_load_media_MediaLoad.html">MediaLoad</a></li><li><a class="className" href="org_casalib_load_media_sound_SoundLoad.html">SoundLoad</a></li></ul></td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">05/31/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.load.base.BytesLoad</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.load.base.RetryableLoad;
+import org.casalib.load.base.BytesLoadInterface;
+import org.casalib.time.EnterFrame;
+
+/**
+    Base bytes load class for items where methods &lt;code>getBytesLoaded&lt;/code> and &lt;code>getBytesTotal&lt;/code> are available. Class needs to be extended further to function properly.
+    
+    @author Aaron Clinger
+    @version 05/31/07
+    @since Flash Player 7
+*/
+
+class org.casalib.load.base.BytesLoad extends RetryableLoad implements BytesLoadInterface {
+    public static var EVENT_LOAD_PROGRESS:String = 'onLoadProgress';
+    public static var EVENT_INSTANTIATE:String   = 'onInstantiate';
+    public static var loadTimeout:Number = 8000;
+    private var $loadTimeout:Number;
+    private var $previousTime:Number;
+    private var $previousBytesLoaded:Number;
+    private var $isProgressing:Boolean;
+    private var $framePulse:EnterFrame;
+    
+    /**
+        @param target: A path to a container where the file specified by &lt;code>filePath&lt;/code> should be loaded into.
+        @param filePath: The absolute or relative URL of the file to be loaded.
+    */
+    private function BytesLoad(target:Object, filePath:String) {
+        super(target, filePath);
+        
+        this.setLoadTimeout(BytesLoad.loadTimeout);
+        
+        this.$setClassDescription('org.casalib.load.base.BytesLoad');
+    }
+    
+    /**
+        {@inheritDoc}
+        
+        @usageNote Class defaults to &lt;code>8000&lt;/code> milliseconds.
+    */
+    public function setLoadTimeout(loadTimeout:Number):Void {
+        this.$loadTimeout = loadTimeout;
+    }
+    
+    public function getBytesLoaded():Number {
+        return this.$target.getBytesLoaded();
+    }
+    
+    public function getBytesTotal():Number {
+        return this.$target.getBytesTotal();
+    }
+    
+    public function destroy():Void {
+        this.$clean();
+        
+        delete this.$loadTimeout;
+        
+        super.destroy();
+    }
+    
+    /**
+        @sends onLoadProgress = function(sender:BytesLoad, bytesLoaded:Number, bytesTotal:Number) {}
+    */
+    private function $checkLoadProgress():Void {
+        var bl:Number = this.getBytesLoaded();
+        var bt:Number = this.getBytesTotal();
+        
+        var currentTime:Number = getTimer();
+        
+        if (bl &lt; 50 || bl == this.$previousBytesLoaded || isNaN(bl) || isNaN(bt)) {
+            if (currentTime - this.$previousTime >= this.$loadTimeout)
+                this.$retryLoad();
+            return;
+        }
+        
+        this.$loadProgress(bl, currentTime);
+        this.dispatchEvent(BytesLoad.EVENT_LOAD_PROGRESS, this, bl, bt);
+        
+        this.$checkForLoadComplete();
+    }
+    
+    /**
+        If target in subclass has an reliable &lt;code>"onLoad"&lt;/code> handler overriding this to a bank method and follow docs located: {@link Load#$remapOnLoadHandler}. Otherwise leave as is.
+    */
+    private function $checkForLoadComplete():Void {
+        if (this.getBytesTotal() != 0)
+            if (this.getBytesLoaded() >= this.getBytesTotal())
+                this.$onComplete();
+    }
+    
+    /**
+        @sends onInstantiate = function(sender:BytesLoad) {}
+    */
+    private function $loadProgress(bytesLoaded:Number, currentTime:Number):Void {
+        if (!this.$isProgressing) {
+            if (bytesLoaded > 0) {
+                this.$isProgressing = true;
+                this.dispatchEvent(BytesLoad.EVENT_INSTANTIATE, this);
+            }
+        }
+        
+        this.$previousBytesLoaded = bytesLoaded;
+        this.$previousTime        = currentTime;
+    }
+    
+    /**
+        &lt;strong>This function needs to be extended by a subclass.&lt;/strong>
+    */
+    private function $startLoad():Void {
+        super.$startLoad();
+        
+        this.$isProgressing = false;
+        
+        this.$loadProgress(0, getTimer());
+        
+        this.$framePulse = EnterFrame.getInstance();
+        this.$framePulse.addEventObserver(this, EnterFrame.EVENT_ENTER_FRAME, '$checkLoadProgress');
+    }
+    
+    private function $retryLoad():Void {
+        this.$framePulse.removeEventObserversForScope(this);
+        
+        super.$retryLoad();
+    }
+    
+    private function $onComplete():Void {
+        this.$framePulse.removeEventObserversForScope(this);
+        
+        var prevBytesLoaded:Number = this.$previousBytesLoaded;
+        
+        this.$loadProgress(this.getBytesTotal(), null);
+        
+        if (this.getBytesTotal() != prevBytesLoaded)
+            this.dispatchEvent(BytesLoad.EVENT_LOAD_PROGRESS, this, this.getBytesTotal(), this.getBytesTotal());
+        
+        super.$onComplete();
+    }
+    
+    private function $clean():Void {
+        this.$framePulse.removeEventObserversForScope(this);
+        
+        delete this.$isProgressing;
+        delete this.$framePulse;
+        delete this.$previousBytesLoaded;
+        delete this.$previousTime;
+        
+        super.$clean();
+    }
+}
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Base bytes load class for items where methods <code><span class="codeIdentifier">getBytesLoaded</span></code> and <code><span class="codeIdentifier">getBytesTotal</span></code> are available.</span> Class needs to be extended further to function properly.<div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Since:</span><div class="item"><ul><li> Flash Player 7 </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Events broadcasted to listeners:</span><div class="item"><ul><li><code>onLoadProgress = function (sender:BytesLoad, bytesLoaded:Number, bytesTotal:Number) {}</code> </li><li><code>onInstantiate = function (sender:BytesLoad) {}</code> </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class properties</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#EVENT_LOAD_PROGRESS">EVENT_LOAD_PROGRESS</a><span class="typeInfo">  : String</span></li><li class="sortli listnum2"><a href="#EVENT_INSTANTIATE">EVENT_INSTANTIATE</a><span class="typeInfo">  : String</span></li><li class="sortli listnum3"><a href="#loadTimeout">loadTimeout</a><span class="typeInfo">  : Number</span></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Class properties inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_RetryableLoad.html">RetryableLoad</a></span></span><div class="item inheritedList"><a href="org_casalib_load_base_RetryableLoad.html#EVENT_LOAD_RETRY">EVENT_LOAD_RETRY</a>  <a href="org_casalib_load_base_RetryableLoad.html#loadRetries">loadRetries</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Class properties inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_Load.html">Load</a></span></span><div class="item inheritedList"><a href="org_casalib_load_base_Load.html#EVENT_LOAD_COMPLETE">EVENT_LOAD_COMPLETE</a>  <a href="org_casalib_load_base_Load.html#EVENT_LOAD_ERROR">EVENT_LOAD_ERROR</a>  <a href="org_casalib_load_base_Load.html#EVENT_LOAD_INIT">EVENT_LOAD_INIT</a>  <a href="org_casalib_load_base_Load.html#EVENT_LOAD_START">EVENT_LOAD_START</a></div></div></div></div></div><div class="memberSummaryPart"><span class="title">Instance methods</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#setLoadTimeout">setLoadTimeout</a><span class="typeInfo"> (loadTimeout:Number) : Void</span><ul class="summary"><li><div class="inheritDoc">	Sets the amount of time a load will wait without receiving further progress before retrying.</li></ul></li><li class="sortli listnum2"><a href="#getBytesLoaded">getBytesLoaded</a><span class="typeInfo">  : Number</span><ul class="summary"><li><div class="inheritDoc">Returns the number of bytes that have loaded (streamed).</li></ul></li><li class="sortli listnum3"><a href="#getBytesTotal">getBytesTotal</a><span class="typeInfo">  : Number</span><ul class="summary"><li><div class="inheritDoc">Returns the size, in bytes, of the file currently or completed loading.</li></ul></li><li class="sortli listnum4"><a href="#destroy">destroy</a><span class="typeInfo">  : Void</span><ul class="summary"><li><div class="inheritDoc">Removes any internal variables, intervals, enter frames, internal MovieClips and event observers to allow the object to be garbage collected.</li></ul></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_RetryableLoad.html">RetryableLoad</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_load_base_RetryableLoad.html#$clean">$clean</a>  <a class="private" href="org_casalib_load_base_RetryableLoad.html#$onLoad">$onLoad</a>  <a class="private" href="org_casalib_load_base_RetryableLoad.html#$retryLoad">$retryLoad</a>  <a class="private" href="org_casalib_load_base_RetryableLoad.html#$startLoad">$startLoad</a>  <a href="org_casalib_load_base_RetryableLoad.html#destroy">destroy</a>  <a href="org_casalib_load_base_RetryableLoad.html#setLoadRetries">setLoadRetries</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_Load.html">Load</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_load_base_Load.html#$clean">$clean</a>  <a class="private" href="org_casalib_load_base_Load.html#$onComplete">$onComplete</a>  <a class="private" href="org_casalib_load_base_Load.html#$onInitialized">$onInitialized</a>  <a class="private" href="org_casalib_load_base_Load.html#$onLoad">$onLoad</a>  <a class="private" href="org_casalib_load_base_Load.html#$remapOnLoadHandler">$remapOnLoadHandler</a>  <a class="private" href="org_casalib_load_base_Load.html#$startLoad">$startLoad</a>  <a class="private" href="org_casalib_load_base_Load.html#$stopLoad">$stopLoad</a>  <a href="org_casalib_load_base_Load.html#destroy">destroy</a>  <a href="org_casalib_load_base_Load.html#getFilePath">getFilePath</a>  <a href="org_casalib_load_base_Load.html#hasLoaded">hasLoaded</a>  <a href="org_casalib_load_base_Load.html#isLoading">isLoading</a>  <a href="org_casalib_load_base_Load.html#start">start</a>  <a href="org_casalib_load_base_Load.html#stop">stop</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_event_EventDispatcher.html">EventDispatcher</a></span></span><div class="item inheritedList"><a href="org_casalib_event_EventDispatcher.html#addEventObserver">addEventObserver</a>  <a href="org_casalib_event_EventDispatcher.html#destroy">destroy</a>  <a href="org_casalib_event_EventDispatcher.html#dispatchEvent">dispatchEvent</a>  <a href="org_casalib_event_EventDispatcher.html#removeAllEventObservers">removeAllEventObservers</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserver">removeEventObserver</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForEvent">removeEventObserversForEvent</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForScope">removeEventObserversForScope</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_core_CoreObject.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_core_CoreObject.html#destroy">destroy</a>  <a href="org_casalib_core_CoreObject.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Classproperties">Class properties</h2><div class="member" id="EVENT_INSTANTIATE"><h3>EVENT_INSTANTIATE</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_INSTANTIATE</b>:String = <span class="codeString">'onInstantiate'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_LOAD_PROGRESS"><h3>EVENT_LOAD_PROGRESS</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_LOAD_PROGRESS</b>:String = <span class="codeString">'onLoadProgress'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="loadTimeout"><h3>loadTimeout</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>loadTimeout</b>:Number = <span class="codeNumber">8000</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div></div><div class="memberSection"><h2 id="Instancemethods">Instance methods</h2><div class="member" id="destroy"><h3>destroy</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>destroy</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Removes any internal variables, intervals, enter frames, internal MovieClips and event observers to allow the object to be garbage collected.<br />		<br />		<strong>Always call <code><span class="codeIdentifier">getBytesLoaded</span></code> before deleting last object pointer.</strong></div><a class="followInheritDoc" href="org_casalib_core_CoreInterface.html#destroy">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Overrides:</span><div class="item"><ul><li> <a href="org_casalib_load_base_RetryableLoad.html#destroy">RetryableLoad.destroy</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_core_CoreInterface.html#destroy">org.casalib.core.CoreInterface.destroy</a> </li></ul></div></div></div></div></div><div class="member" id="getBytesLoaded"><h3>getBytesLoaded</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>getBytesLoaded</b> (
+</div><div class="code">) : Number</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Returns the number of bytes that have loaded (streamed).</div><a class="followInheritDoc" href="org_casalib_load_base_BytesLoadInterface.html#getBytesLoaded">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> <div class="inheritDoc">An integer that indicates the number of bytes loaded.</div><a class="followInheritDoc" href="org_casalib_load_base_BytesLoadInterface.html#getBytesLoaded">#</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_load_base_BytesLoadInterface.html#getBytesLoaded">BytesLoadInterface.getBytesLoaded</a> </li></ul></div></div></div></div></div><div class="member" id="getBytesTotal"><h3>getBytesTotal</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>getBytesTotal</b> (
+</div><div class="code">) : Number</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Returns the size, in bytes, of the file currently or completed loading.</div><a class="followInheritDoc" href="org_casalib_load_base_BytesLoadInterface.html#getBytesTotal">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> <div class="inheritDoc">An integer that indicates the total size, in bytes, of the movie clip.</div><a class="followInheritDoc" href="org_casalib_load_base_BytesLoadInterface.html#getBytesTotal">#</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_load_base_BytesLoadInterface.html#getBytesTotal">BytesLoadInterface.getBytesTotal</a> </li></ul></div></div></div></div></div><div class="member" id="setLoadTimeout"><h3>setLoadTimeout</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>setLoadTimeout</b> (
+</div><div class="code">loadTimeout:Number) : Void</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">	Sets the amount of time a load will wait without receiving further progress before <a href="org_casalib_load_base_RetryableLoadInterface.html#setLoadRetries">retrying</a>.</div><a class="followInheritDoc" href="org_casalib_load_base_BytesLoadInterface.html#setLoadTimeout">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">loadTimeout<span class="itemSeparator">:</span></div><div><div class="inheritDoc">Time in milliseconds.</div><a class="followInheritDoc" href="org_casalib_load_base_BytesLoadInterface.html#setLoadTimeout">#</a></div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> Class defaults to <code><span class="codeNumber">8000</span></code> milliseconds. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_load_base_BytesLoadInterface.html#setLoadTimeout">BytesLoadInterface.setLoadTimeout</a> </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

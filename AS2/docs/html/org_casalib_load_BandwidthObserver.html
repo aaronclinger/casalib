@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>BandwidthObserver</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_load_BandwidthObserver"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classproperties" accesskey="l">C<span class="accessKey">l</span>ass properties</a></li><li><a href="#Instanceproperties" accesskey="l">Instance <span class="accessKey">p</span>roperties</a></li><li><a href="#Classmethods" accesskey="a">Cl<span class="accessKey">a</span>ss methods</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li></ul><br class="clear" /></div><h1>BandwidthObserver</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">02/13/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.load.BandwidthObserver</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.core.CoreObject;
+import org.casalib.time.Stopwatch;
+import org.casalib.util.LoadUtil;
+import org.casalib.util.ArrayUtil;
+import org.casalib.util.ConversionUtil;
+import org.casalib.load.base.BytesLoadInterface;
+import org.casalib.load.base.BytesLoad;
+import org.casalib.load.base.Load;
+
+/**
+    Calculates load speeds for individual watched files and remembers the values for comparison with other loads.
+
+    @author Aaron Clinger
+    @version 02/13/07
+    @since Flash Player 7
+    @example
+        &lt;code>
+            this.createEmptyMovieClip("loadZone_mc", this.getNextHighestDepth());
+            
+            var mediaLoad:MediaLoad = new MediaLoad(this.loadZone_mc, "test.jpg");
+            var bandwidth:BandwidthObserver = BandwidthObserver.observe(this.mediaLoad);
+            
+            function onImageLoadProgress(sender:MediaLoad, bytesLoaded:Number, bytesTotal:Number):Void {
+                trace("File is loading at " + this.bandwidth.getKBps() + " kBps.");
+            }
+            
+            this.mediaLoad.addEventObserver(this, MediaLoad.EVENT_LOAD_PROGRESS, "onImageLoadProgress");
+            this.mediaLoad.start();
+        &lt;/code>
+    @usageNote This class only calculates kiloBYTES per seconds, not the bandwidth speed norm kilobits per second. Bits are not very useful in flash; flash only knows object's size in bytes so kBps is a much more useful number. If you need to find kbps or bits use {@link ConversionUtil} to convert the values.
+*/
+
+class org.casalib.load.BandwidthObserver extends CoreObject {
+    private var $loadItem:Object;
+    private var $stopwatch:Stopwatch;
+    private var $kBps:Number;
+    
+    private static var $observedLoads: /*BandwidthObserver*/ Array;
+    private static var $hasInit:Boolean;
+    
+    
+    /**
+        Defines load to observe and calculate the speed of transfer in kBps.
+        
+        @param loadItem: File to observe the request and download speed. Can be any class that inherits from {@link BytesLoadInterface} and dispatches events &lt;code>"onLoadStart"&lt;/code>, &lt;code>"onLoadProgress"&lt;/code> and &lt;code>"onLoadError"&lt;/code>.
+        @return Returns {@link BandwidthObserver} instance.
+        @usageNote Loading file should be larger than 30kB and the load should last longer than two seconds to provide a valid value.
+    */
+    public static function observe(loadItem:BytesLoadInterface):BandwidthObserver {
+        if (!BandwidthObserver.$hasInit) {
+            BandwidthObserver.$observedLoads = new Array();
+            BandwidthObserver.$hasInit       = true;
+        } else {
+            var len:Number = BandwidthObserver.$observedLoads.length;
+            while (len--)
+                if (BandwidthObserver.$observedLoads[len].getLoadItem() == loadItem)
+                    return BandwidthObserver.$observedLoads[len];
+        }
+        
+        var observer:BandwidthObserver = new BandwidthObserver(loadItem);
+        BandwidthObserver.$observedLoads.push(observer);
+        
+        return observer;
+    }
+    
+    /**
+        @return Returns the average kBps of all observed loads.
+    */
+    public static function getAverageKBps():Number {
+        return ArrayUtil.average(BandwidthObserver.$getAllKBpsValues());
+    }
+    
+    /**
+        @return Returns the lowest/slowest kBps of all observed loads.
+    */
+    public static function getLowestKBps():Number {
+        return ArrayUtil.getLowestValue(BandwidthObserver.$getAllKBpsValues());
+    }
+    
+    /**
+        @return Returns the highest/fastest kBps of all observed loads.
+    */
+    public static function getHighestKBps():Number {
+        return ArrayUtil.getHighestValue(BandwidthObserver.$getAllKBpsValues());
+    }
+    
+    private static function $getAllKBpsValues(): /*Number*/ Array {
+        var len:Number = BandwidthObserver.$observedLoads.length;
+        var kBps: /*Number*/ Array = new Array();
+        var val:Number;
+        
+        while (len--) {
+            val = BandwidthObserver.$observedLoads[len].getKBps();
+            if (val != undefined)
+                kBps.push(val);
+        }
+        
+        return kBps;
+    }
+    
+    
+    private function BandwidthObserver(loadItem:BytesLoadInterface) {
+        super();
+        
+        this.$stopwatch = new Stopwatch();
+        
+        this.$loadItem = loadItem;
+        this.$loadItem.addEventObserver(this.$stopwatch, Load.EVENT_LOAD_START, 'start');
+        this.$loadItem.addEventObserver(this, BytesLoad.EVENT_LOAD_PROGRESS, '$calculateKBps');
+        this.$loadItem.addEventObserver(this, Load.EVENT_LOAD_ERROR, '$clean');
+        
+        this.$setClassDescription('org.casalib.load.BandwidthObserver');
+    }
+    
+    /**
+        @return returns the kBps of the specific load this instance is observing.
+    */
+    public function getKBps():Number {
+        return this.$kBps;
+    }
+    
+    /**
+        @return Returns the bytes load instance being observed.
+    */
+    public function getLoadItem():Object {
+        return this.$loadItem;
+    }
+    
+    public function destroy():Void {
+        this.$clean();
+        
+        ArrayUtil.removeArrayItem(BandwidthObserver.$observedLoads, this.$loadItem);
+        
+        this.$loadItem.removeEventObserversForScope(this);
+        this.$loadItem.removeEventObserversForScope(this.$stopwatch);
+        
+        this.$stopwatch.destroy();
+        
+        delete this.$stopwatch;
+        delete this.$loadItem;
+        
+        super.destroy();
+    }
+    
+    private function $calculateKBps(sender:Object, bytesLoaded:Number, bytesTotal:Number):Void {
+        this.$kBps = LoadUtil.calculateKBps(bytesLoaded, 0, this.$stopwatch.getTime());
+    }
+    
+    private function $clean():Void {
+        delete this.$kBps;
+    }
+}
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Calculates load speeds for individual watched files and remembers the values for comparison with other loads.</span><div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Since:</span><div class="item"><ul><li> Flash Player 7 </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeIdentifier">this</span><span class="codeIdentifier">.createEmptyMovieClip</span>(<span class="codeString">"loadZone_mc"</span>, <span class="codeIdentifier">this</span><span class="codeIdentifier">.getNextHighestDepth</span>());
+
+<span class="codeKeyword">var</span> mediaLoad:MediaLoad = <span class="codeKeyword">new</span> MediaLoad(<span class="codeIdentifier">this</span>.loadZone_mc, <span class="codeString">"test.jpg"</span>);
+<span class="codeKeyword">var</span> bandwidth:BandwidthObserver = BandwidthObserver.observe(<span class="codeIdentifier">this</span>.mediaLoad);
+
+<span class="codeKeyword">function</span> onImageLoadProgress(sender:MediaLoad, bytesLoaded:<span class="codeIdentifier">Number</span>, bytesTotal:<span class="codeIdentifier">Number</span>):<span class="codeIdentifier">Void</span> {
+    <span class="codeIdentifier">trace</span>(<span class="codeString">"File is loading at "</span> + <span class="codeIdentifier">this</span><span class="codeIdentifier">.bandwidth</span>.getKBps() + <span class="codeString">" kBps."</span>);
+}
+
+<span class="codeIdentifier">this</span>.mediaLoad.addEventObserver(<span class="codeIdentifier">this</span>, MediaLoad.EVENT_LOAD_PROGRESS, <span class="codeString">"onImageLoadProgress"</span>);
+<span class="codeIdentifier">this</span>.mediaLoad<span class="codeIdentifier">.start</span>();</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> This class only calculates kiloBYTES per seconds, not the bandwidth speed norm kilobits per second. Bits are not very useful in flash; flash only knows object's size in bytes so kBps is a much more useful number. If you need to find kbps or bits use <a class="className" href="org_casalib_util_ConversionUtil.html">org.casalib.util.ConversionUtil</a> to convert the values. </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class methods</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#observe">observe</a><span class="typeInfo"> (loadItem:<a class="className" href="org_casalib_load_base_BytesLoadInterface.html">BytesLoadInterface</a>) : <a class="className" href="org_casalib_load_BandwidthObserver.html">BandwidthObserver</a></span><ul class="summary"><li>Defines load to observe and calculate the speed of transfer in kBps.</li></ul></li><li class="sortli listnum2"><a href="#getAverageKBps">getAverageKBps</a><span class="typeInfo">  : Number</span></li><li class="sortli listnum3"><a href="#getLowestKBps">getLowestKBps</a><span class="typeInfo">  : Number</span></li><li class="sortli listnum4"><a href="#getHighestKBps">getHighestKBps</a><span class="typeInfo">  : Number</span></li></ul></div><div class="memberSummaryPart"><span class="title">Instance methods</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#getKBps">getKBps</a><span class="typeInfo">  : Number</span></li><li class="sortli listnum2"><a href="#getLoadItem">getLoadItem</a><span class="typeInfo">  : Object</span></li><li class="sortli listnum3"><a href="#destroy">destroy</a><span class="typeInfo">  : Void</span></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_core_CoreObject.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_core_CoreObject.html#destroy">destroy</a>  <a href="org_casalib_core_CoreObject.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Classmethods">Class methods</h2><div class="member" id="getAverageKBps"><h3>getAverageKBps</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>getAverageKBps</b> (
+</div><div class="code">) : Number</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the average kBps of all observed loads. </li></ul></div></div></div></div></div><div class="member" id="getHighestKBps"><h3>getHighestKBps</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>getHighestKBps</b> (
+</div><div class="code">) : Number</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the highest/fastest kBps of all observed loads. </li></ul></div></div></div></div></div><div class="member" id="getLowestKBps"><h3>getLowestKBps</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>getLowestKBps</b> (
+</div><div class="code">) : Number</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the lowest/slowest kBps of all observed loads. </li></ul></div></div></div></div></div><div class="member" id="observe"><h3>observe</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>observe</b> (
+</div><div class="code">loadItem:<a class="className" href="org_casalib_load_base_BytesLoadInterface.html">BytesLoadInterface</a>) : <a class="className" href="org_casalib_load_BandwidthObserver.html">BandwidthObserver</a></div><br class="clear" /></div></div><div class="description"> Defines load to observe and calculate the speed of transfer in kBps. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">loadItem<span class="itemSeparator">:</span></div><div>File to observe the request and download speed. Can be any class that inherits from <a class="className" href="org_casalib_load_base_BytesLoadInterface.html">org.casalib.load.base.BytesLoadInterface</a> and dispatches events <code><span class="codeString">"onLoadStart"</span></code>, <code><span class="codeString">"onLoadProgress"</span></code> and <code><span class="codeString">"onLoadError"</span></code>.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <a class="className" href="org_casalib_load_BandwidthObserver.html">BandwidthObserver</a> instance. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> Loading file should be larger than 30kB and the load should last longer than two seconds to provide a valid value. </li></ul></div></div></div></div></div></div><div class="memberSection"><h2 id="Instancemethods">Instance methods</h2><div class="member" id="destroy"><h3>destroy</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>destroy</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Overrides:</span><div class="item"><ul><li> <a href="org_casalib_core_CoreObject.html#destroy">org.casalib.core.CoreObject.destroy</a> </li></ul></div></div></div></div></div><div class="member" id="getKBps"><h3>getKBps</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>getKBps</b> (
+</div><div class="code">) : Number</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> returns the kBps of the specific load this instance is observing. </li></ul></div></div></div></div></div><div class="member" id="getLoadItem"><h3>getLoadItem</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>getLoadItem</b> (
+</div><div class="code">) : Object</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the bytes load instance being observed. </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

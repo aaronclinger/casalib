@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>FontManager</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_load_media_font_FontManager"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classproperties" accesskey="l">C<span class="accessKey">l</span>ass properties</a></li><li><a href="#Instanceproperties" accesskey="l">Instance <span class="accessKey">p</span>roperties</a></li><li><a href="#Classmethods" accesskey="a">Cl<span class="accessKey">a</span>ss methods</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li></ul><br class="clear" /></div><h1>FontManager</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_load_media_MediaLoad.html">MediaLoad</a> &lt; <a class="className" href="org_casalib_load_base_BytesLoad.html">BytesLoad</a> &lt; <a class="className" href="org_casalib_load_base_RetryableLoad.html">RetryableLoad</a> &lt; <a class="className" href="org_casalib_load_base_Load.html">Load</a> &lt; <a class="className" href="org_casalib_event_EventDispatcher.html">EventDispatcher</a> &lt; <a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">03/21/08</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.load.media.font.FontManager</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.load.media.MediaLoad;
+
+/**
+    Manages dynamic font switching/loading.
+    
+    To create an externally loadable Font resource please use the following steps:
+    &lt;ol>
+        &lt;li>Create a new FLA file and name it &lt;tt>yourFontDesc_lib.fla&lt;/tt>.&lt;/li>
+        &lt;li>On the root of &lt;tt>yourFontDesc_lib.fla&lt;/tt> create a dynamic TextField.&lt;/li>
+        &lt;li>Choose a typeface and embed all characters you want to include. Include "Basic Latin" for this example.&lt;/li>
+        &lt;li>Enter some text into the TextField. &lt;i>This is required to have the font successfully register&lt;/i>. It is recommend to enter the font name into the field.&lt;/li>
+        &lt;li>Give the TextField an instance name of &lt;tt>font_txt&lt;/tt>.&lt;/li>
+        &lt;li>Convert the TextField to a symbol, give it a name of &lt;tt>myFont&lt;/tt>, and make sure its type is MovieClip.&lt;/li>
+        &lt;li>Make sure "Export for runtime sharing" is checked under Linkage, and give it an Indentifier of &lt;tt>myFont&lt;/tt>.&lt;/li>
+        &lt;li>In the URL field type &lt;tt>[yourFontDesc_lib].swf&lt;/tt>. This path is relative to the HTML file that your shell SWF will be loaded into, so change the path in this URL field if necessary.&lt;/li>
+        &lt;li>Click &lt;b>OK&lt;/b> to apply these changes to the symbol.&lt;/li>
+        &lt;li>Publish this file and save it. You can now close this FLA.&lt;/li>
+        &lt;li>Create a new FLA and name it &lt;tt>yourFontDesc.fla&lt;/tt>.&lt;/li>
+        &lt;li>In &lt;tt>yourFontDesc.fla&lt;/tt> create a new symbol, give it a name of &lt;tt>myFontContainer&lt;/tt>, and make sure its type is MovieClip.&lt;/li>
+        &lt;li>Check "Import for runtime sharing" under Linkage, and give it an Indentifier of &lt;tt>myFontContainer&lt;/tt>.&lt;/li>
+        &lt;li>In the URL field type the &lt;em>same&lt;/em> URL you used in the &lt;tt>[yourFontDec_lib].fla&lt;/tt> URL field (Univers_55_lib.swf in the screenshot below). It actually doesn't matter what you type here, because it will automatically update with the correct value (even if it gives you an error) once you complete the next few steps.&lt;/li>
+        &lt;li>Under Source click the browse button and find &lt;tt>yourFontDesc_lib.fla&lt;/tt> and click &lt;b>Open&lt;/b>.&lt;/li>
+        &lt;li>Select source symbol &lt;tt>myFont&lt;/tt> and click &lt;b>OK&lt;/b>.&lt;/li>
+        &lt;li>Click &lt;b>OK&lt;/b> to apply these changes to the symbol.&lt;/li>
+        &lt;li>Make sure the the symbol is on the main stage at the root level and give it an instance name of &lt;tt>fontContainer_mc&lt;/tt>.&lt;/li>
+        &lt;li>On a frame at the root place the following code (&lt;b>REQUIRED&lt;/b>):
+            &lt;code>
+                import org.casalib.load.media.font.FontManager;
+                FontManager.registerFont("myFontReferenceName", this.fontContainer_mc.font_txt, this, true);
+            &lt;/code>
+            &lt;em>Please note:&lt;/em> If you are concerned about the extra file size added by the FontManager class, you can compile against an intrinsic class for your external font SWFs.
+        &lt;/li>
+        &lt;li>Publish this file and save it. You can now close this FLA.&lt;/li>
+        &lt;li>Now you can use the code in the example below to load and apply the font. Follow these steps for each font you would like to load.&lt;/li>
+    &lt;/ol>
+    
+    
+    @author Aaron Clinger
+    @version 03/21/08
+    @since Flash Player 7
+    @example
+        &lt;code>
+            this.createTextField("headline_txt", this.getNextHighestDepth(), 50, 50, 300, 100);
+            this.headline_txt.border = this.headline_txt.background = this.headline_txt.wordWrap = this.headline_txt.multiline = true;
+            this.headline_txt.type = "input";
+            this.headline_txt.text = "This is an example of dynamic font loading with FontManager.";
+            
+            var fontLoad:FontManager = FontManager.loadFont("testFont.swf");
+            this.fontLoad.addEventObserver(this, FontManager.EVENT_FONT_REGISTER);
+            this.fontLoad.start();
+            
+            function onFontRegister(referenceName:String, fontTextFormat:TextFormat):Void {
+                FontManager.applyTextFormatByReferenceName(referenceName, this.headline_txt);
+                
+                this.fontLoad.destroy();
+                delete this.fontLoad;
+            }
+        &lt;/code>
+*/
+
+class org.casalib.load.media.font.FontManager extends MediaLoad {
+    public static var EVENT_FONT_REGISTER:String      = 'onFontRegister';
+    public static var EVENT_LAST_FONT_REGISTER:String = 'onLastFontRegister';
+    private static var $textFormats:Object;
+    private static var $fontLoadMap:Object;
+    private static var $incrementId:Number;
+    private static var $fontManager_mc:MovieClip;
+    
+    private var $fontLoad_mc:MovieClip;
+    private var $fontList:Object;
+    
+    /**
+        Load a SWF wrapped font from a external location.
+        
+        @param filePath: The absolute or relative URL of the SWF.
+        @return {@link FontManager} instance.
+    */
+    public static function loadFont(filePath:String):FontManager {
+        if (FontManager.$fontLoadMap == undefined)
+            FontManager.$init();
+        
+        var fontLoad_mc:MovieClip  = FontManager.$fontManager_mc.createEmptyMovieClip('fontLoad' + FontManager.$incrementId + '_mc', FontManager.$fontManager_mc.getNextHighestDepth());
+        FontManager.$incrementId++;
+        
+        var fmInstance:FontManager = new FontManager(fontLoad_mc, filePath);
+        
+        FontManager.$fontLoadMap[fontLoad_mc] = fmInstance;
+        
+        return fmInstance;
+    }
+    
+    /**
+        Looks up and returns a TextFormat by its reference name.
+        
+        @param referenceName: Reference name of font.
+        @return A new TextFormat with &lt;code>font&lt;/code> defined.
+    */
+    public static function getTextFormatByReferenceName(referenceName:String):TextFormat {
+        if (FontManager.$textFormats[referenceName] != undefined)
+            return FontManager.$copyTextFormat(FontManager.$textFormats[referenceName]);
+    }
+    
+    /**
+        Assigns a TextFormat to a TextField and determines if &lt;code>embedFonts&lt;/code> should be &lt;code>true&lt;/code> or &lt;code>false&lt;/code>.
+        
+        @param referenceName: Reference name of font.
+        @param field_txt: TextField or {@link CoreTextField} to apply the TextFormat.
+        @return Returns &lt;code>true&lt;/code> if TextFormat by &lt;code>referenceName&lt;/code> was successfully found; otherwise &lt;code>false&lt;/code>.
+        @usageNote Automatically sets &lt;code>embedFonts&lt;/code> to &lt;code>true&lt;/code> if &lt;code>font&lt;/code> is NOT &lt;code>_sans&lt;/code>, &lt;code>_serif&lt;/code> or &lt;code>_typewriter&lt;/code>; otherwise sets &lt;code>embedFonts&lt;/code> to &lt;code>false&lt;/code>.
+    */
+    public static function applyTextFormatByReferenceName(referenceName:String, field_txt:Object):Boolean {
+        var textFormat:TextFormat = FontManager.getTextFormatByReferenceName(referenceName);
+        
+        if (textFormat == undefined)
+            return false;
+        
+        field_txt.embedFonts = !FontManager.$isSystemFont(textFormat.font);
+        field_txt.setTextFormat(textFormat);
+        
+        return true;
+    }
+    
+    /**
+        Assigns a new TextFormat to a TextField and determines if &lt;code>embedFonts&lt;/code> should be &lt;code>true&lt;/code> or &lt;code>false&lt;/code>.
+        
+        @param referenceName: Reference name of font.
+        @param field_txt: TextField or {@link CoreTextField} to apply the TextFormat.
+        @return Returns &lt;code>true&lt;/code> if TextFormat by &lt;code>referenceName&lt;/code> was successfully found; otherwise &lt;code>false&lt;/code>.
+        @usageNote Automatically sets &lt;code>embedFonts&lt;/code> to &lt;code>true&lt;/code> if &lt;code>font&lt;/code> is NOT &lt;code>_sans&lt;/code>, &lt;code>_serif&lt;/code> or &lt;code>_typewriter&lt;/code>; otherwise sets &lt;code>embedFonts&lt;/code> to &lt;code>false&lt;/code>.
+    */
+    public static function applyNewTextFormatByReferenceName(referenceName:String, field_txt:Object):Boolean {
+        var textFormat:TextFormat = FontManager.getTextFormatByReferenceName(referenceName);
+        
+        if (textFormat == undefined)
+            return false;
+        
+        field_txt.embedFonts = !FontManager.$isSystemFont(textFormat.font);
+        field_txt.setNewTextFormat(textFormat);
+        
+        return true;
+    }
+    
+    /**
+        Gets a list of all of the refrence names of registered fonts.
+        
+        @return Array of font reference names.
+    */
+    public static function getFontReferenceNames(): /*String*/ Array {
+        var referenceNames: /*String*/ Array = new Array();
+        
+        for (var i:String in FontManager.$textFormats)
+            referenceNames.push(i);
+        
+        return referenceNames;
+    }
+    
+    /**
+        Used by external font SWF files to register fonts. Should not be called by anything else.
+        
+        @param referenceName: The unique reference name of your font. Used to look up at a later time with {@link #getTextFormatByReferenceName}.
+        @param field: TextField or {@link CoreTextField} with the embedded font.
+        @param sender_mc: Reference to the external SWFs root/shell; if this code is on the top timeline &lt;code>sender_mc&lt;/code> should be &lt;code>this&lt;/code>.
+        @param isLastRegister: &lt;strong>[optional]&lt;/strong> Indicates it's the last font registered &lt;code>true&lt;/code>, or that there are other fonts left to register &lt;code>false&lt;/code>; defaults to &lt;code>false&lt;/code>.
+        @return Returns &lt;code>true&lt;/code> if parameter &lt;code>sender_mc&lt;/code> was referenced correctly and the font was successfully registered; otherwise &lt;code>false&lt;/code>.
+        @usageNote Parameter &lt;code>isLastRegister&lt;/code> should only be &lt;code>true&lt;/code> during the registering of the last font in the loaded SWF. If there is only one font being registered it should always be &lt;code>true&lt;/code>.
+    */
+    public static function registerFont(referenceName:String, field:Object, sender_mc:MovieClip, isLastRegister:Boolean):Boolean {
+        var fontLoad:FontManager = FontManager.$fontLoadMap[sender_mc];
+        
+        if (fontLoad != undefined) {
+            fontLoad.$registerTextFormat(referenceName, field, (isLastRegister == undefined) ? false : isLastRegister);
+            
+            if (isLastRegister) {
+                fontLoad.destroy();
+                delete FontManager.$fontLoadMap[sender_mc];
+            }
+            
+            return true;
+        }
+        
+        return false;
+    }
+    
+    private static function $init():Void {
+        FontManager.$fontLoadMap    = new Object();
+        FontManager.$textFormats    = new Object();
+        FontManager.$incrementId    = 0;
+        FontManager.$fontManager_mc = _root.createEmptyMovieClip('fontManager_mc', _root.getNextHighestDepth());
+        
+        FontManager.$fontManager_mc._visible = false;
+    }
+    
+    private static function $isSystemFont(fontName:String):Boolean {
+        switch (fontName.toLowerCase()) {
+            case '_sans' :
+            case '_serif' :
+            case '_typewriter' :
+                return true;
+            default :
+                return false;
+        }
+    }
+    
+    
+    private function FontManager(target_mc:MovieClip, filePath:String) {
+        super(target_mc, filePath, true);
+        
+        this.$setClassDescription('org.casalib.load.media.font.FontManager');
+    }
+    
+    /**
+        @sends onFontRegister = function(referenceName:String, fontTextFormat:TextFormat) {}
+        @sends onLastFontRegister = function(sender:FontManager) {}
+    */
+    private function $registerTextFormat(referenceName:String, field:Object, isLastRegister:Boolean):Void {
+        var textFormat:TextFormat = FontManager.$copyTextFormat(field.getTextFormat());
+        
+        FontManager.$textFormats[referenceName] = textFormat;
+        
+        this.dispatchEvent(FontManager.EVENT_FONT_REGISTER, referenceName, textFormat);
+        
+        if (isLastRegister)
+            this.dispatchEvent(FontManager.EVENT_LAST_FONT_REGISTER, this);
+    }
+    
+    private static function $copyTextFormat(formatToCopy:TextFormat):TextFormat {
+        var formatCopy:TextFormat = new TextFormat();
+        
+        formatCopy.font   = formatToCopy.font;
+        formatCopy.italic = formatToCopy.italic;
+        formatCopy.bold   = formatToCopy.bold;
+        
+        return formatCopy;
+    }
+    
+    /**
+        {@inheritDoc}
+        
+        @usageNote &lt;code>destroy&lt;/code> is called automatically after event &lt;code>onLastFontRegister&lt;/code>.
+    */
+    public function destroy():Void {
+        var loadContainer_mc:MovieClip = this.getMovieClip();
+        delete FontManager.$fontLoadMap[loadContainer_mc];
+        
+        loadContainer_mc.unloadMovie();
+        loadContainer_mc.removeMovieClip();
+        
+        delete this.$fontLoad_mc;
+        delete this.$fontList;
+        
+        super.destroy();
+    }
+}
+
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Manages dynamic font switching/loading.</span><br />	<br />	To create an externally loadable Font resource please use the following steps:<ol><li>Create a new FLA file and name it <tt>yourFontDesc_lib.fla</tt>.</li><li>On the root of <tt>yourFontDesc_lib.fla</tt> create a dynamic TextField.</li><li>Choose a typeface and embed all characters you want to include. Include "Basic Latin" for this example.</li><li>Enter some text into the TextField. <i>This is required to have the font successfully register</i>. It is recommend to enter the font name into the field.</li><li>Give the TextField an instance name of <tt>font_txt</tt>.</li><li>Convert the TextField to a symbol, give it a name of <tt>myFont</tt>, and make sure its type is MovieClip.</li><li>Make sure "Export for runtime sharing" is checked under Linkage, and give it an Indentifier of <tt>myFont</tt>.</li><li>In the URL field type <tt>[yourFontDesc_lib].swf</tt>. This path is relative to the HTML file that your shell SWF will be loaded into, so change the path in this URL field if necessary.</li><li>Click <b>OK</b> to apply these changes to the symbol.</li><li>Publish this file and save it. You can now close this FLA.</li><li>Create a new FLA and name it <tt>yourFontDesc.fla</tt>.</li><li>In <tt>yourFontDesc.fla</tt> create a new symbol, give it a name of <tt>myFontContainer</tt>, and make sure its type is MovieClip.</li><li>Check "Import for runtime sharing" under Linkage, and give it an Indentifier of <tt>myFontContainer</tt>.</li><li>In the URL field type the <em>same</em> URL you used in the <tt>[yourFontDec_lib].fla</tt> URL field (Univers_55_lib.swf in the screenshot below). It actually doesn't matter what you type here, because it will automatically update with the correct value (even if it gives you an error) once you complete the next few steps.</li><li>Under Source click the browse button and find <tt>yourFontDesc_lib.fla</tt> and click <b>Open</b>.</li><li>Select source symbol <tt>myFont</tt> and click <b>OK</b>.</li><li>Click <b>OK</b> to apply these changes to the symbol.</li><li>Make sure the the symbol is on the main stage at the root level and give it an instance name of <tt>fontContainer_mc</tt>.</li><li>On a frame at the root place the following code (<b>REQUIRED</b>):<br />			<pre>
+<span class="codeKeyword">import</span> org.casalib<span class="codeIdentifier">.load</span>.media<span class="codeIdentifier">.font</span>.FontManager;
+FontManager.registerFont(<span class="codeString">"myFontReferenceName"</span>, <span class="codeIdentifier">this</span>.fontContainer_mc.font_txt, <span class="codeIdentifier">this</span>, <span class="codeIdentifier">true</span>);</pre>			<em>Please note:</em> If you are concerned about the extra file size added by the FontManager class, you can compile against an intrinsic class for your external font SWFs.</li><li>Publish this file and save it. You can now close this FLA.</li><li>Now you can use the code in the example below to load and apply the font. Follow these steps for each font you would like to load.</li></ol><div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Since:</span><div class="item"><ul><li> Flash Player 7 </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeIdentifier">this</span><span class="codeIdentifier">.createTextField</span>(<span class="codeString">"headline_txt"</span>, <span class="codeIdentifier">this</span><span class="codeIdentifier">.getNextHighestDepth</span>(), <span class="codeNumber">50</span>, <span class="codeNumber">50</span>, <span class="codeNumber">300</span>, <span class="codeNumber">100</span>);
+<span class="codeIdentifier">this</span>.headline_txt<span class="codeIdentifier">.border</span> = <span class="codeIdentifier">this</span>.headline_txt<span class="codeIdentifier">.background</span> = <span class="codeIdentifier">this</span>.headline_txt<span class="codeIdentifier">.wordWrap</span> = <span class="codeIdentifier">this</span>.headline_txt<span class="codeIdentifier">.multiline</span> = <span class="codeIdentifier">true</span>;
+<span class="codeIdentifier">this</span>.headline_txt<span class="codeIdentifier">.type</span> = <span class="codeString">"input"</span>;
+<span class="codeIdentifier">this</span>.headline_txt<span class="codeIdentifier">.text</span> = <span class="codeString">"This is an example of dynamic font loading with FontManager."</span>;
+
+<span class="codeKeyword">var</span> fontLoad:FontManager = FontManager.loadFont(<span class="codeString">"testFont.swf"</span>);
+<span class="codeIdentifier">this</span>.fontLoad.addEventObserver(<span class="codeIdentifier">this</span>, FontManager.EVENT_FONT_REGISTER);
+<span class="codeIdentifier">this</span>.fontLoad<span class="codeIdentifier">.start</span>();
+
+<span class="codeKeyword">function</span> onFontRegister(referenceName:<span class="codeIdentifier">String</span>, fontTextFormat:<span class="codeIdentifier">TextFormat</span>):<span class="codeIdentifier">Void</span> {
+    FontManager.applyTextFormatByReferenceName(referenceName, <span class="codeIdentifier">this</span>.headline_txt);
+
+    <span class="codeIdentifier">this</span>.fontLoad.destroy();
+    <span class="codeKeyword">delete</span> <span class="codeIdentifier">this</span>.fontLoad;
+}</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Events broadcasted to listeners:</span><div class="item"><ul><li><code>onFontRegister = function (referenceName:String, fontTextFormat:TextFormat) {}</code> </li><li><code>onLastFontRegister = function (sender:FontManager) {}</code> </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class properties</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#EVENT_FONT_REGISTER">EVENT_FONT_REGISTER</a><span class="typeInfo">  : String</span></li><li class="sortli listnum2"><a href="#EVENT_LAST_FONT_REGISTER">EVENT_LAST_FONT_REGISTER</a><span class="typeInfo">  : String</span></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Class properties inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_BytesLoad.html">BytesLoad</a></span></span><div class="item inheritedList"><a href="org_casalib_load_base_BytesLoad.html#EVENT_INSTANTIATE">EVENT_INSTANTIATE</a>  <a href="org_casalib_load_base_BytesLoad.html#EVENT_LOAD_PROGRESS">EVENT_LOAD_PROGRESS</a>  <a href="org_casalib_load_base_BytesLoad.html#loadTimeout">loadTimeout</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Class properties inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_RetryableLoad.html">RetryableLoad</a></span></span><div class="item inheritedList"><a href="org_casalib_load_base_RetryableLoad.html#EVENT_LOAD_RETRY">EVENT_LOAD_RETRY</a>  <a href="org_casalib_load_base_RetryableLoad.html#loadRetries">loadRetries</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Class properties inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_Load.html">Load</a></span></span><div class="item inheritedList"><a href="org_casalib_load_base_Load.html#EVENT_LOAD_COMPLETE">EVENT_LOAD_COMPLETE</a>  <a href="org_casalib_load_base_Load.html#EVENT_LOAD_ERROR">EVENT_LOAD_ERROR</a>  <a href="org_casalib_load_base_Load.html#EVENT_LOAD_INIT">EVENT_LOAD_INIT</a>  <a href="org_casalib_load_base_Load.html#EVENT_LOAD_START">EVENT_LOAD_START</a></div></div></div></div></div><div class="memberSummaryPart"><span class="title">Class methods</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#loadFont">loadFont</a><span class="typeInfo"> (filePath:String) : <a class="className" href="org_casalib_load_media_font_FontManager.html">FontManager</a></span><ul class="summary"><li>Load a SWF wrapped font from a external location.</li></ul></li><li class="sortli listnum2"><a href="#getTextFormatByReferenceName">getTextFormatByReferenceName</a><span class="typeInfo"> (referenceName:String) : TextFormat</span><ul class="summary"><li>Looks up and returns a TextFormat by its reference name.</li></ul></li><li class="sortli listnum3"><a href="#applyTextFormatByReferenceName">applyTextFormatByReferenceName</a><span class="typeInfo"> (referenceName:String, field_txt:Object) : Boolean</span><ul class="summary"><li>Assigns a TextFormat to a TextField and determines if embedFonts should be <span class="codeIdentifier">true</span> or <span class="codeIdentifier">false</span>.</li></ul></li><li class="sortli listnum4"><a href="#applyNewTextFormatByReferenceName">applyNewTextFormatByReferenceName</a><span class="typeInfo"> (referenceName:String, field_txt:Object) : Boolean</span><ul class="summary"><li>Assigns a new TextFormat to a TextField and determines if embedFonts should be <span class="codeIdentifier">true</span> or <span class="codeIdentifier">false</span>.</li></ul></li><li class="sortli listnum5"><a href="#getFontReferenceNames">getFontReferenceNames</a><span class="typeInfo">  : Array</span><ul class="summary"><li>Gets a list of all of the refrence names of registered fonts.</li></ul></li><li class="sortli listnum6"><a href="#registerFont">registerFont</a><span class="typeInfo"> (referenceName:String, field:Object, sender_mc:MovieClip, isLastRegister:Boolean) : Boolean</span><ul class="summary"><li>Used by external font SWF files to register fonts.</li></ul></li></ul></div><div class="memberSummaryPart"><span class="title">Instance methods</span><ul class="sortable" id="sortul3"><li class="sortli listnum1"><a href="#destroy">destroy</a><span class="typeInfo">  : Void</span></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_load_media_MediaLoad.html">MediaLoad</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_load_media_MediaLoad.html#$loadProgress">$loadProgress</a>  <a class="private" href="org_casalib_load_media_MediaLoad.html#$onComplete">$onComplete</a>  <a class="private" href="org_casalib_load_media_MediaLoad.html#$startLoad">$startLoad</a>  <a class="private" href="org_casalib_load_media_MediaLoad.html#$stopLoad">$stopLoad</a>  <a href="org_casalib_load_media_MediaLoad.html#destroy">destroy</a>  <a href="org_casalib_load_media_MediaLoad.html#getMovieClip">getMovieClip</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_BytesLoad.html">BytesLoad</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_load_base_BytesLoad.html#$checkForLoadComplete">$checkForLoadComplete</a>  <a class="private" href="org_casalib_load_base_BytesLoad.html#$checkLoadProgress">$checkLoadProgress</a>  <a class="private" href="org_casalib_load_base_BytesLoad.html#$clean">$clean</a>  <a class="private" href="org_casalib_load_base_BytesLoad.html#$loadProgress">$loadProgress</a>  <a class="private" href="org_casalib_load_base_BytesLoad.html#$onComplete">$onComplete</a>  <a class="private" href="org_casalib_load_base_BytesLoad.html#$retryLoad">$retryLoad</a>  <a class="private" href="org_casalib_load_base_BytesLoad.html#$startLoad">$startLoad</a>  <a href="org_casalib_load_base_BytesLoad.html#destroy">destroy</a>  <a href="org_casalib_load_base_BytesLoad.html#getBytesLoaded">getBytesLoaded</a>  <a href="org_casalib_load_base_BytesLoad.html#getBytesTotal">getBytesTotal</a>  <a href="org_casalib_load_base_BytesLoad.html#setLoadTimeout">setLoadTimeout</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_RetryableLoad.html">RetryableLoad</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_load_base_RetryableLoad.html#$clean">$clean</a>  <a class="private" href="org_casalib_load_base_RetryableLoad.html#$onLoad">$onLoad</a>  <a class="private" href="org_casalib_load_base_RetryableLoad.html#$retryLoad">$retryLoad</a>  <a class="private" href="org_casalib_load_base_RetryableLoad.html#$startLoad">$startLoad</a>  <a href="org_casalib_load_base_RetryableLoad.html#destroy">destroy</a>  <a href="org_casalib_load_base_RetryableLoad.html#setLoadRetries">setLoadRetries</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_load_base_Load.html">Load</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_load_base_Load.html#$clean">$clean</a>  <a class="private" href="org_casalib_load_base_Load.html#$onComplete">$onComplete</a>  <a class="private" href="org_casalib_load_base_Load.html#$onInitialized">$onInitialized</a>  <a class="private" href="org_casalib_load_base_Load.html#$onLoad">$onLoad</a>  <a class="private" href="org_casalib_load_base_Load.html#$remapOnLoadHandler">$remapOnLoadHandler</a>  <a class="private" href="org_casalib_load_base_Load.html#$startLoad">$startLoad</a>  <a class="private" href="org_casalib_load_base_Load.html#$stopLoad">$stopLoad</a>  <a href="org_casalib_load_base_Load.html#destroy">destroy</a>  <a href="org_casalib_load_base_Load.html#getFilePath">getFilePath</a>  <a href="org_casalib_load_base_Load.html#hasLoaded">hasLoaded</a>  <a href="org_casalib_load_base_Load.html#isLoading">isLoading</a>  <a href="org_casalib_load_base_Load.html#start">start</a>  <a href="org_casalib_load_base_Load.html#stop">stop</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_event_EventDispatcher.html">EventDispatcher</a></span></span><div class="item inheritedList"><a href="org_casalib_event_EventDispatcher.html#addEventObserver">addEventObserver</a>  <a href="org_casalib_event_EventDispatcher.html#destroy">destroy</a>  <a href="org_casalib_event_EventDispatcher.html#dispatchEvent">dispatchEvent</a>  <a href="org_casalib_event_EventDispatcher.html#removeAllEventObservers">removeAllEventObservers</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserver">removeEventObserver</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForEvent">removeEventObserversForEvent</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForScope">removeEventObserversForScope</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_core_CoreObject.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_core_CoreObject.html#destroy">destroy</a>  <a href="org_casalib_core_CoreObject.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Classproperties">Class properties</h2><div class="member" id="EVENT_FONT_REGISTER"><h3>EVENT_FONT_REGISTER</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_FONT_REGISTER</b>:String = <span class="codeString">'onFontRegister'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_LAST_FONT_REGISTER"><h3>EVENT_LAST_FONT_REGISTER</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_LAST_FONT_REGISTER</b>:String = <span class="codeString">'onLastFontRegister'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div></div><div class="memberSection"><h2 id="Classmethods">Class methods</h2><div class="member" id="applyNewTextFormatByReferenceName"><h3>applyNewTextFormatByReferenceName</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>applyNewTextFormatByReferenceName</b> (
+
+</div><div class="code">referenceName:String,
+field_txt:Object) : Boolean</div><br class="clear" /></div></div><div class="description"> Assigns a new TextFormat to a TextField and determines if <code>embedFonts</code> should be <code><span class="codeIdentifier">true</span></code> or <code><span class="codeIdentifier">false</span></code>. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">referenceName<span class="itemSeparator">:</span></div><div>Reference name of font.</div></div><div class="item"><div class="floatbox code colorizedCode">field_txt    <span class="itemSeparator">:</span></div><div>TextField or <a class="className" href="org_casalib_textfield_CoreTextField.html">org.casalib.textfield.CoreTextField</a> to apply the TextFormat.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if TextFormat by <code>referenceName</code> was successfully found; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> Automatically sets <code>embedFonts</code> to <code><span class="codeIdentifier">true</span></code> if <code>font</code> is NOT <code>_sans</code>, <code>_serif</code> or <code>_typewriter</code>; otherwise sets <code>embedFonts</code> to <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div><div class="member" id="applyTextFormatByReferenceName"><h3>applyTextFormatByReferenceName</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>applyTextFormatByReferenceName</b> (
+
+</div><div class="code">referenceName:String,
+field_txt:Object) : Boolean</div><br class="clear" /></div></div><div class="description"> Assigns a TextFormat to a TextField and determines if <code>embedFonts</code> should be <code><span class="codeIdentifier">true</span></code> or <code><span class="codeIdentifier">false</span></code>. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">referenceName<span class="itemSeparator">:</span></div><div>Reference name of font.</div></div><div class="item"><div class="floatbox code colorizedCode">field_txt    <span class="itemSeparator">:</span></div><div>TextField or <a class="className" href="org_casalib_textfield_CoreTextField.html">org.casalib.textfield.CoreTextField</a> to apply the TextFormat.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if TextFormat by <code>referenceName</code> was successfully found; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> Automatically sets <code>embedFonts</code> to <code><span class="codeIdentifier">true</span></code> if <code>font</code> is NOT <code>_sans</code>, <code>_serif</code> or <code>_typewriter</code>; otherwise sets <code>embedFonts</code> to <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div><div class="member" id="getFontReferenceNames"><h3>getFontReferenceNames</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>getFontReferenceNames</b> (
+</div><div class="code">) : Array</div><br class="clear" /></div></div><div class="description"> Gets a list of all of the refrence names of registered fonts. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Array of font reference names. </li></ul></div></div></div></div></div><div class="member" id="getTextFormatByReferenceName"><h3>getTextFormatByReferenceName</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>getTextFormatByReferenceName</b> (
+</div><div class="code">referenceName:String) : TextFormat</div><br class="clear" /></div></div><div class="description"> Looks up and returns a TextFormat by its reference name. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">referenceName<span class="itemSeparator">:</span></div><div>Reference name of font.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> A new TextFormat with <code>font</code> defined. </li></ul></div></div></div></div></div><div class="member" id="loadFont"><h3>loadFont</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>loadFont</b> (
+</div><div class="code">filePath:String) : <a class="className" href="org_casalib_load_media_font_FontManager.html">FontManager</a></div><br class="clear" /></div></div><div class="description"> Load a SWF wrapped font from a external location. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">filePath<span class="itemSeparator">:</span></div><div>The absolute or relative URL of the SWF.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> <a class="className" href="org_casalib_load_media_font_FontManager.html">FontManager</a> instance. </li></ul></div></div></div></div></div><div class="member" id="registerFont"><h3>registerFont</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>registerFont</b> (
+
+
+
+</div><div class="code">referenceName:String,
+field:Object,
+sender_mc:MovieClip,
+isLastRegister:Boolean) : Boolean</div><br class="clear" /></div></div><div class="description"> Used by external font SWF files to register fonts. Should not be called by anything else. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">referenceName <span class="itemSeparator">:</span></div><div>The unique reference name of your font. Used to look up at a later time with <a href="org_casalib_load_media_font_FontManager.html#getTextFormatByReferenceName">getTextFormatByReferenceName</a>.</div></div><div class="item"><div class="floatbox code colorizedCode">field         <span class="itemSeparator">:</span></div><div>TextField or <a class="className" href="org_casalib_textfield_CoreTextField.html">org.casalib.textfield.CoreTextField</a> with the embedded font.</div></div><div class="item"><div class="floatbox code colorizedCode">sender_mc     <span class="itemSeparator">:</span></div><div>Reference to the external SWFs root/shell; if this code is on the top timeline <code>sender_mc</code> should be <code><span class="codeIdentifier">this</span></code>.</div></div><div class="item"><div class="floatbox code colorizedCode">isLastRegister<span class="itemSeparator">:</span></div><div><strong>[optional]</strong> Indicates it's the last font registered <code><span class="codeIdentifier">true</span></code>, or that there are other fonts left to register <code><span class="codeIdentifier">false</span></code>; defaults to <code><span class="codeIdentifier">false</span></code>.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if parameter <code>sender_mc</code> was referenced correctly and the font was successfully registered; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> Parameter <code>isLastRegister</code> should only be <code><span class="codeIdentifier">true</span></code> during the registering of the last font in the loaded SWF. If there is only one font being registered it should always be <code><span class="codeIdentifier">true</span></code>. </li></ul></div></div></div></div></div></div><div class="memberSection"><h2 id="Instancemethods">Instance methods</h2><div class="member" id="destroy"><h3>destroy</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>destroy</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> <code>destroy</code> is called automatically after event <code>onLastFontRegister</code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Overrides:</span><div class="item"><ul><li> <a href="org_casalib_load_media_MediaLoad.html#destroy">org.casalib.load.media.MediaLoad.destroy</a> </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

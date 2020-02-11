@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>XmlUtil</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_util_XmlUtil"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classmethods" accesskey="a">Cl<span class="accessKey">a</span>ss methods</a></li></ul><br class="clear" /></div><h1>XmlUtil</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td>none</td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">07/19/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger, Mike Creighton, Chad Udell, Harry Williams</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.util.XmlUtil</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.util.TypeUtil;
+import org.casalib.xml.CoreXml;
+
+/**
+    @author Aaron Clinger
+    @author Mike Creighton
+    @author Chad Udell
+    @author Harry Williams
+    @version 07/19/07
+*/
+
+class org.casalib.util.XmlUtil {
+    
+    /**
+        Traverses through the child nodes and returns the first node it finds that matches specified name.
+        
+        @param context: Node that contains the child nodes you are searching.
+        @param name: Name of the target node.
+        @return Returns the first node that matched specified name.
+    */
+    public static function getChildNodeByName(context:XMLNode, name:String):XMLNode {
+        var i:Number = -1;
+        var childNode:XMLNode;
+        
+        while (++i &lt; context.childNodes.length) {
+            childNode = context.childNodes[i];
+            
+            if (childNode.nodeName == name)
+                return childNode;
+        }
+        
+        return undefined;
+    }
+    
+    /**
+        Traverses through the child nodes and returns all nodes it finds that matches specified name.
+        
+        @param context: Node that contains the child nodes you are searching.
+        @param name: Name of the target nodes.
+        @return Returns an Array comprised of nodes that matched specified name.
+    */
+    public static function getChildNodesByName(context:XMLNode, name:String): /*XMLNode*/ Array {
+        var i:Number                 = -1;
+        var nodes: /*XMLNode*/ Array = new Array();
+        var childNode:XMLNode;
+        
+        while (++i &lt; context.childNodes.length) {
+            childNode = context.childNodes[i];
+            
+            if (childNode.nodeName == name)
+                nodes.push(childNode);
+        }
+        
+        return nodes;
+    }
+    
+    /**
+        Traverses through the child nodes and returns the text content of the first node it finds that matches specified name.
+        
+        @param context: Node that contains the child nodes you are searching.
+        @param name: Name of the target node.
+        @return Returns the text value of the node.
+    */
+    public static function getTextOfChildNodeByName(context:XMLNode, name:String):String {
+        var node:XMLNode = XmlUtil.getChildNodeByName(context, name);
+        
+        if (node.firstChild.nodeType == 3)
+            return node.firstChild.nodeValue;
+        
+        return undefined;
+    }
+    
+    /**
+        Traverses through the child nodes and returns the text content of the first node it finds that matches specified name.
+        
+        @param context: Node that contains the child nodes you are searching.
+        @param name: Name of the target nodes.
+        @return Returns an Array comprised of the text values of the nodes that matched specified name.
+    */
+    public static function getTextOfChildNodesByName(context:XMLNode, name:String): /*String*/ Array {
+        var nodes: /*XMLNode*/ Array    = XmlUtil.getChildNodesByName(context, name);
+        var textNodes: /*String*/ Array = new Array();
+        var i:Number                    = -1;
+        var node:XMLNode;
+        
+        while (++i &lt; nodes.length) {
+            node = nodes[i];
+            
+            if (node.firstChild.nodeType == 3)
+                textNodes.push(node.firstChild.nodeValue);
+        }
+        
+        return textNodes;
+    }
+    
+    /**
+        Returns an easily navigable object from XML.
+        
+        @param xmlData: Defined or loaded XML to be coverted.
+        @param convertNumbers: &lt;strong>[optional]&lt;/strong> Indicates to either convert number strings to numbers &lt;code>true&lt;/code>, or leave all numbers as strings &lt;code>false&lt;/code>; defaults to &lt;code>true&lt;/code>.
+        @param convertBooleans: &lt;strong>[optional]&lt;/strong> Indicates to either convert &lt;code>"true"&lt;/code>/&lt;code>"false"&lt;/code> strings to proper booleans &lt;code>true&lt;/code>, or leave all booleans as strings &lt;code>false&lt;/code>; defaults to &lt;code>true&lt;/code>.
+        @return An Object comprised of Arrays.
+        @example
+            &lt;code>
+                var birthdayXml:XML = new XML("&lt;birthday>&lt;people>&lt;person>&lt;name>Aaron Clinger&lt;/name>&lt;birthdate month=\"January\" day=\"11\" />&lt;/person>&lt;person>&lt;name>John Doe&lt;/name>&lt;birthdate month=\"April\" day=\"21\" />&lt;/person>&lt;/people>&lt;/birthday>");
+                
+                var xmlObject:Object = XmlUtil.xmlToObject(this.birthdayXml);
+                
+                trace("Name is " + this.xmlObject.birthday[0].people[0].person[1].name[0].nodeValue);
+                trace("Day born is " + this.xmlObject.birthday[0].people[0].person[1].birthdate[0].day);
+            &lt;/code>
+    */
+    public static function xmlToObject(xmlData:XML, convertNumbers:Boolean, convertBooleans:Boolean):Object {
+        var obj:Object = new Object();
+        
+        XmlUtil.$createChildNodeObjects(obj, xmlData.childNodes, (convertNumbers == undefined) ? true : convertNumbers, (convertBooleans == undefined) ? true : convertBooleans);
+        
+        return obj;
+    }
+    
+    /**
+        Returns XML converted from an Object.
+        
+        @param objectData: Basic Object to be coverted. 
+        @return A {@link CoreXml} object comprised of passed Object's data.
+        @example
+            &lt;code>
+                var xmlObject:Object         = new Object();
+                this.xmlObject.wrapper       = new Object();
+                this.xmlObject.wrapper.group = "friends";
+                this.xmlObject.wrapper.name  = new Array("Greg", "Jose", "Dave", "Toby");
+                
+                var xmlData:CoreXml = XmlUtil.objectToXml(this.xmlObject);
+                
+                trace(this.xmlData); // traces &lt;wrapper group="friends">&lt;name>Toby&lt;/name>&lt;name>Dave&lt;/name>&lt;name>Jose&lt;/name>&lt;name>Greg&lt;/name>&lt;/wrapper>
+            &lt;/code>
+        @usageNote {@link #objectToXml} ignores &lt;code>function&lt;/code>, &lt;code>Button&lt;/code>, &lt;code>TextField&lt;/code> and &lt;code>MovieClip&lt;/code>.
+    */
+    public static function objectToXml(objectData:Object):CoreXml {
+        for (var i:String in objectData)
+            if (!TypeUtil.isTypeOf(objectData[i], 'object'))
+                return null;
+        
+        return XmlUtil.$createXMLNodesFromObject(objectData);
+    }
+    
+    /**
+        Traverses recursively through an XMLNode and its children returning the value of all text within.
+        
+        @param node: XMLNode to be traversed.
+        @return String containing all text nodes' nodeValues concatenated together.
+    */
+    public static function extractText(node:XMLNode):String {
+        var outputStr:String = '';
+        
+        switch(node.nodeType) {
+            case 3: // Text node here.
+                outputStr += node.nodeValue;
+                break;
+            case 1: // Element node
+                if (node.hasChildNodes()) {
+                    var c:Number = -1;
+                    while(++c &lt; node.childNodes.length)
+                        outputStr += XmlUtil.extractText(node.childNodes[c]);
+                }
+                break;
+        }
+        
+        return outputStr;
+    }
+    
+    private static function $createXMLNodesFromObject(targetObj:Object, containerName:String, areAttributes:Boolean):CoreXml {
+        var x:CoreXml = new CoreXml();
+        var node:XMLNode;
+        
+        if (areAttributes)
+            node = x.createElement(containerName);
+        
+        for (var i:String in targetObj) {
+            switch (TypeUtil.getTypeOf(targetObj[i])) {
+            case 'string' :
+            case 'number' :
+            case 'boolean' :
+                if (areAttributes)
+                    node.attributes[i] = targetObj[i];
+                else {
+                    node = x.createElement(isNaN(i) ? i : containerName);
+                    node.appendChild(x.createTextNode(targetObj[i]));
+                    x.appendChild(node);
+                }
+                break;
+            case 'array' :
+                if (areAttributes)
+                    node.appendChild(XmlUtil.$createXMLNodesFromObject(targetObj[i], i));
+                else
+                    x.appendChild(XmlUtil.$createXMLNodesFromObject(targetObj[i], i));
+                break;
+            case 'object' :
+                if (areAttributes)
+                    node.appendChild(XmlUtil.$createXMLNodesFromObject(targetObj[i], i, true));
+                else
+                    x.appendChild(XmlUtil.$createXMLNodesFromObject(targetObj[i], i, true));
+                break;
+            }
+        }
+        
+        if (areAttributes)
+            x.appendChild(node);
+        
+        return x;
+    }
+    
+    private static function $createChildNodeObjects(targetObj:Object, nodeList:Array, convertNumbers:Boolean, convertBooleans:Boolean):Void {
+        var nName:String;
+        
+        for (var i:String in nodeList) {
+            nName = nodeList[i].nodeName;
+            
+            if (nName == null)
+                break;
+            
+            if (targetObj[nName] == undefined)
+                targetObj[nName] = new Array();
+            
+            targetObj[nName].splice(0, 0, XmlUtil.$getNodeObject(nodeList[i], convertNumbers, convertBooleans));
+        }
+    }
+    
+    private static function $getNodeObject(xmlNode:Object, convertNumbers:Boolean, convertBooleans:Boolean):Object {
+        var nodeObject:Object = new Object();
+        var xmlProperty:String;
+        
+        for (var p:String in xmlNode.attributes) {
+            xmlProperty = xmlNode.attributes[p].toString();
+            
+            if (convertBooleans &amp;&amp; xmlProperty == 'true' || xmlProperty == 'false') {
+                nodeObject[p] = (xmlProperty == 'true') ? true : false;
+                continue;
+            }
+            
+            if (convertNumbers &amp;&amp; !isNaN(xmlProperty)) {
+                nodeObject[p] = Number(xmlProperty);
+                continue;
+            }
+            
+            nodeObject[p] = xmlProperty;
+        }
+        
+        var firstChildValue:Object = xmlNode.firstChild.nodeValue;
+        
+        if (firstChildValue != null) {
+            if (convertBooleans &amp;&amp; firstChildValue == 'true' || firstChildValue == 'false')
+                firstChildValue = (firstChildValue == 'true') ? true : false;
+            
+            if (convertNumbers &amp;&amp; !isNaN(firstChildValue))
+                firstChildValue = Number(firstChildValue);
+            
+            nodeObject.nodeValue = firstChildValue;
+        } else {
+            XmlUtil.$createChildNodeObjects(nodeObject, xmlNode.childNodes, convertNumbers, convertBooleans);
+        }
+        
+        return nodeObject;
+    }
+    
+    private function XmlUtil() {} // Prevents instance creation
+}
+</textarea></div></div></div><div class="classDescription"></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class methods</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#getChildNodeByName">getChildNodeByName</a><span class="typeInfo"> (context:XMLNode, name:String) : XMLNode</span><ul class="summary"><li>	Traverses through the child nodes and returns the first node it finds that matches specified name.</li></ul></li><li class="sortli listnum2"><a href="#getChildNodesByName">getChildNodesByName</a><span class="typeInfo"> (context:XMLNode, name:String) : Array</span><ul class="summary"><li>Traverses through the child nodes and returns all nodes it finds that matches specified name.</li></ul></li><li class="sortli listnum3"><a href="#getTextOfChildNodeByName">getTextOfChildNodeByName</a><span class="typeInfo"> (context:XMLNode, name:String) : String</span><ul class="summary"><li>Traverses through the child nodes and returns the text content of the first node it finds that matches specified name.</li></ul></li><li class="sortli listnum4"><a href="#getTextOfChildNodesByName">getTextOfChildNodesByName</a><span class="typeInfo"> (context:XMLNode, name:String) : Array</span><ul class="summary"><li>Traverses through the child nodes and returns the text content of the first node it finds that matches specified name.</li></ul></li><li class="sortli listnum5"><a href="#xmlToObject">xmlToObject</a><span class="typeInfo"> (xmlData:XML, convertNumbers:Boolean, convertBooleans:Boolean) : Object</span><ul class="summary"><li>Returns an easily navigable object from XML.</li></ul></li><li class="sortli listnum6"><a href="#objectToXml">objectToXml</a><span class="typeInfo"> (objectData:Object) : <a class="className" href="org_casalib_xml_CoreXml.html">CoreXml</a></span><ul class="summary"><li>Returns XML converted from an Object.</li></ul></li><li class="sortli listnum7"><a href="#extractText">extractText</a><span class="typeInfo"> (node:XMLNode) : String</span><ul class="summary"><li>Traverses recursively through an XMLNode and its children returning the value of all text within.</li></ul></li></ul></div></div></div><div class="memberSection"><h2 id="Classmethods">Class methods</h2><div class="member" id="extractText"><h3>extractText</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>extractText</b> (
+</div><div class="code">node:XMLNode) : String</div><br class="clear" /></div></div><div class="description"> Traverses recursively through an XMLNode and its children returning the value of all text within. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">node<span class="itemSeparator">:</span></div><div>XMLNode to be traversed.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> String containing all text nodes' nodeValues concatenated together. </li></ul></div></div></div></div></div><div class="member" id="getChildNodeByName"><h3>getChildNodeByName</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>getChildNodeByName</b> (
+
+</div><div class="code">context:XMLNode,
+name:String) : XMLNode</div><br class="clear" /></div></div><div class="description"> 	Traverses through the child nodes and returns the first node it finds that matches specified name. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">context<span class="itemSeparator">:</span></div><div>Node that contains the child nodes you are searching.</div></div><div class="item"><div class="floatbox code colorizedCode">name   <span class="itemSeparator">:</span></div><div>Name of the target node.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the first node that matched specified name. </li></ul></div></div></div></div></div><div class="member" id="getChildNodesByName"><h3>getChildNodesByName</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>getChildNodesByName</b> (
+
+</div><div class="code">context:XMLNode,
+name:String) : Array</div><br class="clear" /></div></div><div class="description"> Traverses through the child nodes and returns all nodes it finds that matches specified name. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">context<span class="itemSeparator">:</span></div><div>Node that contains the child nodes you are searching.</div></div><div class="item"><div class="floatbox code colorizedCode">name   <span class="itemSeparator">:</span></div><div>Name of the target nodes.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns an Array comprised of nodes that matched specified name. </li></ul></div></div></div></div></div><div class="member" id="getTextOfChildNodeByName"><h3>getTextOfChildNodeByName</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>getTextOfChildNodeByName</b> (
+
+</div><div class="code">context:XMLNode,
+name:String) : String</div><br class="clear" /></div></div><div class="description"> Traverses through the child nodes and returns the text content of the first node it finds that matches specified name. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">context<span class="itemSeparator">:</span></div><div>Node that contains the child nodes you are searching.</div></div><div class="item"><div class="floatbox code colorizedCode">name   <span class="itemSeparator">:</span></div><div>Name of the target node.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the text value of the node. </li></ul></div></div></div></div></div><div class="member" id="getTextOfChildNodesByName"><h3>getTextOfChildNodesByName</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>getTextOfChildNodesByName</b> (
+
+</div><div class="code">context:XMLNode,
+name:String) : Array</div><br class="clear" /></div></div><div class="description"> Traverses through the child nodes and returns the text content of the first node it finds that matches specified name. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">context<span class="itemSeparator">:</span></div><div>Node that contains the child nodes you are searching.</div></div><div class="item"><div class="floatbox code colorizedCode">name   <span class="itemSeparator">:</span></div><div>Name of the target nodes.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns an Array comprised of the text values of the nodes that matched specified name. </li></ul></div></div></div></div></div><div class="member" id="objectToXml"><h3>objectToXml</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>objectToXml</b> (
+</div><div class="code">objectData:Object) : <a class="className" href="org_casalib_xml_CoreXml.html">CoreXml</a></div><br class="clear" /></div></div><div class="description"> Returns XML converted from an Object. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">objectData<span class="itemSeparator">:</span></div><div>Basic Object to be coverted. </div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> A <a class="className" href="org_casalib_xml_CoreXml.html">org.casalib.xml.CoreXml</a> object comprised of passed Object's data. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> xmlObject:<span class="codeIdentifier">Object</span>         = <span class="codeKeyword">new</span> <span class="codeIdentifier">Object</span>();
+<span class="codeIdentifier">this</span>.xmlObject.wrapper       = <span class="codeKeyword">new</span> <span class="codeIdentifier">Object</span>();
+<span class="codeIdentifier">this</span>.xmlObject.wrapper.group = <span class="codeString">"friends"</span>;
+<span class="codeIdentifier">this</span>.xmlObject.wrapper<span class="codeIdentifier">.name</span>  = <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeString">"Greg"</span>, <span class="codeString">"Jose"</span>, <span class="codeString">"Dave"</span>, <span class="codeString">"Toby"</span>);
+
+<span class="codeKeyword">var</span> xmlData:CoreXml = XmlUtil.objectToXml(<span class="codeIdentifier">this</span>.xmlObject);
+
+<span class="codeIdentifier">trace</span>(<span class="codeIdentifier">this</span>.xmlData); <span class="codeComment">// traces &#60;wrapper group="friends"&#62;&#60;name&#62;Toby&#60;/name&#62;&#60;name&#62;Dave&#60;/name&#62;&#60;name&#62;Jose&#60;/name&#62;&#60;name&#62;Greg&#60;/name&#62;&#60;/wrapper&#62;</span></pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> <a href="org_casalib_util_XmlUtil.html#objectToXml">objectToXml</a> ignores <code><span class="codeKeyword">function</span></code>, <code><span class="codeIdentifier">Button</span></code>, <code><span class="codeIdentifier">TextField</span></code> and <code><span class="codeIdentifier">MovieClip</span></code>. </li></ul></div></div></div></div></div><div class="member" id="xmlToObject"><h3>xmlToObject</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>xmlToObject</b> (
+
+
+</div><div class="code">xmlData:XML,
+convertNumbers:Boolean,
+convertBooleans:Boolean) : Object</div><br class="clear" /></div></div><div class="description"> Returns an easily navigable object from XML. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">xmlData        <span class="itemSeparator">:</span></div><div>Defined or loaded XML to be coverted.</div></div><div class="item"><div class="floatbox code colorizedCode">convertNumbers <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> Indicates to either convert number strings to numbers <code><span class="codeIdentifier">true</span></code>, or leave all numbers as strings <code><span class="codeIdentifier">false</span></code>; defaults to <code><span class="codeIdentifier">true</span></code>.</div></div><div class="item"><div class="floatbox code colorizedCode">convertBooleans<span class="itemSeparator">:</span></div><div><strong>[optional]</strong> Indicates to either convert <code><span class="codeString">"true"</span></code>/<code><span class="codeString">"false"</span></code> strings to proper booleans <code><span class="codeIdentifier">true</span></code>, or leave all booleans as strings <code><span class="codeIdentifier">false</span></code>; defaults to <code><span class="codeIdentifier">true</span></code>.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> An Object comprised of Arrays. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> birthdayXml:<span class="codeIdentifier">XML</span> = <span class="codeKeyword">new</span> <span class="codeIdentifier">XML</span>(<span class="codeString">"&#60;birthday&#62;&#60;people&#62;&#60;person&#62;&#60;name&#62;Aaron Clinger&#60;/name&#62;&#60;birthdate month=\"January\" day=\"11\" /&#62;&#60;/person&#62;&#60;person&#62;&#60;name&#62;John Doe&#60;/name&#62;&#60;birthdate month=\"April\" day=\"21\" /&#62;&#60;/person&#62;&#60;/people&#62;&#60;/birthday&#62;"</span>);
+
+<span class="codeKeyword">var</span> xmlObject:<span class="codeIdentifier">Object</span> = XmlUtil.xmlToObject(<span class="codeIdentifier">this</span>.birthdayXml);
+
+<span class="codeIdentifier">trace</span>(<span class="codeString">"Name is "</span> + <span class="codeIdentifier">this</span>.xmlObject.birthday[<span class="codeNumber">0</span>].people[<span class="codeNumber">0</span>].person[<span class="codeNumber">1</span>]<span class="codeIdentifier">.name</span>[<span class="codeNumber">0</span>]<span class="codeIdentifier">.nodeValue</span>);
+<span class="codeIdentifier">trace</span>(<span class="codeString">"Day born is "</span> + <span class="codeIdentifier">this</span>.xmlObject.birthday[<span class="codeNumber">0</span>].people[<span class="codeNumber">0</span>].person[<span class="codeNumber">1</span>].birthdate[<span class="codeNumber">0</span>].day);</pre> </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

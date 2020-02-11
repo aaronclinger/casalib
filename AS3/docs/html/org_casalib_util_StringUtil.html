@@ -1,0 +1,2137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" encoding="utf-8">
+	<head>
+		<title>StringUtil | CASA Lib AS3 Docs</title>
+		<link rel="stylesheet" type="text/css" href="../css/shCoreDefault.min.css" />
+		<link rel="stylesheet" type="text/css" href="../css/VisDoc.min.css" />
+		<script type="text/javascript" src="../js/1_jquery.min.js"></script>
+		<script type="text/javascript" src="../js/2_jquery.cookie.min.js"></script>
+		<script type="text/javascript" src="../js/3_jquery.simpletreeview.min.js"></script>
+		<script type="text/javascript" src="../js/4_shCore.min.js"></script>
+		<script type="text/javascript" src="../js/5_shBrushAS3.min.js"></script>
+		<script type="text/javascript" src="../js/6_shBrushJava.min.js"></script>
+		<script type="text/javascript" src="../js/7_VisDoc.min.js"></script>
+	</head>
+	<body class='isShowingNavigation' id='page_org_casalib_util_StringUtil'>
+	    <div id='page'> 
+			<div id='wrapper'>
+				<div id='outer'> 
+					<div id='floatWrap'> 
+						<div id='main'>
+							<div id='clearHeaderCenter'></div> 
+							<div id='mainContent'>
+																<h1>StringUtil</h1>									<div class='classProperties'>
+		<table cellspacing='0'>
+				<tr>
+		<th>Kind of class:</th>
+		<td>public class</td>
+	</tr>
+							<tr>
+		<th>Package:</th>
+		<td>
+			<ul>
+								<li>			<a href="package_org_casalib_util.html">org.casalib.util</a>
+</li>
+							</ul>
+		</td>
+	</tr>
+							<tr>
+		<th>Inherits from:</th>
+		<td>
+			<ul>
+								<li>			none</li>
+							</ul>
+		</td>
+	</tr>
+																<tr>
+		<th class='classDetails'>Version:</th>
+		<td class='classDetails'>06/23/11</td>
+	</tr>
+	<tr>
+		<th class='classDetails'>Author:</th>
+		<td class='classDetails'>Aaron Clinger, Mike Creighton, David Nelson, Jon Adams</td>
+	</tr>
+	<tr>
+		<th class='classDetails'>Classpath:</th>
+		<td class='classDetails'>org.casalib.util.StringUtil</td>
+	</tr>
+	<tr>
+		<th class='classDetails'>File last modified:</th>
+		<td class='classDetails'>Thursday, 23 June 2011, 20:37:02</td>
+	</tr>
+		</table>
+	</div>
+	<div class='sourceCode'>
+				<span class='sourceCodeShow'><a href="#"><span class='closure'>&#9658;&nbsp;</span><span class='linkLabel'>View source</span></a></span><span class='sourceCodeHide'><a href="#"><span class='disclosure'>&#9660;&nbsp;</span><span class='linkLabel'>Hide source</span></a></span>	<pre id="source" class="brush:as3">/*
+    CASA Lib for ActionScript 3.0
+    Copyright (c) 2011, Aaron Clinger & Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+package org.casalib.util {
+    import flash.xml.XMLDocument;
+    import flash.xml.XMLNodeType;
+    import flash.xml.XMLNode;
+    import org.casalib.util.NumberUtil;
+    
+    
+    /**
+        Utilities for manipulating and searching Strings.
+        
+        @author Aaron Clinger
+        @author Mike Creighton
+        @author David Nelson
+        @author Jon Adams
+        @version 06/23/11
+    */
+    public class StringUtil {
+        public static const WHITESPACE:String = " \t\n\r"; /**< Whitespace characters (space, tab, new line and return). */
+        public static var SMALL_WORDS:Array   = new Array("a", "an", "and", "as", "at", "but", "by", "en", "for", "if", "is", "in", "of", "on", "or", "the", "to", "v", "via", "vs"); /**< The default list of small/short words to be used with {@link #toTitleCase}. */
+        
+        
+        /**
+            Determines if the singular or plural versions of a noun should be used given a number.
+            
+            @param count: The number of items.
+            @param singular: The singular version of the word.
+            @param plural: The plural version of the word. If no word is defined method appends "s" to the singular word. 
+            @return The singular or plural version of the word.
+            @example
+                <code>
+                    trace(StringUtil.pluralize(1, "Dog")); // Traces "Dog"
+                    trace(StringUtil.pluralize(3, "Dog")); // Traces "Dogs"
+                    trace(StringUtil.pluralize(2, "Child", "Children")); // Traces "Children"
+                </code>
+        */
+        public static function pluralize(count:int, singular:String, plural:String = null):String {
+            plural ||= singular + 's';
+            
+            return Math.abs(count) == 1 ? singular : plural;
+        }
+        
+        /**
+            Returns a shortened String.
+            
+            @param source: String to shorten.
+            @param trailing: The number of characters to remove from the end of the String.
+            @param leading: The number of characters to remove from the begining of the String.
+            @param separator: Characters to seperate the begining and the end of the String.
+            @return The shortened String.
+            @example
+                <code>
+                    trace(StringUtil.truncate('Mississippi', 2, 3, '...')); // Traces "Mis...pi"
+                </code>
+        */
+        public static function truncate(source:String, trailing:uint, leading:uint = 0, separator:String = ""):String {
+            const lead:String  = source.substr(0, leading);
+            const trail:String = source.substr(-trailing, trailing);
+            
+            return lead + separator + trail;
+        }
+        
+        
+        /**
+            Transforms source String to title case.
+            
+            @param source: String to return as title cased.
+            @param lowerCaseSmallWords: Indicates to make {@link #SMALL_WORDS small words} lower case <code>true</code>, or to capitalized small words <code>false</code>.
+            @return String with capitalized words.
+        */
+        public static function toTitleCase(source:String, lowerCaseSmallWords:Boolean = true):String {
+            source = StringUtil._checkWords(source.toLowerCase(), ' ', true, lowerCaseSmallWords);
+            
+            var parts:Array = source.split(' ');
+            var last:int    = parts.length - 1;
+            
+            if (!StringUtil._isIgnoredWord(parts[0]))
+                parts[0] = StringUtil._capitalizeFirstLetter(parts[0]);
+                
+            if (!StringUtil._isIgnoredWord(parts[last]) && (!lowerCaseSmallWords || !StringUtil._isSmallWord(parts[last])))
+                parts[last] = StringUtil._capitalizeFirstLetter(parts[last]);
+            
+            source = parts.join(' ');
+            
+            if (StringUtil.contains(source, ': ')) {
+                var i:int = -1;
+                parts     = source.split(': ');
+                
+                while (++i < parts.length)
+                    parts[i] = StringUtil._capitalizeFirstLetter(parts[i]);
+                
+                source = parts.join(': ');
+            }
+            
+            return source;
+        }
+        
+        protected static function _checkWords(source:String, delimiter:String, checkForDashes:Boolean = false, lowerCaseSmallWords:Boolean = false):String {
+            var words:Array = source.split(delimiter);
+            var l:int       = words.length;
+            var word:String;
+            
+            while (l--) {
+                word = words[l];
+                
+                words[l] = StringUtil._checkWord(word, checkForDashes, lowerCaseSmallWords);
+            }
+            
+            return words.join(delimiter);
+        }
+        
+        protected static function _checkWord(word:String, checkForDashes:Boolean, lowerCaseSmallWords:Boolean):String {
+            if (StringUtil._isIgnoredWord(word))
+                return word;
+            
+            if (lowerCaseSmallWords)
+                if (StringUtil._isSmallWord(word))
+                    return word.toLowerCase();
+            
+            if (checkForDashes) {
+                var dashes:Array = new Array('-', '–', '—');
+                var i:int        = -1;
+                var dashFound:Boolean;
+                
+                while (++i < dashes.length) {
+                    if (StringUtil.contains(word, dashes[i]) != 0) {
+                        word = StringUtil._checkWords(word, dashes[i], false, true);
+                        dashFound = true;
+                    }
+                }
+                
+                if (dashFound)
+                    return word;
+            }
+            
+            return StringUtil._capitalizeFirstLetter(word);
+        }
+        
+        protected static function _isIgnoredWord(word:String):Boolean {
+            var periodIndex:int = word.indexOf('.');
+            var upperIndex:int  = StringUtil.indexOfUpperCase(word);
+            
+            if (periodIndex != -1 && periodIndex != word.length - 1 || upperIndex != -1 && upperIndex != 0)
+                return true;
+            
+            return false;
+        }
+        
+        protected static function _isSmallWord(word:String):Boolean {
+            return StringUtil.SMALL_WORDS.indexOf(StringUtil.getLettersFromString(word).toLowerCase()) > -1;
+        }
+        
+        protected static function _capitalizeFirstLetter(source:String):String {
+            var i:int = -1;
+            while (++i < source.length)
+                if (!StringUtil.isPunctuation(source.charAt(i)))
+                    return StringUtil.replaceAt(source, i, source.charAt(i).toUpperCase());
+            
+            return source;
+        }
+        
+        /**
+            Creates an "universally unique" identifier (RFC 4122, version 4).
+            
+            @return Returns an UUID.
+        */
+        public static function uuid():String {
+            const specialChars:Array = new Array('8', '9', 'A', 'B');
+            
+            return StringUtil.createRandomIdentifier(8, 15) + '-' + StringUtil.createRandomIdentifier(4, 15) + '-4' + StringUtil.createRandomIdentifier(3, 15) + '-' + specialChars[NumberUtil.randomIntegerWithinRange(0, 3)] + StringUtil.createRandomIdentifier(3, 15) + '-' + StringUtil.createRandomIdentifier(12, 15);
+        }
+        
+        /**
+            Creates a random identifier of a specified length and complexity.
+            
+            @param length: The character length of the random identifier.
+            @param radix: The number of unique/allowed values for each character (61 is the maximum complexity).
+            @return Returns a random identifier.
+            @usageNote For a case-insensitive identifier pass in a max <code>radix</code> of 35, for a numberic identifier pass in a max <code>radix</code> of 9.
+        */
+        public static function createRandomIdentifier(length:uint, radix:uint = 61):String {
+            const characters:Array = new Array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+            const id:Array         = new Array();
+            radix                  = (radix > 61) ? 61 : radix;
+            
+            while (length--) {
+                id.push(characters[NumberUtil.randomIntegerWithinRange(0, radix)]);
+            }
+            
+            return id.join('');
+        }
+        
+        /**
+            Detects URLs in a String and wraps them in a link.
+            
+            @param source: String in which to automatically wrap links around URLs.
+            @param window: The browser window or HTML frame in which to display the URL.
+            @param className: An optional CSS class name to add to the link. You can specify multiple classes by seperating the class names with spaces.
+            @return Returns the String with any URLs wrapped in a link.
+            @see <a href="http://daringfireball.net/2010/07/improved_regex_for_matching_urls">Read more about the regular expression used by this method.</a>
+        */
+        public static function autoLink(source:String, window:String = "_blank", className:String = null):String {
+            const pattern:RegExp = new RegExp('(?i)\\b((?:[a-z][\\w-]+:(?:/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:\'".,<>?«»“”‘’]))', 'g')
+            className            = (className != "" && className != null) ? ' class="' + className + '"' : '';
+            window               = (window != null) ? ' target="' + window + '"' : '';
+            
+            return source.replace(pattern, '<a href="$1"' + window + className + '>$1</a>');
+        }
+        
+        /**
+            Converts all applicable characters to HTML entities.
+            
+            @param source: String to convert.
+            @return Returns the converted string.
+        */
+        public static function htmlEncode(source:String):String {
+            return new XML(new XMLNode(XMLNodeType.TEXT_NODE, source)).toXMLString();
+        }
+        
+        /**
+            Converts all HTML entities to their applicable characters.
+            
+            @param source: String to convert.
+            @return Returns the converted string.
+        */
+        public static function htmlDecode(source:String):String {
+            return new XMLDocument(source).firstChild.nodeValue;
+        }
+        
+        /**
+            Determines if String is only comprised of punctuation characters (any character other than the letters or numbers).
+            
+            @param source: String to check.
+            @param allowSpaces: Indicates to count spaces as punctuation <code>true</code>, or not to <code>false</code>.
+            @return Returns <code>true</code> if String is only punctuation; otherwise <code>false</code>.
+        */
+        public static function isPunctuation(source:String, allowSpaces:Boolean = true):Boolean {
+            if (StringUtil.getNumbersFromString(source).length != 0 || StringUtil.getLettersFromString(source).length != 0)
+                return false;
+            
+            if (!allowSpaces)
+                return source.split(' ').length == 1;
+            
+            return true;
+        }
+        
+        /**
+            Determines if String is only comprised of upper case letters.
+            
+            @param source: String to check.
+            @return Returns <code>true</code> if String is only upper case characters; otherwise <code>false</code>.
+            @usageNote This function counts numbers, spaces, punctuation and special characters as upper case.
+        */
+        public static function isUpperCase(source:String):Boolean {
+            if (source != source.toUpperCase())
+                return false;
+            
+            return true;
+        }
+        
+        /**
+            Determines if String is only comprised of lower case letters.
+            
+            @param source: String to check.
+            @return Returns <code>true</code> if String is only lower case characters; otherwise <code>false</code>.
+            @usageNote This function counts numbers, spaces, punctuation and special characters as lower case.
+        */
+        public static function isLowerCase(source:String):Boolean {
+            if (source != source.toLowerCase())
+                return false;
+            
+            return true;
+        }
+        
+        /**
+            Determines if String is only comprised of numbers.
+            
+            @param source: String to check.
+            @return Returns <code>true</code> if String is a number; otherwise <code>false</code>.
+        */
+        public static function isNumber(source:String):Boolean {
+            var trimmed:String = StringUtil.trim(source);
+            
+            if (trimmed.length < source.length || source.length == 0)
+                return false;
+            
+            return !isNaN(Number(source));
+        }
+        
+        /**
+            Searches the String for an occurrence of an upper case letter.
+            
+            @param source: String to search for a upper case letter.
+            @return The index of the first occurrence of a upper case letter or <code>-1</code>.
+        */
+        public static function indexOfUpperCase(source:String, startIndex:uint = 0):int {
+            var letters:Array = source.split('');
+            var i:int         = startIndex - 1;
+            
+            while (++i < letters.length)
+                if (letters[i] == letters[i].toUpperCase() && letters[i] != letters[i].toLowerCase())
+                    return i;
+            
+            return -1;
+        }
+        
+        /**
+            Searches the String for an occurrence of a lower case letter.
+            
+            @param source: String to search for a lower case letter.
+            @return The index of the first occurrence of a lower case letter or <code>-1</code>.
+        */
+        public static function indexOfLowerCase(source:String, startIndex:uint = 0):int {
+            var letters:Array = source.split('');
+            var i:int         = startIndex - 1;
+            
+            while (++i < letters.length)
+                if (letters[i] == letters[i].toLowerCase() && letters[i] != letters[i].toUpperCase())
+                    return i;
+            
+            return -1;
+        }
+        
+        /**
+            Returns all the numeric characters from a String.
+            
+            @param source: String to return numbers from.
+            @return String containing only numbers.
+        */
+        public static function getNumbersFromString(source:String):String {
+            var pattern:RegExp = /[^0-9]/g;
+            return source.replace(pattern, '');
+        }
+        
+        /**
+            Returns all the letter characters from a String.
+            
+            @param source: String to return letters from.
+            @return String containing only letters.
+        */
+        public static function getLettersFromString(source:String):String {
+            var pattern:RegExp = /[[:digit:]|[:punct:]|\s]/g;
+            return source.replace(pattern, '');
+        }
+        
+        /**
+            Determines if String contains search String.
+            
+            @param source: String to search in.
+            @param search: String to search for.
+            @return Returns the frequency of the search term found in source String.
+        */
+        public static function contains(source:String, search:String):uint {
+            var pattern:RegExp = new RegExp(search, 'g');
+            return source.match(pattern).length;
+        }
+        
+        /**
+            Strips whitespace (or other characters) from the beginning of a String.
+            
+            @param source: String to remove characters from.
+            @param removeChars: Characters to strip (case sensitive). Defaults to whitespace characters.
+            @return String with characters removed.
+        */
+        public static function trimLeft(source:String, removeChars:String = StringUtil.WHITESPACE):String {
+            var pattern:RegExp = new RegExp('^[' + removeChars + ']+', '');
+            return source.replace(pattern, '');
+        }
+        
+        /**
+            Strips whitespace (or other characters) from the end of a String.
+            
+            @param source: String to remove characters from.
+            @param removeChars: Characters to strip (case sensitive). Defaults to whitespace characters.
+            @return String with characters removed.
+        */
+        public static function trimRight(source:String, removeChars:String = StringUtil.WHITESPACE):String {
+            var pattern:RegExp = new RegExp('[' + removeChars + ']+$', '');
+            return source.replace(pattern, '');
+        }
+        
+        /**
+            Strips whitespace (or other characters) from the beginning and end of a String.
+            
+            @param source: String to remove characters from.
+            @param removeChars: Characters to strip (case sensitive). Defaults to whitespace characters.
+            @return String with characters removed.
+        */
+        public static function trim(source:String, removeChars:String = StringUtil.WHITESPACE):String {
+            var pattern:RegExp = new RegExp('^[' + removeChars + ']+|[' + removeChars + ']+$', 'g');
+            return source.replace(pattern, '');
+        }
+        
+        /**
+            Removes additional spaces from String.
+            
+            @param source: String to remove extra spaces from.
+            @return String with additional spaces removed.
+        */
+        public static function removeExtraSpaces(source:String):String {
+            var pattern:RegExp = /( )+/g;
+            return StringUtil.trim(source.replace(pattern, ' '), ' ');
+        }
+        
+        /**
+            Removes tabs, linefeeds, carriage returns and spaces from String.
+            
+            @param source: String to remove whitespace from.
+            @return String with whitespace removed.
+        */
+        public static function removeWhitespace(source:String):String {
+            var pattern:RegExp = new RegExp('[' + StringUtil.WHITESPACE + ']', 'g');
+            return source.replace(pattern, '');
+        }
+        
+        /**
+            Removes characters from a source String.
+            
+            @param source: String to remove characters from.
+            @param remove: String describing characters to remove.
+            @return String with characters removed.
+        */
+        public static function remove(source:String, remove:String):String {
+            return StringUtil.replace(source, remove, '');
+        }
+        
+        /**
+            Replaces target characters with new characters.
+            
+            @param source: String to replace characters from.
+            @param remove: String describing characters to remove.
+            @param replace: String to replace removed characters.
+            @return String with characters replaced.
+        */
+        public static function replace(source:String, remove:String, replace:String):String {
+            return source.split(remove).join(replace);
+        }
+        
+        /**
+            Removes a character at a specific index.
+            
+            @param source: String to remove character from.
+            @param position: Position of character to remove.
+            @return String with character removed.
+        */
+        public static function removeAt(source:String, position:int):String {
+            return StringUtil.replaceAt(source, position, '');
+        }
+        
+        /**
+            Replaces a character at a specific index with new characters.
+            
+            @param source: String to replace characters from.
+            @param position: Position of character to replace.
+            @param replace: String to replace removed character.
+            @return String with character replaced.
+        */
+        public static function replaceAt(source:String, position:int, replace:String):String {
+            var parts:Array = source.split('');
+            parts.splice(position, 1, replace);
+            return parts.join('');
+        }
+        
+        /**
+            Adds characters at a specific index.
+            
+            @param source: String to add characters to.
+            @param position: Position in which to add characters.
+            @param addition: String to add.
+            @return String with characters added.
+        */
+        public static function addAt(source:String, position:int, addition:String):String {
+            var parts:Array = source.split('');
+            parts.splice(position, 0, addition);
+            return parts.join('');
+        }
+        
+        /**
+            Counts the number of words in a String.
+            
+            @param source: String in which to count words.
+            @return The amount of words.
+        */
+        public static function getWordCount(source:String):uint {
+            return StringUtil.removeExtraSpaces(StringUtil.trim(source)).split(' ').length;
+        }
+        
+        /**
+            Extracts all the unique characters from a source String.
+            
+            @param source: String to find unique characters within.
+            @return String containing unique characters from source String.
+        */
+        public static function getUniqueCharacters(source:String):String {
+            var unique:String = '';
+            var i:uint        = 0;
+            var char:String;
+            
+            while (i < source.length) {
+                char = source.charAt(i);
+                
+                if (unique.indexOf(char) == -1)
+                    unique += char;
+                
+                i++;
+            }
+            
+            return unique;
+        }
+    }
+}</pre>
+</div>
+	<div class='classDescription'>
+	<span class='descriptionSummary'>Utilities for manipulating and searching Strings.</span></div>
+
+									<div class='toc'>
+		<h2 id='Summary'>Summary</h2>
+		<div class='docNav'>
+			<ul>
+									<li>
+						<span class='typeInfoHide'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>&times;</span>Hide type info</a></span>
+						<span class='typeInfoShow'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>+</span>Show type info</a></span>
+					</li>									<li>
+						<span class='summariesHide'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>&times;</span>Hide summaries</a></span>
+						<span class='summariesShow'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>+</span>Show summaries</a></span>
+					</li>			</ul>
+			<div class='clear'></div>
+		</div>
+				<div class='memberList'>
+							<div class='memberSummaryPart'>
+					<span class='title'>Constants</span>
+					<ul>
+													<li class=''>								
+								<a href="#WHITESPACE">WHITESPACE</a>
+																<span class='typeInfo'> : String</span>																<ul class='summary'>
+									<li>Whitespace characters (space, tab, new line and return).</li>
+								</ul>							</li>
+											</ul>
+									</div>
+							<div class='memberSummaryPart'>
+					<span class='title'>Class properties</span>
+					<ul>
+													<li class=''>								
+								<a href="#SMALL_WORDS">SMALL_WORDS</a>
+																<span class='typeInfo'> : Array</span>																<ul class='summary'>
+									<li>The default list of small/short words to be used with toTitleCase.</li>
+								</ul>							</li>
+											</ul>
+									</div>
+							<div class='memberSummaryPart'>
+					<span class='title'>Class methods</span>
+					<ul>
+													<li class=''>								
+								<a href="#pluralize">pluralize</a>
+																<span class='typeInfo'>(count:int, singular:String, plural:String = null) : String</span>																<ul class='summary'>
+									<li>Determines if the singular or plural versions of a noun should be used given a number.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#truncate">truncate</a>
+																<span class='typeInfo'>(source:String, trailing:uint, leading:uint, separator:String = "") : String</span>																<ul class='summary'>
+									<li>Returns a shortened String.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#toTitleCase">toTitleCase</a>
+																<span class='typeInfo'>(source:String, lowerCaseSmallWords:Boolean = true) : String</span>																<ul class='summary'>
+									<li>Transforms source String to title case.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#uuid">uuid</a>
+																<span class='typeInfo'>() : String</span>																<ul class='summary'>
+									<li>Creates an "universally unique" identifier (RFC 4122, version 4).</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#createRandomIdentifier">createRandomIdentifier</a>
+																<span class='typeInfo'>(length:uint, radix:uint = 61) : String</span>																<ul class='summary'>
+									<li>Creates a random identifier of a specified length and complexity.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#autoLink">autoLink</a>
+																<span class='typeInfo'>(source:String, window:String = "_blank", className:String = null) : String</span>																<ul class='summary'>
+									<li>Detects URLs in a String and wraps them in a link.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#htmlEncode">htmlEncode</a>
+																<span class='typeInfo'>(source:String) : String</span>																<ul class='summary'>
+									<li>Converts all applicable characters to HTML entities.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#htmlDecode">htmlDecode</a>
+																<span class='typeInfo'>(source:String) : String</span>																<ul class='summary'>
+									<li>Converts all HTML entities to their applicable characters.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#isPunctuation">isPunctuation</a>
+																<span class='typeInfo'>(source:String, allowSpaces:Boolean = true) : Boolean</span>																<ul class='summary'>
+									<li>Determines if String is only comprised of punctuation characters (any character other than the letters or numbers).</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#isUpperCase">isUpperCase</a>
+																<span class='typeInfo'>(source:String) : Boolean</span>																<ul class='summary'>
+									<li>Determines if String is only comprised of upper case letters.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#isLowerCase">isLowerCase</a>
+																<span class='typeInfo'>(source:String) : Boolean</span>																<ul class='summary'>
+									<li>Determines if String is only comprised of lower case letters.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#isNumber">isNumber</a>
+																<span class='typeInfo'>(source:String) : Boolean</span>																<ul class='summary'>
+									<li>Determines if String is only comprised of numbers.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#indexOfUpperCase">indexOfUpperCase</a>
+																<span class='typeInfo'>(source:String, startIndex:uint) : int</span>																<ul class='summary'>
+									<li>Searches the String for an occurrence of an upper case letter.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#indexOfLowerCase">indexOfLowerCase</a>
+																<span class='typeInfo'>(source:String, startIndex:uint) : int</span>																<ul class='summary'>
+									<li>Searches the String for an occurrence of a lower case letter.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#getNumbersFromString">getNumbersFromString</a>
+																<span class='typeInfo'>(source:String) : String</span>																<ul class='summary'>
+									<li>Returns all the numeric characters from a String.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#getLettersFromString">getLettersFromString</a>
+																<span class='typeInfo'>(source:String) : String</span>																<ul class='summary'>
+									<li>Returns all the letter characters from a String.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#contains">contains</a>
+																<span class='typeInfo'>(source:String, search:String) : uint</span>																<ul class='summary'>
+									<li>Determines if String contains search String.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#trimLeft">trimLeft</a>
+																<span class='typeInfo'>(source:String, removeChars:String = <a href="org_casalib_util_StringUtil.html">StringUtil</a>.WHITESPACE) : String</span>																<ul class='summary'>
+									<li>Strips whitespace (or other characters) from the beginning of a String.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#trimRight">trimRight</a>
+																<span class='typeInfo'>(source:String, removeChars:String = <a href="org_casalib_util_StringUtil.html">StringUtil</a>.WHITESPACE) : String</span>																<ul class='summary'>
+									<li>Strips whitespace (or other characters) from the end of a String.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#trim">trim</a>
+																<span class='typeInfo'>(source:String, removeChars:String = <a href="org_casalib_util_StringUtil.html">StringUtil</a>.WHITESPACE) : String</span>																<ul class='summary'>
+									<li>Strips whitespace (or other characters) from the beginning and end of a String.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#removeExtraSpaces">removeExtraSpaces</a>
+																<span class='typeInfo'>(source:String) : String</span>																<ul class='summary'>
+									<li>Removes additional spaces from String.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#removeWhitespace">removeWhitespace</a>
+																<span class='typeInfo'>(source:String) : String</span>																<ul class='summary'>
+									<li>Removes tabs, linefeeds, carriage returns and spaces from String.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#remove">remove</a>
+																<span class='typeInfo'>(source:String, remove:String) : String</span>																<ul class='summary'>
+									<li>Removes characters from a source String.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#replace">replace</a>
+																<span class='typeInfo'>(source:String, remove:String, replace:String) : String</span>																<ul class='summary'>
+									<li>Replaces target characters with new characters.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#removeAt">removeAt</a>
+																<span class='typeInfo'>(source:String, position:int) : String</span>																<ul class='summary'>
+									<li>Removes a character at a specific index.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#replaceAt">replaceAt</a>
+																<span class='typeInfo'>(source:String, position:int, replace:String) : String</span>																<ul class='summary'>
+									<li>Replaces a character at a specific index with new characters.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#addAt">addAt</a>
+																<span class='typeInfo'>(source:String, position:int, addition:String) : String</span>																<ul class='summary'>
+									<li>Adds characters at a specific index.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#getWordCount">getWordCount</a>
+																<span class='typeInfo'>(source:String) : uint</span>																<ul class='summary'>
+									<li>Counts the number of words in a String.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#getUniqueCharacters">getUniqueCharacters</a>
+																<span class='typeInfo'>(source:String) : String</span>																<ul class='summary'>
+									<li>Extracts all the unique characters from a source String.</li>
+								</ul>							</li>
+											</ul>
+									</div>
+					</div>	</div>
+																					<div class='memberSection'>
+			<h2 id='Constants'>Constants</h2>
+							<div class='member' id='WHITESPACE'>
+									<h3>WHITESPACE</h3>											<div class='fullMemberString'>
+							<span class='code'>static const <strong>WHITESPACE</strong>:String = " \t\n\r"</span>						</div>											<div class='description'>
+																			<p>Whitespace characters (space, tab, new line and return).</p>						</div>									</div>
+					</div>
+				<div class='memberSection'>
+			<h2 id='Classproperties'>Class properties</h2>
+							<div class='member' id='SMALL_WORDS'>
+									<h3>SMALL_WORDS</h3>											<div class='fullMemberString'>
+							<span class='code'>static <strong>SMALL_WORDS</strong>:Array = new Array("a", "an", "and", "as", "at", "but", "by", "en", "for", "if", "is", "in", "of", "on", "or", "the", "to", "v", "via", "vs")</span><span class='access'>(read,write)</span>						</div>											<div class='description'>
+																			<p>The default list of small/short words to be used with <a href="org_casalib_util_StringUtil.html#toTitleCase">toTitleCase</a>.</p>						</div>									</div>
+					</div>
+				<div class='memberSection'>
+			<h2 id='Classmethods'>Class methods</h2>
+							<div class='member' id='addAt'>
+									<h3>addAt</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>addAt</strong>(source:String,
+                      position:int,
+                      addition:String) : String</span>						</div>											<div class='description'>
+																			<p>Adds characters at a specific index.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source  <span class='itemSeparator'>:</span></span>String to add characters to.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>position<span class='itemSeparator'>:</span></span>Position in which to add characters.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>addition<span class='itemSeparator'>:</span></span>String to add.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					String with characters added.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='autoLink'>
+									<h3>autoLink</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>autoLink</strong>(source:String,
+                         window:String = "_blank",
+                         className:String = null) : String</span>						</div>											<div class='description'>
+																			<p>Detects URLs in a String and wraps them in a link.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source   <span class='itemSeparator'>:</span></span>String in which to automatically wrap links around URLs.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>window   <span class='itemSeparator'>:</span></span>The browser window or HTML frame in which to display the URL.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>className<span class='itemSeparator'>:</span></span>An optional CSS class name to add to the link. You can specify multiple classes by seperating the class names with spaces.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns the String with any URLs wrapped in a link.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>See also</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<a href="org_casalib_util_StringUtil.html"><a href="http://daringfireball.net/2010/07/improved_regex_for_matching_urls">Read more about the regular expression used by this method.</a></a>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='contains'>
+									<h3>contains</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>contains</strong>(source:String,
+                         search:String) : uint</span>						</div>											<div class='description'>
+																			<p>Determines if String contains search String.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source<span class='itemSeparator'>:</span></span>String to search in.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>search<span class='itemSeparator'>:</span></span>String to search for.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns the frequency of the search term found in source String.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='createRandomIdentifier'>
+									<h3>createRandomIdentifier</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>createRandomIdentifier</strong>(length:uint,
+                                       radix:uint = 61) : String</span>						</div>											<div class='description'>
+																			<p>Creates a random identifier of a specified length and complexity.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>length<span class='itemSeparator'>:</span></span>The character length of the random identifier.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>radix <span class='itemSeparator'>:</span></span>The number of unique/allowed values for each character (61 is the maximum complexity).	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns a random identifier.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Usage note</span>
+					<div class='item'>
+					<ul>
+								<li>
+					For a case-insensitive identifier pass in a max <code>radix</code> of 35, for a numberic identifier pass in a max <code>radix</code> of 9.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='getLettersFromString'>
+									<h3>getLettersFromString</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>getLettersFromString</strong>(source:String) : String</span>						</div>											<div class='description'>
+																			<p>Returns all the letter characters from a String.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source<span class='itemSeparator'>:</span></span>String to return letters from.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					String containing only letters.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='getNumbersFromString'>
+									<h3>getNumbersFromString</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>getNumbersFromString</strong>(source:String) : String</span>						</div>											<div class='description'>
+																			<p>Returns all the numeric characters from a String.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source<span class='itemSeparator'>:</span></span>String to return numbers from.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					String containing only numbers.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='getUniqueCharacters'>
+									<h3>getUniqueCharacters</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>getUniqueCharacters</strong>(source:String) : String</span>						</div>											<div class='description'>
+																			<p>Extracts all the unique characters from a source String.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source<span class='itemSeparator'>:</span></span>String to find unique characters within.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					String containing unique characters from source String.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='getWordCount'>
+									<h3>getWordCount</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>getWordCount</strong>(source:String) : uint</span>						</div>											<div class='description'>
+																			<p>Counts the number of words in a String.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source<span class='itemSeparator'>:</span></span>String in which to count words.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					The amount of words.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='htmlDecode'>
+									<h3>htmlDecode</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>htmlDecode</strong>(source:String) : String</span>						</div>											<div class='description'>
+																			<p>Converts all HTML entities to their applicable characters.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source<span class='itemSeparator'>:</span></span>String to convert.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns the converted string.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='htmlEncode'>
+									<h3>htmlEncode</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>htmlEncode</strong>(source:String) : String</span>						</div>											<div class='description'>
+																			<p>Converts all applicable characters to HTML entities.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source<span class='itemSeparator'>:</span></span>String to convert.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns the converted string.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='indexOfLowerCase'>
+									<h3>indexOfLowerCase</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>indexOfLowerCase</strong>(source:String,
+                                 startIndex:uint) : int</span>						</div>											<div class='description'>
+																			<p>Searches the String for an occurrence of a lower case letter.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source<span class='itemSeparator'>:</span></span>String to search for a lower case letter.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					The index of the first occurrence of a lower case letter or <code>-<span class="codeNumber">1</span></code>.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='indexOfUpperCase'>
+									<h3>indexOfUpperCase</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>indexOfUpperCase</strong>(source:String,
+                                 startIndex:uint) : int</span>						</div>											<div class='description'>
+																			<p>Searches the String for an occurrence of an upper case letter.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source<span class='itemSeparator'>:</span></span>String to search for a upper case letter.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					The index of the first occurrence of a upper case letter or <code>-<span class="codeNumber">1</span></code>.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='isLowerCase'>
+									<h3>isLowerCase</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>isLowerCase</strong>(source:String) : Boolean</span>						</div>											<div class='description'>
+																			<p>Determines if String is only comprised of lower case letters.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source<span class='itemSeparator'>:</span></span>String to check.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns <code><span class="codeIdentifier">true</span></code> if String is only lower case characters; otherwise <code><span class="codeIdentifier">false</span></code>.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Usage note</span>
+					<div class='item'>
+					<ul>
+								<li>
+					This function counts numbers, spaces, punctuation and special characters as lower case.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='isNumber'>
+									<h3>isNumber</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>isNumber</strong>(source:String) : Boolean</span>						</div>											<div class='description'>
+																			<p>Determines if String is only comprised of numbers.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source<span class='itemSeparator'>:</span></span>String to check.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns <code><span class="codeIdentifier">true</span></code> if String is a number; otherwise <code><span class="codeIdentifier">false</span></code>.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='isPunctuation'>
+									<h3>isPunctuation</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>isPunctuation</strong>(source:String,
+                              allowSpaces:Boolean = true) : Boolean</span>						</div>											<div class='description'>
+																			<p>Determines if String is only comprised of punctuation characters (any character other than the letters or numbers).</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source     <span class='itemSeparator'>:</span></span>String to check.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>allowSpaces<span class='itemSeparator'>:</span></span>Indicates to count spaces as punctuation <code><span class="codeIdentifier">true</span></code>, or not to <code><span class="codeIdentifier">false</span></code>.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns <code><span class="codeIdentifier">true</span></code> if String is only punctuation; otherwise <code><span class="codeIdentifier">false</span></code>.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='isUpperCase'>
+									<h3>isUpperCase</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>isUpperCase</strong>(source:String) : Boolean</span>						</div>											<div class='description'>
+																			<p>Determines if String is only comprised of upper case letters.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source<span class='itemSeparator'>:</span></span>String to check.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns <code><span class="codeIdentifier">true</span></code> if String is only upper case characters; otherwise <code><span class="codeIdentifier">false</span></code>.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Usage note</span>
+					<div class='item'>
+					<ul>
+								<li>
+					This function counts numbers, spaces, punctuation and special characters as upper case.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='pluralize'>
+									<h3>pluralize</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>pluralize</strong>(count:int,
+                          singular:String,
+                          plural:String = null) : String</span>						</div>											<div class='description'>
+																			<p>Determines if the singular or plural versions of a noun should be used given a number.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>count   <span class='itemSeparator'>:</span></span>The number of items.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>singular<span class='itemSeparator'>:</span></span>The singular version of the word.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>plural  <span class='itemSeparator'>:</span></span>The plural version of the word. If no word is defined method appends "s" to the singular word.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<pre>
+trace(StringUtil.pluralize(1, &quot;Dog&quot;)); <span class="codeComment">// Traces &quot;Dog&quot;</span>
+trace(StringUtil.pluralize(3, &quot;Dog&quot;)); <span class="codeComment">// Traces &quot;Dogs&quot;</span>
+trace(StringUtil.pluralize(2, &quot;Child&quot;, &quot;Children&quot;)); <span class="codeComment">// Traces &quot;Children&quot;</span>
+</pre>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					The singular or plural version of the word.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='remove'>
+									<h3>remove</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>remove</strong>(source:String,
+                       remove:String) : String</span>						</div>											<div class='description'>
+																			<p>Removes characters from a source String.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source<span class='itemSeparator'>:</span></span>String to remove characters from.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>remove<span class='itemSeparator'>:</span></span>String describing characters to remove.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					String with characters removed.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='removeAt'>
+									<h3>removeAt</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>removeAt</strong>(source:String,
+                         position:int) : String</span>						</div>											<div class='description'>
+																			<p>Removes a character at a specific index.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source  <span class='itemSeparator'>:</span></span>String to remove character from.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>position<span class='itemSeparator'>:</span></span>Position of character to remove.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					String with character removed.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='removeExtraSpaces'>
+									<h3>removeExtraSpaces</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>removeExtraSpaces</strong>(source:String) : String</span>						</div>											<div class='description'>
+																			<p>Removes additional spaces from String.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source<span class='itemSeparator'>:</span></span>String to remove extra spaces from.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					String with additional spaces removed.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='removeWhitespace'>
+									<h3>removeWhitespace</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>removeWhitespace</strong>(source:String) : String</span>						</div>											<div class='description'>
+																			<p>Removes tabs, linefeeds, carriage returns and spaces from String.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source<span class='itemSeparator'>:</span></span>String to remove whitespace from.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					String with whitespace removed.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='replace'>
+									<h3>replace</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>replace</strong>(source:String,
+                        remove:String,
+                        replace:String) : String</span>						</div>											<div class='description'>
+																			<p>Replaces target characters with new characters.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source <span class='itemSeparator'>:</span></span>String to replace characters from.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>remove <span class='itemSeparator'>:</span></span>String describing characters to remove.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>replace<span class='itemSeparator'>:</span></span>String to replace removed characters.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					String with characters replaced.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='replaceAt'>
+									<h3>replaceAt</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>replaceAt</strong>(source:String,
+                          position:int,
+                          replace:String) : String</span>						</div>											<div class='description'>
+																			<p>Replaces a character at a specific index with new characters.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source  <span class='itemSeparator'>:</span></span>String to replace characters from.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>position<span class='itemSeparator'>:</span></span>Position of character to replace.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>replace <span class='itemSeparator'>:</span></span>String to replace removed character.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					String with character replaced.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='toTitleCase'>
+									<h3>toTitleCase</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>toTitleCase</strong>(source:String,
+                            lowerCaseSmallWords:Boolean = true) : String</span>						</div>											<div class='description'>
+																			<p>Transforms source String to title case.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source             <span class='itemSeparator'>:</span></span>String to return as title cased.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>lowerCaseSmallWords<span class='itemSeparator'>:</span></span>Indicates to make <a href="org_casalib_util_StringUtil.html#SMALL_WORDS">small words</a> lower case <code><span class="codeIdentifier">true</span></code>, or to capitalized small words <code><span class="codeIdentifier">false</span></code>.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					String with capitalized words.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='trim'>
+									<h3>trim</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>trim</strong>(source:String,
+                     removeChars:String = <a href="org_casalib_util_StringUtil.html">StringUtil</a>.WHITESPACE) : String</span>						</div>											<div class='description'>
+																			<p>Strips whitespace (or other characters) from the beginning and end of a String.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source     <span class='itemSeparator'>:</span></span>String to remove characters from.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>removeChars<span class='itemSeparator'>:</span></span>Characters to strip (case sensitive). Defaults to whitespace characters.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					String with characters removed.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='trimLeft'>
+									<h3>trimLeft</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>trimLeft</strong>(source:String,
+                         removeChars:String = <a href="org_casalib_util_StringUtil.html">StringUtil</a>.WHITESPACE) : String</span>						</div>											<div class='description'>
+																			<p>Strips whitespace (or other characters) from the beginning of a String.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source     <span class='itemSeparator'>:</span></span>String to remove characters from.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>removeChars<span class='itemSeparator'>:</span></span>Characters to strip (case sensitive). Defaults to whitespace characters.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					String with characters removed.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='trimRight'>
+									<h3>trimRight</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>trimRight</strong>(source:String,
+                          removeChars:String = <a href="org_casalib_util_StringUtil.html">StringUtil</a>.WHITESPACE) : String</span>						</div>											<div class='description'>
+																			<p>Strips whitespace (or other characters) from the end of a String.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source     <span class='itemSeparator'>:</span></span>String to remove characters from.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>removeChars<span class='itemSeparator'>:</span></span>Characters to strip (case sensitive). Defaults to whitespace characters.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					String with characters removed.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='truncate'>
+									<h3>truncate</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>truncate</strong>(source:String,
+                         trailing:uint,
+                         leading:uint,
+                         separator:String = "") : String</span>						</div>											<div class='description'>
+																			<p>Returns a shortened String.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>source   <span class='itemSeparator'>:</span></span>String to shorten.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>trailing <span class='itemSeparator'>:</span></span>The number of characters to remove from the end of the String.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>leading  <span class='itemSeparator'>:</span></span>The number of characters to remove from the begining of the String.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>separator<span class='itemSeparator'>:</span></span>Characters to seperate the begining and the end of the String.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<code>trace(StringUtil.truncate(&#39;Mississippi&#39;, 2, 3, &#39;...&#39;)); <span class="codeComment">// Traces &quot;Mis...pi&quot;</span></code>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					The shortened String.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='uuid'>
+									<h3>uuid</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>uuid</strong>() : String</span>						</div>											<div class='description'>
+																			<p>Creates an "universally unique" identifier (RFC 4122, version 4).</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					Returns an UUID.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+					</div>
+		
+							</div>
+						</div>
+											<div id='sidebar'>
+		<div id='clearHeaderLeft'></div> 
+		<div id='sidebarContent'>
+				<div class="list">
+							<ul>
+		<li  class=''>											<li id='menu_index' class=''>				<a href="index.html">CASA Lib AS3 Docs</a>
+</li>
+						</li>
+</ul>
+
+					<ul id='treemenu'>
+		<li  class=''>									<h2>Packages and classes</h2>											<ul>
+		<li  id='menu_package_org_casalib_collection' class='package'>
+																	<a href="package_org_casalib_collection.html">org.casalib.collection</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_collection_IList' class='interface'>				<a href="org_casalib_collection_IList.html"><span class='packagePath'>org.casalib.collection.</span>IList</a>
+</li>
+							<li id='menu_org_casalib_collection_List' class=''>				<a href="org_casalib_collection_List.html"><span class='packagePath'>org.casalib.collection.</span>List</a>
+</li>
+							<li id='menu_org_casalib_collection_UniqueList' class=''>				<a href="org_casalib_collection_UniqueList.html"><span class='packagePath'>org.casalib.collection.</span>UniqueList</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_control' class='package'>
+																	<a href="package_org_casalib_control.html">org.casalib.control</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_control_IResumable' class='interface'>				<a href="org_casalib_control_IResumable.html"><span class='packagePath'>org.casalib.control.</span>IResumable</a>
+</li>
+							<li id='menu_org_casalib_control_IRunnable' class='interface'>				<a href="org_casalib_control_IRunnable.html"><span class='packagePath'>org.casalib.control.</span>IRunnable</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_core' class='package'>
+																	<a href="package_org_casalib_core.html">org.casalib.core</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_core_Destroyable' class=''>				<a href="org_casalib_core_Destroyable.html"><span class='packagePath'>org.casalib.core.</span>Destroyable</a>
+</li>
+							<li id='menu_org_casalib_core_IDestroyable' class='interface'>				<a href="org_casalib_core_IDestroyable.html"><span class='packagePath'>org.casalib.core.</span>IDestroyable</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_display' class='package'>
+																	<a href="package_org_casalib_display.html">org.casalib.display</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_display_CasaBitmap' class=''>				<a href="org_casalib_display_CasaBitmap.html"><span class='packagePath'>org.casalib.display.</span>CasaBitmap</a>
+</li>
+							<li id='menu_org_casalib_display_CasaMovieClip' class=''>				<a href="org_casalib_display_CasaMovieClip.html"><span class='packagePath'>org.casalib.display.</span>CasaMovieClip</a>
+</li>
+							<li id='menu_org_casalib_display_CasaShape' class=''>				<a href="org_casalib_display_CasaShape.html"><span class='packagePath'>org.casalib.display.</span>CasaShape</a>
+</li>
+							<li id='menu_org_casalib_display_CasaSimpleButton' class=''>				<a href="org_casalib_display_CasaSimpleButton.html"><span class='packagePath'>org.casalib.display.</span>CasaSimpleButton</a>
+</li>
+							<li id='menu_org_casalib_display_CasaSprite' class=''>				<a href="org_casalib_display_CasaSprite.html"><span class='packagePath'>org.casalib.display.</span>CasaSprite</a>
+</li>
+							<li id='menu_org_casalib_display_CasaTextField' class=''>				<a href="org_casalib_display_CasaTextField.html"><span class='packagePath'>org.casalib.display.</span>CasaTextField</a>
+</li>
+							<li id='menu_org_casalib_display_ReversibleMovieClip' class=''>				<a href="org_casalib_display_ReversibleMovieClip.html"><span class='packagePath'>org.casalib.display.</span>ReversibleMovieClip</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_errors' class='package'>
+																	<a href="package_org_casalib_errors.html">org.casalib.errors</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_errors_ArguementTypeError' class=''>				<a href="org_casalib_errors_ArguementTypeError.html"><span class='packagePath'>org.casalib.errors.</span>ArguementTypeError</a>
+</li>
+							<li id='menu_org_casalib_errors_ArrayContentsError' class=''>				<a href="org_casalib_errors_ArrayContentsError.html"><span class='packagePath'>org.casalib.errors.</span>ArrayContentsError</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_events' class='package'>
+																	<a href="package_org_casalib_events.html">org.casalib.events</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_events_InactivityEvent' class=''>				<a href="org_casalib_events_InactivityEvent.html"><span class='packagePath'>org.casalib.events.</span>InactivityEvent</a>
+</li>
+							<li id='menu_org_casalib_events_IRemovableEventDispatcher' class='interface'>				<a href="org_casalib_events_IRemovableEventDispatcher.html"><span class='packagePath'>org.casalib.events.</span>IRemovableEventDispatcher</a>
+</li>
+							<li id='menu_org_casalib_events_KeyComboEvent' class=''>				<a href="org_casalib_events_KeyComboEvent.html"><span class='packagePath'>org.casalib.events.</span>KeyComboEvent</a>
+</li>
+							<li id='menu_org_casalib_events_ListenerManager' class=''>				<a href="org_casalib_events_ListenerManager.html"><span class='packagePath'>org.casalib.events.</span>ListenerManager</a>
+</li>
+							<li id='menu_org_casalib_events_LoadEvent' class=''>				<a href="org_casalib_events_LoadEvent.html"><span class='packagePath'>org.casalib.events.</span>LoadEvent</a>
+</li>
+							<li id='menu_org_casalib_events_ProcessEvent' class=''>				<a href="org_casalib_events_ProcessEvent.html"><span class='packagePath'>org.casalib.events.</span>ProcessEvent</a>
+</li>
+							<li id='menu_org_casalib_events_RemovableEventDispatcher' class=''>				<a href="org_casalib_events_RemovableEventDispatcher.html"><span class='packagePath'>org.casalib.events.</span>RemovableEventDispatcher</a>
+</li>
+							<li id='menu_org_casalib_events_RetryEvent' class=''>				<a href="org_casalib_events_RetryEvent.html"><span class='packagePath'>org.casalib.events.</span>RetryEvent</a>
+</li>
+							<li id='menu_org_casalib_events_SequenceEvent' class=''>				<a href="org_casalib_events_SequenceEvent.html"><span class='packagePath'>org.casalib.events.</span>SequenceEvent</a>
+</li>
+							<li id='menu_org_casalib_events_StageEventProxy' class=''>				<a href="org_casalib_events_StageEventProxy.html"><span class='packagePath'>org.casalib.events.</span>StageEventProxy</a>
+</li>
+							<li id='menu_org_casalib_events_TweenEvent' class=''>				<a href="org_casalib_events_TweenEvent.html"><span class='packagePath'>org.casalib.events.</span>TweenEvent</a>
+</li>
+							<li id='menu_org_casalib_events_VideoInfoEvent' class=''>				<a href="org_casalib_events_VideoInfoEvent.html"><span class='packagePath'>org.casalib.events.</span>VideoInfoEvent</a>
+</li>
+							<li id='menu_org_casalib_events_VideoLoadEvent' class=''>				<a href="org_casalib_events_VideoLoadEvent.html"><span class='packagePath'>org.casalib.events.</span>VideoLoadEvent</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_layout' class='package'>
+																	<a href="package_org_casalib_layout.html">org.casalib.layout</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_layout_Distribution' class=''>				<a href="org_casalib_layout_Distribution.html"><span class='packagePath'>org.casalib.layout.</span>Distribution</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_load' class='package'>
+																	<a href="package_org_casalib_load.html">org.casalib.load</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_load_AudioLoad' class=''>				<a href="org_casalib_load_AudioLoad.html"><span class='packagePath'>org.casalib.load.</span>AudioLoad</a>
+</li>
+							<li id='menu_org_casalib_load_CasaLoader' class=''>				<a href="org_casalib_load_CasaLoader.html"><span class='packagePath'>org.casalib.load.</span>CasaLoader</a>
+</li>
+							<li id='menu_org_casalib_load_DataLoad' class=''>				<a href="org_casalib_load_DataLoad.html"><span class='packagePath'>org.casalib.load.</span>DataLoad</a>
+</li>
+							<li id='menu_org_casalib_load_GroupLoad' class=''>				<a href="org_casalib_load_GroupLoad.html"><span class='packagePath'>org.casalib.load.</span>GroupLoad</a>
+</li>
+							<li id='menu_org_casalib_load_ImageLoad' class=''>				<a href="org_casalib_load_ImageLoad.html"><span class='packagePath'>org.casalib.load.</span>ImageLoad</a>
+</li>
+							<li id='menu_org_casalib_load_LoadItem' class=''>				<a href="org_casalib_load_LoadItem.html"><span class='packagePath'>org.casalib.load.</span>LoadItem</a>
+</li>
+							<li id='menu_org_casalib_load_SwfLoad' class=''>				<a href="org_casalib_load_SwfLoad.html"><span class='packagePath'>org.casalib.load.</span>SwfLoad</a>
+</li>
+							<li id='menu_org_casalib_load_VideoLoad' class=''>				<a href="org_casalib_load_VideoLoad.html"><span class='packagePath'>org.casalib.load.</span>VideoLoad</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_math' class='package'>
+																	<a href="package_org_casalib_math.html">org.casalib.math</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_math_Percent' class=''>				<a href="org_casalib_math_Percent.html"><span class='packagePath'>org.casalib.math.</span>Percent</a>
+</li>
+							<li id='menu_org_casalib_math_Range' class=''>				<a href="org_casalib_math_Range.html"><span class='packagePath'>org.casalib.math.</span>Range</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_math_geom' class='package'>
+																	<a href="package_org_casalib_math_geom.html">org.casalib.math.geom</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_math_geom_Ellipse' class=''>				<a href="org_casalib_math_geom_Ellipse.html"><span class='packagePath'>org.casalib.math.geom.</span>Ellipse</a>
+</li>
+							<li id='menu_org_casalib_math_geom_Point3d' class=''>				<a href="org_casalib_math_geom_Point3d.html"><span class='packagePath'>org.casalib.math.geom.</span>Point3d</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_process' class='package'>
+																	<a href="package_org_casalib_process.html">org.casalib.process</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_process_Process' class=''>				<a href="org_casalib_process_Process.html"><span class='packagePath'>org.casalib.process.</span>Process</a>
+</li>
+							<li id='menu_org_casalib_process_ProcessGroup' class=''>				<a href="org_casalib_process_ProcessGroup.html"><span class='packagePath'>org.casalib.process.</span>ProcessGroup</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_time' class='package'>
+																	<a href="package_org_casalib_time.html">org.casalib.time</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_time_EnterFrame' class=''>				<a href="org_casalib_time_EnterFrame.html"><span class='packagePath'>org.casalib.time.</span>EnterFrame</a>
+</li>
+							<li id='menu_org_casalib_time_FrameDelay' class=''>				<a href="org_casalib_time_FrameDelay.html"><span class='packagePath'>org.casalib.time.</span>FrameDelay</a>
+</li>
+							<li id='menu_org_casalib_time_FrameTime' class=''>				<a href="org_casalib_time_FrameTime.html"><span class='packagePath'>org.casalib.time.</span>FrameTime</a>
+</li>
+							<li id='menu_org_casalib_time_FrameTimeStopwatch' class=''>				<a href="org_casalib_time_FrameTimeStopwatch.html"><span class='packagePath'>org.casalib.time.</span>FrameTimeStopwatch</a>
+</li>
+							<li id='menu_org_casalib_time_Inactivity' class=''>				<a href="org_casalib_time_Inactivity.html"><span class='packagePath'>org.casalib.time.</span>Inactivity</a>
+</li>
+							<li id='menu_org_casalib_time_Interval' class=''>				<a href="org_casalib_time_Interval.html"><span class='packagePath'>org.casalib.time.</span>Interval</a>
+</li>
+							<li id='menu_org_casalib_time_Sequence' class=''>				<a href="org_casalib_time_Sequence.html"><span class='packagePath'>org.casalib.time.</span>Sequence</a>
+</li>
+							<li id='menu_org_casalib_time_Stopwatch' class=''>				<a href="org_casalib_time_Stopwatch.html"><span class='packagePath'>org.casalib.time.</span>Stopwatch</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_transitions' class='package'>
+																	<a href="package_org_casalib_transitions.html">org.casalib.transitions</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_transitions_PropertyTween' class=''>				<a href="org_casalib_transitions_PropertyTween.html"><span class='packagePath'>org.casalib.transitions.</span>PropertyTween</a>
+</li>
+							<li id='menu_org_casalib_transitions_Tween' class=''>				<a href="org_casalib_transitions_Tween.html"><span class='packagePath'>org.casalib.transitions.</span>Tween</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_ui' class='package'>
+																	<a href="package_org_casalib_ui.html">org.casalib.ui</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_ui_Key' class=''>				<a href="org_casalib_ui_Key.html"><span class='packagePath'>org.casalib.ui.</span>Key</a>
+</li>
+							<li id='menu_org_casalib_ui_KeyCombo' class=''>				<a href="org_casalib_ui_KeyCombo.html"><span class='packagePath'>org.casalib.ui.</span>KeyCombo</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_util' class='package'>
+																	<a href="package_org_casalib_util.html">org.casalib.util</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_util_AlignUtil' class=''>				<a href="org_casalib_util_AlignUtil.html"><span class='packagePath'>org.casalib.util.</span>AlignUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ArrayUtil' class=''>				<a href="org_casalib_util_ArrayUtil.html"><span class='packagePath'>org.casalib.util.</span>ArrayUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ClassUtil' class=''>				<a href="org_casalib_util_ClassUtil.html"><span class='packagePath'>org.casalib.util.</span>ClassUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ColorUtil' class=''>				<a href="org_casalib_util_ColorUtil.html"><span class='packagePath'>org.casalib.util.</span>ColorUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ConversionUtil' class=''>				<a href="org_casalib_util_ConversionUtil.html"><span class='packagePath'>org.casalib.util.</span>ConversionUtil</a>
+</li>
+							<li id='menu_org_casalib_util_DateUtil' class=''>				<a href="org_casalib_util_DateUtil.html"><span class='packagePath'>org.casalib.util.</span>DateUtil</a>
+</li>
+							<li id='menu_org_casalib_util_DisplayObjectUtil' class=''>				<a href="org_casalib_util_DisplayObjectUtil.html"><span class='packagePath'>org.casalib.util.</span>DisplayObjectUtil</a>
+</li>
+							<li id='menu_org_casalib_util_DrawUtil' class=''>				<a href="org_casalib_util_DrawUtil.html"><span class='packagePath'>org.casalib.util.</span>DrawUtil</a>
+</li>
+							<li id='menu_org_casalib_util_FlashVarUtil' class=''>				<a href="org_casalib_util_FlashVarUtil.html"><span class='packagePath'>org.casalib.util.</span>FlashVarUtil</a>
+</li>
+							<li id='menu_org_casalib_util_FrameUtil' class=''>				<a href="org_casalib_util_FrameUtil.html"><span class='packagePath'>org.casalib.util.</span>FrameUtil</a>
+</li>
+							<li id='menu_org_casalib_util_GeomUtil' class=''>				<a href="org_casalib_util_GeomUtil.html"><span class='packagePath'>org.casalib.util.</span>GeomUtil</a>
+</li>
+							<li id='menu_org_casalib_util_LibraryManager' class=''>				<a href="org_casalib_util_LibraryManager.html"><span class='packagePath'>org.casalib.util.</span>LibraryManager</a>
+</li>
+							<li id='menu_org_casalib_util_LoadItemUtil' class=''>				<a href="org_casalib_util_LoadItemUtil.html"><span class='packagePath'>org.casalib.util.</span>LoadItemUtil</a>
+</li>
+							<li id='menu_org_casalib_util_LoadUtil' class=''>				<a href="org_casalib_util_LoadUtil.html"><span class='packagePath'>org.casalib.util.</span>LoadUtil</a>
+</li>
+							<li id='menu_org_casalib_util_LocationUtil' class=''>				<a href="org_casalib_util_LocationUtil.html"><span class='packagePath'>org.casalib.util.</span>LocationUtil</a>
+</li>
+							<li id='menu_org_casalib_util_NavigateUtil' class=''>				<a href="org_casalib_util_NavigateUtil.html"><span class='packagePath'>org.casalib.util.</span>NavigateUtil</a>
+</li>
+							<li id='menu_org_casalib_util_NumberUtil' class=''>				<a href="org_casalib_util_NumberUtil.html"><span class='packagePath'>org.casalib.util.</span>NumberUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ObjectUtil' class=''>				<a href="org_casalib_util_ObjectUtil.html"><span class='packagePath'>org.casalib.util.</span>ObjectUtil</a>
+</li>
+							<li id='menu_org_casalib_util_PropertySetter' class=''>				<a href="org_casalib_util_PropertySetter.html"><span class='packagePath'>org.casalib.util.</span>PropertySetter</a>
+</li>
+							<li id='menu_org_casalib_util_QueryStringUtil' class=''>				<a href="org_casalib_util_QueryStringUtil.html"><span class='packagePath'>org.casalib.util.</span>QueryStringUtil</a>
+</li>
+							<li id='menu_org_casalib_util_RatioUtil' class=''>				<a href="org_casalib_util_RatioUtil.html"><span class='packagePath'>org.casalib.util.</span>RatioUtil</a>
+</li>
+							<li id='menu_org_casalib_util_SingletonUtil' class=''>				<a href="org_casalib_util_SingletonUtil.html"><span class='packagePath'>org.casalib.util.</span>SingletonUtil</a>
+</li>
+							<li id='menu_org_casalib_util_StageReference' class=''>				<a href="org_casalib_util_StageReference.html"><span class='packagePath'>org.casalib.util.</span>StageReference</a>
+</li>
+							<li id='menu_org_casalib_util_StringUtil' class=''>				<a href="org_casalib_util_StringUtil.html"><span class='packagePath'>org.casalib.util.</span>StringUtil</a>
+</li>
+							<li id='menu_org_casalib_util_TextFieldUtil' class=''>				<a href="org_casalib_util_TextFieldUtil.html"><span class='packagePath'>org.casalib.util.</span>TextFieldUtil</a>
+</li>
+							<li id='menu_org_casalib_util_UrlVariablesUtil' class=''>				<a href="org_casalib_util_UrlVariablesUtil.html"><span class='packagePath'>org.casalib.util.</span>UrlVariablesUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ValidationUtil' class=''>				<a href="org_casalib_util_ValidationUtil.html"><span class='packagePath'>org.casalib.util.</span>ValidationUtil</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+				</li>
+</ul>
+
+			</div>					<div class="globalNav">
+							<ul>
+									<li>
+						<li id='menu_all-packages' class=''>				<a href="all-packages.html">Package tree</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-classes' class=''>				<a href="all-classes.html">Classes</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-methods' class=''>				<a href="all-methods.html">Methods</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-constants' class=''>				<a href="all-constants.html">Constants</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-properties' class=''>				<a href="all-properties.html">Properties</a>
+</li>					</li>
+									<li>
+						<li class=''></li>					</li>
+							</ul>	</div>
+		</div>
+	</div>
+
+					</div>
+					<div class='clear'>&nbsp;</div> 
+				</div>
+			</div>
+			<div id='header'>
+				<div id='headerContentWrapper'>
+					<div id='headerContent'>
+						<ul id='headerButtons'>
+															<li id='toggleTocButton'><a href="#"><span class='disclosure'>&#9660;</span><span class='closure'>&#9658;</span>Navigation</a></li>													</ul>
+					</div>
+				</div>
+			</div>
+			<div id="footer">
+	<div id="footerContent">
+		<ul>
+						<li class="copyright">
+				&copy; 2011 Aaron Clinger and the CASA Lib Team
+			</li>		</ul>
+	</div>
+</div>
+		</div>
+     </body>
+</html>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>MovieClipUtil</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_util_MovieClipUtil"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classmethods" accesskey="a">Cl<span class="accessKey">a</span>ss methods</a></li></ul><br class="clear" /></div><h1>MovieClipUtil</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td>none</td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">09/12/08</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger@auther Mike Creighton</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.util.MovieClipUtil</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+/**
+    Provides utility functions for attaching and creating MovieClips.
+    
+    @author Aaron Clinger
+    @auther Mike Creighton
+    @version 09/12/08
+    @since Flash Player 7
+*/
+
+class org.casalib.util.MovieClipUtil {
+    
+    /**
+        Makes it easier to change or assign classes to library MovieClips without having to change the item's linkage AS 2.0 class settings in the Flash IDE environment. An added benefit is that it allows multiple classes to use a single MovieClip in the library.
+        
+        @param className: The fully qualified name of a class you have defined in an external class file to extend the MovieClip instance.
+        @param target: Location where the MovieClip should be attached.
+        @param linkageId: The linkage name of the MovieClip in the library.
+        @param instanceName: &lt;strong>[optional]&lt;/strong> A unique instance name for the MovieClip; defaults to &lt;code>linkageId&lt;/code>.
+        @param depth: &lt;strong>[optional]&lt;/strong> The depth level where the MovieClip is placed; defaults to next highest open depth.
+        @param initObject: &lt;strong>[optional]&lt;/strong> An object that contains properties with which to populate the newly attached MovieClip.
+        @return Returns a reference to the created MovieClip instance.
+        @example
+            &lt;code>
+                import com.example.MyClass;
+                
+                var myMc:MyClass = MyClass(MovieClipUtil.attachMovieRegisterClass(MyClass, this, "libraryIdentifier", "myMovieClip_mc", 100, {_x:100, _alpha:75}));
+            &lt;/code>
+        @usageNote Be sure to always cast the returned MovieClip reference as the class type to get error notifcation and a valid reference.
+    */
+    public static function attachMovieRegisterClass(className:Function, target:MovieClip, linkageId:String, instanceName:String, depth:Number, initObject:Object):MovieClip {
+        Object.registerClass(linkageId, className);
+        
+        var mc:MovieClip = MovieClipUtil.attachMovie(target, linkageId, instanceName, depth, initObject);
+        
+        Object.registerClass(linkageId, null);
+        
+        return mc;
+    }
+    
+    /**
+        Creates an empty subclassed MovieClip extended by a specified class without requiring an empty MovieClip in the Flash IDE library with a linkage identifier and AS 2.0 class specification. 
+        
+        @param classPath: The fully qualified name of a class you have defined in an external class file to extend the MovieClip instance.
+        @param target: Location where the MovieClip should be attached.
+        @param instanceName: A unique instance name for the MovieClip.
+        @param depth: &lt;strong>[optional]&lt;/strong> The depth level where the MovieClip is placed; defaults to next highest open depth within the &lt;code>target&lt;/code> MovieClip.
+        @param initObject: &lt;strong>[optional]&lt;/strong> An object that contains properties with which to populate the newly attached MovieClip.
+        @return Returns a reference to the created MovieClip subclass instance.
+        @example
+            &lt;code>
+                import com.example.MyClass;
+                
+                var myMc:MyClass = MyClass(MovieClipUtil.createMovieRegisterClass("com.example.MyClass", this, "myMovieClip_mc", 100, {_x:100, _alpha:75}));
+            &lt;/code>
+        @usageNote Be sure to always cast the returned MovieClip reference as the class type to get error notifcation and a valid reference.
+    */
+    public static function createMovieRegisterClass(classPath:String, target:MovieClip, instanceName:String, depth:Number, initObject:Object):MovieClip {
+        return MovieClipUtil.attachMovieRegisterClass(eval(classPath), target, '__Packages.' + classPath, instanceName, depth, initObject);
+    }    
+    
+    /**
+        Mimics the abilities of {@link #attachMovie} by providing the option to pass an object that contains properties with which to populate the created MovieClip.
+        
+        @param target: Location where the MovieClip should be attached.
+        @param instanceName: A unique instance name for the MovieClip.
+        @param depth: &lt;strong>[optional]&lt;/strong> The depth level where the MovieClip is placed; defaults to next highest open depth.
+        @param initObject: &lt;strong>[optional]&lt;/strong> An object that contains properties with which to populate the newly attached MovieClip.
+        @return Returns a reference to the created MovieClip instance.
+        @example
+            &lt;code>
+                var myMc:MovieClip = MovieClipUtil.createEmptyMovieClip(this, "myMovieClip_mc", 100, {_x:15, _alpha:70});
+            &lt;/code>
+    */
+    public static function createEmptyMovieClip(target:MovieClip, instanceName:String, depth:Number, initObject:Object):MovieClip {
+        var mc:MovieClip = target.createEmptyMovieClip(instanceName, (depth == undefined) ? target.getNextHighestDepth() : depth);
+        
+        for (var prop:String in initObject)
+            mc[prop] = initObject[prop];
+        
+        return mc;
+    }
+    
+    /**
+        Mirrors the abilities of the &lt;code>MovieClip.attachMovie&lt;/code> but defaults &lt;code>depth&lt;/code> to the next highest open depth.
+        
+        @param target: Location where the MovieClip should be attached.
+        @param linkageId: The linkage name of the MovieClip in the library.
+        @param instanceName: &lt;strong>[optional]&lt;/strong> A unique instance name for the MovieClip; defaults to &lt;code>linkageId&lt;/code>.
+        @param depth: &lt;strong>[optional]&lt;/strong> The depth level where the MovieClip is placed; defaults to next highest open depth.
+        @param initObject: &lt;strong>[optional]&lt;/strong> An object that contains properties with which to populate the newly attached MovieClip.
+        @return Returns a reference to the created MovieClip instance.
+        @example
+            &lt;code>
+                var myMc:MovieClip = MovieClipUtil.attachMovie(this, "libraryIdentifier", "myMovieClip_mc", 100, {_x:100, _alpha:75});
+            &lt;/code>
+    */
+    public static function attachMovie(target:MovieClip, linkageId:String, instanceName:String, depth:Number, initObject:Object):MovieClip {
+        return target.attachMovie(linkageId, (instanceName == undefined) ? linkageId : instanceName, (depth == undefined) ? target.getNextHighestDepth() : depth, initObject);
+    }
+    
+    private function MovieClipUtil() {} // Prevents instance creation
+}
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Provides utility functions for attaching and creating MovieClips.</span><div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Since:</span><div class="item"><ul><li> Flash Player 7 </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class methods</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#attachMovieRegisterClass">attachMovieRegisterClass</a><span class="typeInfo"> (className:Function, target:MovieClip, linkageId:String, instanceName:String, depth:Number, initObject:Object) : MovieClip</span><ul class="summary"><li>	Makes it easier to change or assign classes to library MovieClips without having to change the item's linkage AS 2.0 class settings in the Flash IDE environment.</li></ul></li><li class="sortli listnum2"><a href="#createMovieRegisterClass">createMovieRegisterClass</a><span class="typeInfo"> (classPath:String, target:MovieClip, instanceName:String, depth:Number, initObject:Object) : MovieClip</span><ul class="summary"><li>Creates an empty subclassed MovieClip extended by a specified class without requiring an empty MovieClip in the Flash IDE library with a linkage identifier and AS 2.0 class specification.</li></ul></li><li class="sortli listnum3"><a href="#createEmptyMovieClip">createEmptyMovieClip</a><span class="typeInfo"> (target:MovieClip, instanceName:String, depth:Number, initObject:Object) : MovieClip</span><ul class="summary"><li>Mimics the abilities of attachMovie by providing the option to pass an object that contains properties with which to populate the created MovieClip.</li></ul></li><li class="sortli listnum4"><a href="#attachMovie">attachMovie</a><span class="typeInfo"> (target:MovieClip, linkageId:String, instanceName:String, depth:Number, initObject:Object) : MovieClip</span><ul class="summary"><li>Mirrors the abilities of the <span class="codeIdentifier">MovieClip</span><span class="codeIdentifier">.attachMovie</span> but defaults depth to the next highest open depth.</li></ul></li></ul></div></div></div><div class="memberSection"><h2 id="Classmethods">Class methods</h2><div class="member" id="attachMovie"><h3>attachMovie</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>attachMovie</b> (
+
+
+
+
+</div><div class="code">target:MovieClip,
+linkageId:String,
+instanceName:String,
+depth:Number,
+initObject:Object) : MovieClip</div><br class="clear" /></div></div><div class="description"> Mirrors the abilities of the <code><span class="codeIdentifier">MovieClip</span><span class="codeIdentifier">.attachMovie</span></code> but defaults <code>depth</code> to the next highest open depth. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">target      <span class="itemSeparator">:</span></div><div>Location where the MovieClip should be attached.</div></div><div class="item"><div class="floatbox code colorizedCode">linkageId   <span class="itemSeparator">:</span></div><div>The linkage name of the MovieClip in the library.</div></div><div class="item"><div class="floatbox code colorizedCode">instanceName<span class="itemSeparator">:</span></div><div><strong>[optional]</strong> A unique instance name for the MovieClip; defaults to <code>linkageId</code>.</div></div><div class="item"><div class="floatbox code colorizedCode">depth       <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> The depth level where the MovieClip is placed; defaults to next highest open depth.</div></div><div class="item"><div class="floatbox code colorizedCode">initObject  <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> An object that contains properties with which to populate the newly attached MovieClip.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns a reference to the created MovieClip instance. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> myMc:<span class="codeIdentifier">MovieClip</span> = MovieClipUtil<span class="codeIdentifier">.attachMovie</span>(<span class="codeIdentifier">this</span>, <span class="codeString">"libraryIdentifier"</span>, <span class="codeString">"myMovieClip_mc"</span>, <span class="codeNumber">100</span>, {<span class="codeProperty">_x</span>:<span class="codeNumber">100</span>, <span class="codeProperty">_alpha</span>:<span class="codeNumber">75</span>});</pre> </li></ul></div></div></div></div></div><div class="member" id="attachMovieRegisterClass"><h3>attachMovieRegisterClass</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>attachMovieRegisterClass</b> (
+
+
+
+
+
+</div><div class="code">className:Function,
+target:MovieClip,
+linkageId:String,
+instanceName:String,
+depth:Number,
+initObject:Object) : MovieClip</div><br class="clear" /></div></div><div class="description"> 	Makes it easier to change or assign classes to library MovieClips without having to change the item's linkage AS 2.0 class settings in the Flash IDE environment. An added benefit is that it allows multiple classes to use a single MovieClip in the library. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">className   <span class="itemSeparator">:</span></div><div>The fully qualified name of a class you have defined in an external class file to extend the MovieClip instance.</div></div><div class="item"><div class="floatbox code colorizedCode">target      <span class="itemSeparator">:</span></div><div>Location where the MovieClip should be attached.</div></div><div class="item"><div class="floatbox code colorizedCode">linkageId   <span class="itemSeparator">:</span></div><div>The linkage name of the MovieClip in the library.</div></div><div class="item"><div class="floatbox code colorizedCode">instanceName<span class="itemSeparator">:</span></div><div><strong>[optional]</strong> A unique instance name for the MovieClip; defaults to <code>linkageId</code>.</div></div><div class="item"><div class="floatbox code colorizedCode">depth       <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> The depth level where the MovieClip is placed; defaults to next highest open depth.</div></div><div class="item"><div class="floatbox code colorizedCode">initObject  <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> An object that contains properties with which to populate the newly attached MovieClip.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns a reference to the created MovieClip instance. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">import</span> com.example.MyClass;
+
+<span class="codeKeyword">var</span> myMc:MyClass = MyClass(MovieClipUtil.attachMovieRegisterClass(MyClass, <span class="codeIdentifier">this</span>, <span class="codeString">"libraryIdentifier"</span>, <span class="codeString">"myMovieClip_mc"</span>, <span class="codeNumber">100</span>, {<span class="codeProperty">_x</span>:<span class="codeNumber">100</span>, <span class="codeProperty">_alpha</span>:<span class="codeNumber">75</span>}));</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> Be sure to always cast the returned MovieClip reference as the class type to get error notifcation and a valid reference. </li></ul></div></div></div></div></div><div class="member" id="createEmptyMovieClip"><h3>createEmptyMovieClip</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>createEmptyMovieClip</b> (
+
+
+
+</div><div class="code">target:MovieClip,
+instanceName:String,
+depth:Number,
+initObject:Object) : MovieClip</div><br class="clear" /></div></div><div class="description"> Mimics the abilities of <a href="org_casalib_util_MovieClipUtil.html#attachMovie">attachMovie</a> by providing the option to pass an object that contains properties with which to populate the created MovieClip. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">target      <span class="itemSeparator">:</span></div><div>Location where the MovieClip should be attached.</div></div><div class="item"><div class="floatbox code colorizedCode">instanceName<span class="itemSeparator">:</span></div><div>A unique instance name for the MovieClip.</div></div><div class="item"><div class="floatbox code colorizedCode">depth       <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> The depth level where the MovieClip is placed; defaults to next highest open depth.</div></div><div class="item"><div class="floatbox code colorizedCode">initObject  <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> An object that contains properties with which to populate the newly attached MovieClip.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns a reference to the created MovieClip instance. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> myMc:<span class="codeIdentifier">MovieClip</span> = MovieClipUtil<span class="codeIdentifier">.createEmptyMovieClip</span>(<span class="codeIdentifier">this</span>, <span class="codeString">"myMovieClip_mc"</span>, <span class="codeNumber">100</span>, {<span class="codeProperty">_x</span>:<span class="codeNumber">15</span>, <span class="codeProperty">_alpha</span>:<span class="codeNumber">70</span>});</pre> </li></ul></div></div></div></div></div><div class="member" id="createMovieRegisterClass"><h3>createMovieRegisterClass</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>createMovieRegisterClass</b> (
+
+
+
+
+</div><div class="code">classPath:String,
+target:MovieClip,
+instanceName:String,
+depth:Number,
+initObject:Object) : MovieClip</div><br class="clear" /></div></div><div class="description"> Creates an empty subclassed MovieClip extended by a specified class without requiring an empty MovieClip in the Flash IDE library with a linkage identifier and AS 2.0 class specification.  </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">classPath   <span class="itemSeparator">:</span></div><div>The fully qualified name of a class you have defined in an external class file to extend the MovieClip instance.</div></div><div class="item"><div class="floatbox code colorizedCode">target      <span class="itemSeparator">:</span></div><div>Location where the MovieClip should be attached.</div></div><div class="item"><div class="floatbox code colorizedCode">instanceName<span class="itemSeparator">:</span></div><div>A unique instance name for the MovieClip.</div></div><div class="item"><div class="floatbox code colorizedCode">depth       <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> The depth level where the MovieClip is placed; defaults to next highest open depth within the <code>target</code> MovieClip.</div></div><div class="item"><div class="floatbox code colorizedCode">initObject  <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> An object that contains properties with which to populate the newly attached MovieClip.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns a reference to the created MovieClip subclass instance. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">import</span> com.example.MyClass;
+
+<span class="codeKeyword">var</span> myMc:MyClass = MyClass(MovieClipUtil.createMovieRegisterClass(<span class="codeString">"com.example.MyClass"</span>, <span class="codeIdentifier">this</span>, <span class="codeString">"myMovieClip_mc"</span>, <span class="codeNumber">100</span>, {<span class="codeProperty">_x</span>:<span class="codeNumber">100</span>, <span class="codeProperty">_alpha</span>:<span class="codeNumber">75</span>}));</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> Be sure to always cast the returned MovieClip reference as the class type to get error notifcation and a valid reference. </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

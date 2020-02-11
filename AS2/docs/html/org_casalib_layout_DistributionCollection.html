@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DistributionCollection</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_layout_DistributionCollection"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classproperties" accesskey="l">C<span class="accessKey">l</span>ass properties</a></li><li><a href="#Instanceproperties" accesskey="l">Instance <span class="accessKey">p</span>roperties</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li></ul><br class="clear" /></div><h1>DistributionCollection</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_event_EventDispatcher.html">EventDispatcher</a> &lt; <a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">12/01/08</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger, Jon Adams</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.layout.DistributionCollection</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:35:13</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.event.EventDispatcher;
+import org.casalib.math.geom.Rectangle;
+import org.casalib.util.ArrayUtil;
+import org.casalib.util.TypeUtil;
+
+/**
+    Creates the mechanism to distribute &lt;code>MovieClip&lt;/code>s, &lt;code>TextField&lt;/code>s and &lt;code>Button&lt;/code>s to a vertical or horzontal grid of columns and rows.
+    
+    @author Aaron Clinger
+    @author Jon Adams
+    @version 12/01/08
+    @example
+        &lt;code>
+            var distribution:DistributionCollection = new DistributionCollection();
+            this.distribution.setRectangle(new Rectangle(10, 10, 400, Number.POSITIVE_INFINITY));
+            this.distribution.setMargin(0, 5, 5, 0);
+            
+            var len:Number = 5;
+            while (len--) {
+                this.distribution.addItem(this.attachMovie("box", "box" + len + "_mc", this.getNextHighestDepth()));
+            }
+            
+            this.distribution.positionItems();
+        &lt;/code>
+*/
+
+class org.casalib.layout.DistributionCollection extends EventDispatcher {
+    public static var EVENT_POSITION:String = 'onPosition';
+    private var $margin:Object;
+    private var $rect:Rectangle;
+    private var $bounding:Rectangle;
+    private var $collection:Array;
+    private var $isVert:Boolean;
+    private var $round:Boolean;
+    
+    
+    /**
+        Creates a new DistributionCollection instance.
+        
+        @param snapToPixel: &lt;strong>[optional]&lt;/strong> Force the position of all items to whole pixels &lt;code>true&lt;/code>, or to let items be positioned on sub-pixels &lt;code>false&lt;/code>; defaults to &lt;code>false&lt;/code>.
+    */
+    public function DistributionCollection(snapToPixel:Boolean) {
+        super();
+        
+        this.$collection = new Array();
+        this.$round      = (snapToPixel == undefined) ? false : snapToPixel;
+        this.$margin     = new Object();
+        this.$margin.top = this.$margin.right = this.$margin.bottom = this.$margin.left = 0;
+        
+        this.$setClassDescription('org.casalib.layout.DistributionCollection');
+    }
+    
+    /**
+        Defines the area and position of the distribution.
+        
+        @param rectangle: A rectangle defining either the max width or height boundries of the distribution
+        @return Returns &lt;code>true&lt;/code> if the rectangle was valid and applied; otherwise &lt;code>false&lt;/code>.
+        @usageNote Either the rectangle's width or height must defined as &lt;code>Number.POSITIVE_INFINITY&lt;/code>.
+    */
+    public function setRectangle(rectangle:Rectangle):Boolean {
+        if (rectangle.getWidth() == Number.POSITIVE_INFINITY || rectangle.getHeight() == Number.POSITIVE_INFINITY) {
+            if (rectangle.getWidth() != Number.POSITIVE_INFINITY) {
+                this.$rect   = rectangle.clone();
+                this.$isVert = true;
+                
+                this.positionItems();
+                
+                return true;
+            } else if (rectangle.getHeight() != Number.POSITIVE_INFINITY) {
+                this.$rect   = rectangle.clone();
+                this.$isVert = false;
+                
+                this.positionItems();
+                
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+        @return Returns the area and position of the distribution that was defined with {@link #setRectangle}.
+    */
+    public function getRectangle():Rectangle {
+        return this.$rect.clone();
+    }
+    
+    /**
+        @return Returns the actual area and position the items in the distribution occupy.
+    */
+    public function getBoundingRectangle():Rectangle {
+        return this.$bounding.clone();
+    }
+    
+    /**
+        Defines the spacing between items in the distribution.
+        
+        @param marginTop: Sets the top spacing of an element.
+        @param marginRight: Sets the right spacing of an element.
+        @param marginBottom: Sets the bottom spacing of an element.
+        @param marginLeft: Sets the left spacing of an element.
+    */
+    public function setMargin(marginTop:Number, marginRight:Number, marginBottom:Number, marginLeft:Number):Void {
+        this.$margin.top    = (marginTop == undefined) ? 0 : marginTop;
+        this.$margin.right  = (marginRight == undefined) ? 0 : marginRight;
+        this.$margin.left   = (marginLeft == undefined) ? 0 : marginLeft;
+        this.$margin.bottom = (marginBottom == undefined) ? 0 : marginBottom;
+        
+        this.positionItems();
+    }
+    
+    /**
+        Adds or reorders item to receive distribution position updates.
+        
+        @param item: A &lt;code>MovieClip&lt;/code>, &lt;code>TextField&lt;/code> or &lt;code>Button&lt;/code>.
+        @param position: &lt;strong>[optional]&lt;/strong> An integer that specifies the index of the where the item will be inserted into the distribution; defaults to the end of the distribution.
+        @return Returns &lt;code>true&lt;/code> if item was of type &lt;code>MovieClip&lt;/code>, &lt;code>TextField&lt;/code> or &lt;code>Button&lt;/code> and was successfully added; otherwise &lt;code>false&lt;/code>.
+    */
+    public function addItem(item:Object, position:Number):Boolean {
+        switch (TypeUtil.getTypeOf(item)) {
+            case 'button' :
+            case 'movieclip' :
+            case 'textfield' :
+                var index:Number = ArrayUtil.indexOf(this.$collection, item);
+                
+                if (index != -1)
+                    this.$collection.splice(index, 1);
+                
+                this.$collection.splice((position == undefined) ? this.$collection.length : position, 0, item);
+                
+                return true;
+            default :
+                return false;
+        }
+    }
+    
+    /**
+        Removes item previously added with {@link #addItem} from receiving distribution updates. Leaves item at its current position.
+        
+        @param item: A &lt;code>MovieClip&lt;/code>, &lt;code>TextField&lt;/code> or &lt;code>Button&lt;/code> you wish to remove.
+        @return Returns &lt;code>true&lt;/code> if item was successfully found and removed; otherwise &lt;code>false&lt;/code>.
+    */
+    public function removeItem(item:Object):Boolean {
+        if (ArrayUtil.removeArrayItem(this.$collection, item) > 0)
+            return true;
+        
+        return false;
+    }
+    
+    /**
+        Returns the element at the specified position in the collection.
+        
+        @param position: The position of the element to return.
+        @return The element at the specified position in the collection.
+    */
+    public function getItemAt(position:Number):Object {
+        return this.$collection[position];
+    }
+    
+    /**
+        Finds the position of the first occurrence of a specified item.
+        
+        @param item: The element to search for.
+    */
+    public function findItemPosition(item:Object):Number {
+        return ArrayUtil.indexOf(this.$collection, item);
+    }
+    
+    /**
+        Returns an Array containing all of the elements in the collection in order.
+        
+        @return Returns an Array containing all of the elements in the collection in order.
+    */
+    public function getItems():Array {
+        return this.$collection.slice();
+    }
+    
+    /**
+        Applies the distribution layout for all items added with {@link #addItem}.
+        
+        @sends onPosition = function(sender:DistributionCollection) {}
+        @usageNote &lt;code>positionItems&lt;/code> is automatically called after {@link #setRectangle} and {@link #setMargin}.
+    */
+    public function positionItems():Void {
+        if (this.$rect == undefined)
+            return;
+        
+        var i:Number             = -1;
+        var row:Number           = 0;
+        var column:Number        = 0;
+        var largest:Number       = 0;
+        var largestWidth:Number  = 0;
+        var largestHeight:Number = 0;
+        var h:Number             = 0;
+        var w:Number             = 0;
+        var item:Object;
+        
+        while (++i &lt; this.$collection.length) {
+            item = this.$collection[i];
+            
+            w = item._width  + this.$margin.left + this.$margin.right;
+            h = item._height + this.$margin.top + this.$margin.bottom;
+            
+            if (this.$isVert) {
+                column += w;
+                
+                if (column > this.$rect.getWidth()) {
+                    row += (largest == 0) ? row : largest;
+                    
+                    largest = 0;
+                    column  = w;
+                }
+                
+                if (h > largest)
+                    largest = h;
+                
+                if (column > largestWidth)
+                    largestWidth = column;
+                
+                item._x = column - item._width - this.$margin.right + this.$rect.getX();
+                item._y = row + this.$margin.top + this.$rect.getY();
+            } else {
+                row += h;
+                
+                if (row > this.$rect.getHeight()) {
+                    column += (largest == 0) ? column : largest;
+                    
+                    largest = 0;
+                    row     = h;
+                }
+                
+                if (w > largest)
+                    largest = w;
+                
+                if (row > largestHeight)
+                    largestHeight = row;
+                
+                item._x = column + this.$margin.left + this.$rect.getX();
+                item._y = row - item._height - this.$margin.bottom + this.$rect.getY();
+            }
+            
+            if (this.$round) {
+                item._x = Math.round(item._x);
+                item._y = Math.round(item._y);
+            }
+        }
+        
+        if (this.$bounding != undefined)
+            this.$bounding.destroy();
+        
+        this.$bounding = this.$rect.clone();
+        this.$bounding.setWidth(this.$isVert ? largestWidth : column + w);
+        this.$bounding.setHeight(this.$isVert ? row + h : largestHeight);
+        
+        this.dispatchEvent(DistributionCollection.EVENT_POSITION, this);
+    }
+    
+    public function destroy():Void {
+        this.$rect.destroy();
+        this.$bounding.destroy();
+        
+        delete this.$margin;
+        delete this.$rect;
+        delete this.$bounding;
+        delete this.$collection;
+        delete this.$isVert;
+        delete this.$round;
+        
+        super.destroy();
+    }
+}
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Creates the mechanism to distribute <code><span class="codeIdentifier">MovieClip</span></code>s, <code><span class="codeIdentifier">TextField</span></code>s and <code><span class="codeIdentifier">Button</span></code>s to a vertical or horzontal grid of columns and rows.</span><div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> distribution:DistributionCollection = <span class="codeKeyword">new</span> DistributionCollection();
+<span class="codeIdentifier">this</span>.distribution.setRectangle(<span class="codeKeyword">new</span> Rectangle(<span class="codeNumber">10</span>, <span class="codeNumber">10</span>, <span class="codeNumber">400</span>, <span class="codeIdentifier">Number</span>.POSITIVE_INFINITY));
+<span class="codeIdentifier">this</span>.distribution.setMargin(<span class="codeNumber">0</span>, <span class="codeNumber">5</span>, <span class="codeNumber">5</span>, <span class="codeNumber">0</span>);
+
+<span class="codeKeyword">var</span> len:<span class="codeIdentifier">Number</span> = <span class="codeNumber">5</span>;
+<span class="codeKeyword">while</span> (len--) {
+    <span class="codeIdentifier">this</span>.distribution.addItem(<span class="codeIdentifier">this</span><span class="codeIdentifier">.attachMovie</span>(<span class="codeString">"box"</span>, <span class="codeString">"box"</span> + len + <span class="codeString">"_mc"</span>, <span class="codeIdentifier">this</span><span class="codeIdentifier">.getNextHighestDepth</span>()));
+}
+
+<span class="codeIdentifier">this</span>.distribution.positionItems();</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Events broadcasted to listeners:</span><div class="item"><ul><li><code>onPosition = function (sender:DistributionCollection) {}</code> </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Constructor</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#DistributionCollection">DistributionCollection</a><span class="typeInfo"> (snapToPixel:Boolean)</span><ul class="summary"><li>Creates a new DistributionCollection instance.</li></ul></li></ul></div><div class="memberSummaryPart"><span class="title">Class properties</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#EVENT_POSITION">EVENT_POSITION</a><span class="typeInfo">  : String</span></li></ul></div><div class="memberSummaryPart"><span class="title">Instance methods</span><ul class="sortable" id="sortul3"><li class="sortli listnum1"><a href="#setRectangle">setRectangle</a><span class="typeInfo"> (rectangle:<a class="className" href="org_casalib_math_geom_Rectangle.html">Rectangle</a>) : Boolean</span><ul class="summary"><li>Defines the area and position of the distribution.</li></ul></li><li class="sortli listnum2"><a href="#getRectangle">getRectangle</a><span class="typeInfo">  : <a class="className" href="org_casalib_math_geom_Rectangle.html">Rectangle</a></span></li><li class="sortli listnum3"><a href="#getBoundingRectangle">getBoundingRectangle</a><span class="typeInfo">  : <a class="className" href="org_casalib_math_geom_Rectangle.html">Rectangle</a></span></li><li class="sortli listnum4"><a href="#setMargin">setMargin</a><span class="typeInfo"> (marginTop:Number, marginRight:Number, marginBottom:Number, marginLeft:Number) : Void</span><ul class="summary"><li>Defines the spacing between items in the distribution.</li></ul></li><li class="sortli listnum5"><a href="#addItem">addItem</a><span class="typeInfo"> (item:Object, position:Number) : Boolean</span><ul class="summary"><li>Adds or reorders item to receive distribution position updates.</li></ul></li><li class="sortli listnum6"><a href="#removeItem">removeItem</a><span class="typeInfo"> (item:Object) : Boolean</span><ul class="summary"><li>Removes item previously added with addItem from receiving distribution updates.</li></ul></li><li class="sortli listnum7"><a href="#getItemAt">getItemAt</a><span class="typeInfo"> (position:Number) : Object</span><ul class="summary"><li>Returns the element at the specified position in the collection.</li></ul></li><li class="sortli listnum8"><a href="#findItemPosition">findItemPosition</a><span class="typeInfo"> (item:Object) : Number</span><ul class="summary"><li>Finds the position of the first occurrence of a specified item.</li></ul></li><li class="sortli listnum9"><a href="#getItems">getItems</a><span class="typeInfo">  : Array</span><ul class="summary"><li>Returns an Array containing all of the elements in the collection in order.</li></ul></li><li class="sortli listnum10"><a href="#positionItems">positionItems</a><span class="typeInfo">  : Void</span><ul class="summary"><li>Applies the distribution layout for all items added with addItem.</li></ul></li><li class="sortli listnum11"><a href="#destroy">destroy</a><span class="typeInfo">  : Void</span></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_event_EventDispatcher.html">EventDispatcher</a></span></span><div class="item inheritedList"><a href="org_casalib_event_EventDispatcher.html#addEventObserver">addEventObserver</a>  <a href="org_casalib_event_EventDispatcher.html#destroy">destroy</a>  <a href="org_casalib_event_EventDispatcher.html#dispatchEvent">dispatchEvent</a>  <a href="org_casalib_event_EventDispatcher.html#removeAllEventObservers">removeAllEventObservers</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserver">removeEventObserver</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForEvent">removeEventObserversForEvent</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForScope">removeEventObserversForScope</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_core_CoreObject.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_core_CoreObject.html#destroy">destroy</a>  <a href="org_casalib_core_CoreObject.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Constructor">Constructor</h2><div class="member" id="DistributionCollection"><h3>DistributionCollection</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>DistributionCollection</b> (
+</div><div class="code">snapToPixel:Boolean)</div><br class="clear" /></div></div><div class="description"> Creates a new DistributionCollection instance. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">snapToPixel<span class="itemSeparator">:</span></div><div><strong>[optional]</strong> Force the position of all items to whole pixels <code><span class="codeIdentifier">true</span></code>, or to let items be positioned on sub-pixels <code><span class="codeIdentifier">false</span></code>; defaults to <code><span class="codeIdentifier">false</span></code>.</div></div></div></div></div></div></div><div class="memberSection"><h2 id="Classproperties">Class properties</h2><div class="member" id="EVENT_POSITION"><h3>EVENT_POSITION</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_POSITION</b>:String = <span class="codeString">'onPosition'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div></div><div class="memberSection"><h2 id="Instancemethods">Instance methods</h2><div class="member" id="addItem"><h3>addItem</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>addItem</b> (
+
+</div><div class="code">item:Object,
+position:Number) : Boolean</div><br class="clear" /></div></div><div class="description"> Adds or reorders item to receive distribution position updates. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">item    <span class="itemSeparator">:</span></div><div>A <code><span class="codeIdentifier">MovieClip</span></code>, <code><span class="codeIdentifier">TextField</span></code> or <code><span class="codeIdentifier">Button</span></code>.</div></div><div class="item"><div class="floatbox code colorizedCode">position<span class="itemSeparator">:</span></div><div><strong>[optional]</strong> An integer that specifies the index of the where the item will be inserted into the distribution; defaults to the end of the distribution.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if item was of type <code><span class="codeIdentifier">MovieClip</span></code>, <code><span class="codeIdentifier">TextField</span></code> or <code><span class="codeIdentifier">Button</span></code> and was successfully added; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div><div class="member" id="destroy"><h3>destroy</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>destroy</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Overrides:</span><div class="item"><ul><li> <a href="org_casalib_event_EventDispatcher.html#destroy">org.casalib.event.EventDispatcher.destroy</a> </li></ul></div></div></div></div></div><div class="member" id="findItemPosition"><h3>findItemPosition</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>findItemPosition</b> (
+</div><div class="code">item:Object) : Number</div><br class="clear" /></div></div><div class="description"> Finds the position of the first occurrence of a specified item. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">item<span class="itemSeparator">:</span></div><div>The element to search for.</div></div></div></div></div></div><div class="member" id="getBoundingRectangle"><h3>getBoundingRectangle</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>getBoundingRectangle</b> (
+</div><div class="code">) : <a class="className" href="org_casalib_math_geom_Rectangle.html">Rectangle</a></div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the actual area and position the items in the distribution occupy. </li></ul></div></div></div></div></div><div class="member" id="getItemAt"><h3>getItemAt</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>getItemAt</b> (
+</div><div class="code">position:Number) : Object</div><br class="clear" /></div></div><div class="description"> Returns the element at the specified position in the collection. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">position<span class="itemSeparator">:</span></div><div>The position of the element to return.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> The element at the specified position in the collection. </li></ul></div></div></div></div></div><div class="member" id="getItems"><h3>getItems</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>getItems</b> (
+</div><div class="code">) : Array</div><br class="clear" /></div></div><div class="description"> Returns an Array containing all of the elements in the collection in order. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns an Array containing all of the elements in the collection in order. </li></ul></div></div></div></div></div><div class="member" id="getRectangle"><h3>getRectangle</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>getRectangle</b> (
+</div><div class="code">) : <a class="className" href="org_casalib_math_geom_Rectangle.html">Rectangle</a></div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the area and position of the distribution that was defined with <a href="org_casalib_layout_DistributionCollection.html#setRectangle">setRectangle</a>. </li></ul></div></div></div></div></div><div class="member" id="positionItems"><h3>positionItems</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>positionItems</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> Applies the distribution layout for all items added with <a href="org_casalib_layout_DistributionCollection.html#addItem">addItem</a>. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Events broadcasted to listeners:</span><div class="item"><ul><li><code>onPosition = function (sender:DistributionCollection) {}</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> <code>positionItems</code> is automatically called after <a href="org_casalib_layout_DistributionCollection.html#setRectangle">setRectangle</a> and <a href="org_casalib_layout_DistributionCollection.html#setMargin">setMargin</a>. </li></ul></div></div></div></div></div><div class="member" id="removeItem"><h3>removeItem</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>removeItem</b> (
+</div><div class="code">item:Object) : Boolean</div><br class="clear" /></div></div><div class="description"> Removes item previously added with <a href="org_casalib_layout_DistributionCollection.html#addItem">addItem</a> from receiving distribution updates. Leaves item at its current position. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">item<span class="itemSeparator">:</span></div><div>A <code><span class="codeIdentifier">MovieClip</span></code>, <code><span class="codeIdentifier">TextField</span></code> or <code><span class="codeIdentifier">Button</span></code> you wish to remove.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if item was successfully found and removed; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div><div class="member" id="setMargin"><h3>setMargin</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>setMargin</b> (
+
+
+
+</div><div class="code">marginTop:Number,
+marginRight:Number,
+marginBottom:Number,
+marginLeft:Number) : Void</div><br class="clear" /></div></div><div class="description"> Defines the spacing between items in the distribution. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">marginTop   <span class="itemSeparator">:</span></div><div>Sets the top spacing of an element.</div></div><div class="item"><div class="floatbox code colorizedCode">marginRight <span class="itemSeparator">:</span></div><div>Sets the right spacing of an element.</div></div><div class="item"><div class="floatbox code colorizedCode">marginBottom<span class="itemSeparator">:</span></div><div>Sets the bottom spacing of an element.</div></div><div class="item"><div class="floatbox code colorizedCode">marginLeft  <span class="itemSeparator">:</span></div><div>Sets the left spacing of an element.</div></div></div></div></div></div><div class="member" id="setRectangle"><h3>setRectangle</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>setRectangle</b> (
+</div><div class="code">rectangle:<a class="className" href="org_casalib_math_geom_Rectangle.html">Rectangle</a>) : Boolean</div><br class="clear" /></div></div><div class="description"> Defines the area and position of the distribution. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">rectangle<span class="itemSeparator">:</span></div><div>A rectangle defining either the max width or height boundries of the distribution</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if the rectangle was valid and applied; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> Either the rectangle's width or height must defined as <code><span class="codeIdentifier">Number</span>.POSITIVE_INFINITY</code>. </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

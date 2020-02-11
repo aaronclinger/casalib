@@ -1,0 +1,1632 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" encoding="utf-8">
+	<head>
+		<title>AlignUtil | CASA Lib AS3 Docs</title>
+		<link rel="stylesheet" type="text/css" href="../css/shCoreDefault.min.css" />
+		<link rel="stylesheet" type="text/css" href="../css/VisDoc.min.css" />
+		<script type="text/javascript" src="../js/1_jquery.min.js"></script>
+		<script type="text/javascript" src="../js/2_jquery.cookie.min.js"></script>
+		<script type="text/javascript" src="../js/3_jquery.simpletreeview.min.js"></script>
+		<script type="text/javascript" src="../js/4_shCore.min.js"></script>
+		<script type="text/javascript" src="../js/5_shBrushAS3.min.js"></script>
+		<script type="text/javascript" src="../js/6_shBrushJava.min.js"></script>
+		<script type="text/javascript" src="../js/7_VisDoc.min.js"></script>
+	</head>
+	<body class='isShowingNavigation' id='page_org_casalib_util_AlignUtil'>
+	    <div id='page'> 
+			<div id='wrapper'>
+				<div id='outer'> 
+					<div id='floatWrap'> 
+						<div id='main'>
+							<div id='clearHeaderCenter'></div> 
+							<div id='mainContent'>
+																<h1>AlignUtil</h1>									<div class='classProperties'>
+		<table cellspacing='0'>
+				<tr>
+		<th>Kind of class:</th>
+		<td>public class</td>
+	</tr>
+							<tr>
+		<th>Package:</th>
+		<td>
+			<ul>
+								<li>			<a href="package_org_casalib_util.html">org.casalib.util</a>
+</li>
+							</ul>
+		</td>
+	</tr>
+							<tr>
+		<th>Inherits from:</th>
+		<td>
+			<ul>
+								<li>			none</li>
+							</ul>
+		</td>
+	</tr>
+																<tr>
+		<th class='classDetails'>Version:</th>
+		<td class='classDetails'>05/19/11</td>
+	</tr>
+	<tr>
+		<th class='classDetails'>Author:</th>
+		<td class='classDetails'>Aaron Clinger, Jon Adams</td>
+	</tr>
+	<tr>
+		<th class='classDetails'>Classpath:</th>
+		<td class='classDetails'>org.casalib.util.AlignUtil</td>
+	</tr>
+	<tr>
+		<th class='classDetails'>File last modified:</th>
+		<td class='classDetails'>Friday, 20 May 2011, 00:59:45</td>
+	</tr>
+		</table>
+	</div>
+	<div class='sourceCode'>
+				<span class='sourceCodeShow'><a href="#"><span class='closure'>&#9658;&nbsp;</span><span class='linkLabel'>View source</span></a></span><span class='sourceCodeHide'><a href="#"><span class='disclosure'>&#9660;&nbsp;</span><span class='linkLabel'>Hide source</span></a></span>	<pre id="source" class="brush:as3">/*
+    CASA Lib for ActionScript 3.0
+    Copyright (c) 2011, Aaron Clinger & Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+package org.casalib.util {
+    import flash.display.DisplayObject;
+    import flash.geom.Point;
+    import flash.geom.Rectangle;
+    import org.casalib.util.DisplayObjectUtil;
+    
+    
+    /**
+        Provides utility functions for aligning.
+        
+        @author Aaron Clinger
+        @author Jon Adams
+        @version 05/19/11
+    */
+    public class AlignUtil {
+        public static const BOTTOM:String        = 'bottom';
+        public static const BOTTOM_CENTER:String = 'bottomCenter';
+        public static const BOTTOM_LEFT:String   = 'bottomLeft';
+        public static const BOTTOM_RIGHT:String  = 'bottomRight';
+        public static const CENTER:String        = 'center';
+        public static const LEFT:String          = 'left';
+        public static const MIDDLE:String        = 'middle';
+        public static const MIDDLE_CENTER:String = 'middleCenter';
+        public static const MIDDLE_LEFT:String   = 'middleLeft';
+        public static const MIDDLE_RIGHT:String  = 'middleRight';
+        public static const RIGHT:String         = 'right';
+        public static const TOP:String           = 'top';
+        public static const TOP_CENTER:String    = 'topCenter';
+        public static const TOP_LEFT:String      = 'topLeft';
+        public static const TOP_RIGHT:String     = 'topRight';
+        
+        
+        /**
+            Aligns a <code>DisplayObject</code> to the bounding <code>Rectangle</code> acording to the defined alignment.
+            
+            @param alignment: The alignment type/position.
+            @param displayObject: The <code>DisplayObject</code> to align.
+            @param bounds: The area in which to align the <code>DisplayObject</code>.
+            @param snapToPixel: Force the position to whole pixels <code>true</code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code>false</code>.
+            @param outside: Align the <code>DisplayObject</code> to the outside of the bounds <code>true</code>, or the inside <code>false</code>.
+            @param targetCoordinateSpace: The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code>null</code> to use the <code>displayObject</code>'s coordinate space.
+        */
+        public static function align(alignment:String, displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null):void {
+            const offsetPosition:Point = DisplayObjectUtil.getOffsetPosition(displayObject);
+            
+            switch (alignment) {
+                case AlignUtil.TOP :
+                case AlignUtil.MIDDLE :
+                case AlignUtil.BOTTOM :
+                    break;
+                default :
+                    displayObject.x = offsetPosition.x;
+            }
+            
+            switch (alignment) {
+                case AlignUtil.LEFT :
+                case AlignUtil.CENTER :
+                case AlignUtil.RIGHT :
+                    break;
+                default :
+                    displayObject.y = offsetPosition.y;
+            }
+            
+            const alignPosition:Point   = AlignUtil._getPosition(alignment, displayObject.width, displayObject.height, bounds, outside);
+            const relPosition:Rectangle = displayObject.getBounds((targetCoordinateSpace == null) ? displayObject : targetCoordinateSpace);
+            
+            switch (alignment) {
+                case AlignUtil.TOP :
+                case AlignUtil.MIDDLE :
+                case AlignUtil.BOTTOM :
+                    break;
+                default :
+                    displayObject.x += alignPosition.x - relPosition.x;
+                    
+                    if (snapToPixel)
+                        displayObject.x = Math.round(displayObject.x);
+            }
+            
+            switch (alignment) {
+                case AlignUtil.LEFT :
+                case AlignUtil.CENTER :
+                case AlignUtil.RIGHT :
+                    break;
+                default :
+                    displayObject.y += alignPosition.y - relPosition.y;
+                    
+                    if (snapToPixel)
+                        displayObject.y = Math.round(displayObject.y);
+            }
+        }
+        
+        /**
+            Aligns a <code>Rectangle</code> to another <code>Rectangle</code>.
+            
+            @param align: The alignment type/position.
+            @param rectangle: The <code>Rectangle</code> to align.
+            @param bounds: The area in which to align the <code>Rectangle</code>.
+            @param snapToPixel: Force the position to whole pixels <code>true</code>, or to let the <code>Rectangle</code> be positioned on sub-pixels <code>false</code>.
+            @param outside: Align the <code>Rectangle</code> to the outside of the bounds <code>true</code>, or the inside <code>false</code>.
+            @return A new aligned <code>Rectangle</code>.
+        */
+        public static function alignRectangle(alignment:String, rectangle:Rectangle, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false):Rectangle {
+            const alignedRectangle:Rectangle = rectangle.clone();
+            
+            alignedRectangle.offsetPoint(AlignUtil._getPosition(alignment, rectangle.width, rectangle.height, bounds, outside));
+            
+            if (snapToPixel) {
+                alignedRectangle.x = Math.round(alignedRectangle.x);
+                alignedRectangle.y = Math.round(alignedRectangle.y);
+            }
+            
+            return alignedRectangle;
+        }
+        
+        /**
+            Aligns a <code>DisplayObject</code> to the nearest Pixel.
+            
+            @param displayObject: The <code>DisplayObject</code> to align.
+        */
+        public static function alignToPixel(displayObject:DisplayObject):void {
+            displayObject.x = Math.round(displayObject.x);
+            displayObject.y = Math.round(displayObject.y);
+        }
+        
+        /**
+            Aligns a <code>DisplayObject</code> to the bottom of the bounding <code>Rectangle</code>.
+            
+            @param displayObject: The <code>DisplayObject</code> to align.
+            @param bounds: The area in which to align the <code>DisplayObject</code>.
+            @param snapToPixel: Force the position to whole pixels <code>true</code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code>false</code>.
+            @param outside: Align the <code>DisplayObject</code> to the outside of the bounds <code>true</code>, or the inside <code>false</code>.
+            @param targetCoordinateSpace: The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code>null</code> to use the <code>displayObject</code>'s coordinate space.
+        */
+        public static function alignBottom(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null):void {
+            AlignUtil.align(AlignUtil.BOTTOM, displayObject, bounds, snapToPixel, outside, targetCoordinateSpace);
+        }
+        
+        /**
+            Aligns a <code>DisplayObject</code> to the bottom left of the bounding <code>Rectangle</code>.
+            
+            @param displayObject: The <code>DisplayObject</code> to align.
+            @param bounds: The area in which to align the <code>DisplayObject</code>.
+            @param snapToPixel: Force the position to whole pixels <code>true</code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code>false</code>.
+            @param outside: Align the <code>DisplayObject</code> to the outside of the bounds <code>true</code>, or the inside <code>false</code>.
+            @param targetCoordinateSpace: The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code>null</code> to use the <code>displayObject</code>'s coordinate space.
+        */
+        public static function alignBottomLeft(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null):void {
+            AlignUtil.align(AlignUtil.BOTTOM_LEFT, displayObject, bounds, snapToPixel, outside, targetCoordinateSpace);
+        }
+        
+        /**
+            Aligns a <code>DisplayObject</code> to the bottom and horizontal center of the bounding <code>Rectangle</code>.
+            
+            @param displayObject: The <code>DisplayObject</code> to align.
+            @param bounds: The area in which to align the <code>DisplayObject</code>.
+            @param snapToPixel: Force the position to whole pixels <code>true</code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code>false</code>.
+            @param outside: Align the <code>DisplayObject</code> to the outside of the bounds <code>true</code>, or the inside <code>false</code>.
+            @param targetCoordinateSpace: The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code>null</code> to use the <code>displayObject</code>'s coordinate space.
+        */
+        public static function alignBottomCenter(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null):void {
+            AlignUtil.align(AlignUtil.BOTTOM_CENTER, displayObject, bounds, snapToPixel, outside, targetCoordinateSpace);
+        }
+        
+        /**
+            Aligns a <code>DisplayObject</code> to the bottom right of the bounding <code>Rectangle</code>.
+            
+            @param displayObject: The <code>DisplayObject</code> to align.
+            @param bounds: The area in which to align the <code>DisplayObject</code>.
+            @param snapToPixel: Force the position to whole pixels <code>true</code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code>false</code>.
+            @param outside: Align the <code>DisplayObject</code> to the outside of the bounds <code>true</code>, or the inside <code>false</code>.
+            @param targetCoordinateSpace: The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code>null</code> to use the <code>displayObject</code>'s coordinate space.
+        */
+        public static function alignBottomRight(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null):void {
+            AlignUtil.align(AlignUtil.BOTTOM_RIGHT, displayObject, bounds, snapToPixel, outside, targetCoordinateSpace);
+        }
+        
+        /**
+            Aligns a <code>DisplayObject</code> to the horizontal center of the bounding <code>Rectangle</code>.
+            
+            @param displayObject: The <code>DisplayObject</code> to align.
+            @param bounds: The area in which to align the <code>DisplayObject</code>.
+            @param snapToPixel: Force the position to whole pixels <code>true</code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code>false</code>.
+            @param targetCoordinateSpace: The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code>null</code> to use the <code>displayObject</code>'s coordinate space.
+        */
+        public static function alignCenter(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, targetCoordinateSpace:DisplayObject = null):void {
+            AlignUtil.align(AlignUtil.CENTER, displayObject, bounds, snapToPixel, false, targetCoordinateSpace);
+        }
+        
+        /**
+            Aligns a <code>DisplayObject</code> to the left side of the bounding <code>Rectangle</code>.
+            
+            @param displayObject: The <code>DisplayObject</code> to align.
+            @param bounds: The area in which to align the <code>DisplayObject</code>.
+            @param snapToPixel: Force the position to whole pixels <code>true</code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code>false</code>.
+            @param outside: Align the <code>DisplayObject</code> to the outside of the bounds <code>true</code>, or the inside <code>false</code>.
+            @param targetCoordinateSpace: The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code>null</code> to use the <code>displayObject</code>'s coordinate space.
+        */
+        public static function alignLeft(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null):void {
+            AlignUtil.align(AlignUtil.LEFT, displayObject, bounds, snapToPixel, outside, targetCoordinateSpace);
+        }
+        
+        /**
+            Aligns a <code>DisplayObject</code> to the vertical middle of the bounding <code>Rectangle</code>.
+            
+            @param displayObject: The <code>DisplayObject</code> to align.
+            @param bounds: The area in which to align the <code>DisplayObject</code>.
+            @param snapToPixel: Force the position to whole pixels <code>true</code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code>false</code>.
+            @param targetCoordinateSpace: The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code>null</code> to use the <code>displayObject</code>'s coordinate space.
+        */
+        public static function alignMiddle(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, targetCoordinateSpace:DisplayObject = null):void {
+            AlignUtil.align(AlignUtil.MIDDLE, displayObject, bounds, snapToPixel, false, targetCoordinateSpace);
+        }
+        
+        /**
+            Aligns a <code>DisplayObject</code> to the vertical middle and left side of the bounding <code>Rectangle</code>.
+            
+            @param displayObject: The <code>DisplayObject</code> to align.
+            @param bounds: The area in which to align the <code>DisplayObject</code>.
+            @param snapToPixel: Force the position to whole pixels <code>true</code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code>false</code>.
+            @param outside: Align the <code>DisplayObject</code> to the outside of the bounds <code>true</code>, or the inside <code>false</code>.
+            @param targetCoordinateSpace: The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code>null</code> to use the <code>displayObject</code>'s coordinate space.
+        */
+        public static function alignMiddleLeft(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null):void {
+            AlignUtil.align(AlignUtil.MIDDLE_LEFT, displayObject, bounds, snapToPixel, outside, targetCoordinateSpace);
+        }
+        
+        /**
+            Aligns a <code>DisplayObject</code> to the vertical middle and horizontal center of the bounding <code>Rectangle</code>.
+            
+            @param displayObject: The <code>DisplayObject</code> to align.
+            @param bounds: The area in which to align the <code>DisplayObject</code>.
+            @param snapToPixel: Force the position to whole pixels <code>true</code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code>false</code>.
+            @param targetCoordinateSpace: The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code>null</code> to use the <code>displayObject</code>'s coordinate space.
+        */
+        public static function alignMiddleCenter(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, targetCoordinateSpace:DisplayObject = null):void {
+            AlignUtil.align(AlignUtil.MIDDLE_CENTER, displayObject, bounds, snapToPixel, false, targetCoordinateSpace);
+        }
+        
+        /**
+            Aligns a <code>DisplayObject</code> to the vertical middle and right side of the bounding <code>Rectangle</code>.
+            
+            @param displayObject: The <code>DisplayObject</code> to align.
+            @param bounds: The area in which to align the <code>DisplayObject</code>.
+            @param snapToPixel: Force the position to whole pixels <code>true</code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code>false</code>.
+            @param outside: Align the <code>DisplayObject</code> to the outside of the bounds <code>true</code>, or the inside <code>false</code>.
+            @param targetCoordinateSpace: The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code>null</code> to use the <code>displayObject</code>'s coordinate space.
+        */
+        public static function alignMiddleRight(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null):void {
+            AlignUtil.align(AlignUtil.MIDDLE_RIGHT, displayObject, bounds, snapToPixel, outside, targetCoordinateSpace);
+        }
+        
+        /**
+            Aligns a <code>DisplayObject</code> to the right side of the bounding <code>Rectangle</code>.
+            
+            @param displayObject: The <code>DisplayObject</code> to align.
+            @param bounds: The area in which to align the <code>DisplayObject</code>.
+            @param snapToPixel: Force the position to whole pixels <code>true</code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code>false</code>.
+            @param outside: Align the <code>DisplayObject</code> to the outside of the bounds <code>true</code>, or the inside <code>false</code>.
+            @param targetCoordinateSpace: The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code>null</code> to use the <code>displayObject</code>'s coordinate space.
+        */
+        public static function alignRight(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null):void {
+            AlignUtil.align(AlignUtil.RIGHT, displayObject, bounds, snapToPixel, outside, targetCoordinateSpace);
+        }
+        
+        /**
+            Aligns a <code>DisplayObject</code> to the top of the bounding <code>Rectangle</code>.
+            
+            @param displayObject: The <code>DisplayObject</code> to align.
+            @param bounds: The area in which to align the <code>DisplayObject</code>.
+            @param snapToPixel: Force the position to whole pixels <code>true</code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code>false</code>.
+            @param outside: Align the <code>DisplayObject</code> to the outside of the bounds <code>true</code>, or the inside <code>false</code>.
+            @param targetCoordinateSpace: The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code>null</code> to use the <code>displayObject</code>'s coordinate space.
+        */
+        public static function alignTop(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null):void {
+            AlignUtil.align(AlignUtil.TOP, displayObject, bounds, snapToPixel, outside, targetCoordinateSpace);
+        }
+        
+        /**
+            Aligns a <code>DisplayObject</code> to the top left of the bounding <code>Rectangle</code>.
+            
+            @param displayObject: The <code>DisplayObject</code> to align.
+            @param bounds: The area in which to align the <code>DisplayObject</code>.
+            @param snapToPixel: Force the position to whole pixels <code>true</code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code>false</code>.
+            @param outside: Align the <code>DisplayObject</code> to the outside of the bounds <code>true</code>, or the inside <code>false</code>.
+            @param targetCoordinateSpace: The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code>null</code> to use the <code>displayObject</code>'s coordinate space.
+        */
+        public static function alignTopLeft(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null):void {
+            AlignUtil.align(AlignUtil.TOP_LEFT, displayObject, bounds, snapToPixel, outside, targetCoordinateSpace);
+        }
+        
+        /**
+            Aligns a <code>DisplayObject</code> to the top side and horizontal center of the bounding <code>Rectangle</code>.
+            
+            @param displayObject: The <code>DisplayObject</code> to align.
+            @param bounds: The area in which to align the <code>DisplayObject</code>.
+            @param snapToPixel: Force the position to whole pixels <code>true</code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code>false</code>.
+            @param outside: Align the <code>DisplayObject</code> to the outside of the bounds <code>true</code>, or the inside <code>false</code>.
+            @param targetCoordinateSpace: The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code>null</code> to use the <code>displayObject</code>'s coordinate space.
+        */
+        public static function alignTopCenter(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null):void {
+            AlignUtil.align(AlignUtil.TOP_CENTER, displayObject, bounds, snapToPixel, outside, targetCoordinateSpace);
+        }
+        
+        /**
+            Aligns a <code>DisplayObject</code> to the top right of the bounding <code>Rectangle</code>.
+            
+            @param displayObject: The <code>DisplayObject</code> to align.
+            @param bounds: The area in which to align the <code>DisplayObject</code>.
+            @param snapToPixel: Force the position to whole pixels <code>true</code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code>false</code>.
+            @param outside: Align the <code>DisplayObject</code> to the outside of the bounds <code>true</code>, or the inside <code>false</code>.
+            @param targetCoordinateSpace: The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code>null</code> to use the <code>displayObject</code>'s coordinate space.
+        */
+        public static function alignTopRight(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null):void {
+            AlignUtil.align(AlignUtil.TOP_RIGHT, displayObject, bounds, snapToPixel, outside, targetCoordinateSpace);
+        }
+        
+        protected static function _getPosition(alignment:String, targetWidth:uint, targetHeight:uint, bounds:Rectangle, outside:Boolean):Point {
+            const position:Point = new Point();
+            
+            switch (alignment) {
+                case AlignUtil.BOTTOM_LEFT :
+                case AlignUtil.LEFT :
+                case AlignUtil.MIDDLE_LEFT :
+                case AlignUtil.TOP_LEFT :
+                    position.x = outside ? bounds.x - targetWidth : bounds.x;
+                    break;
+                case AlignUtil.BOTTOM_CENTER :
+                case AlignUtil.CENTER :
+                case AlignUtil.MIDDLE_CENTER :
+                case AlignUtil.TOP_CENTER :
+                    position.x = (bounds.width - targetWidth) * 0.5 + bounds.x;
+                    break;
+                case AlignUtil.BOTTOM_RIGHT:
+                case AlignUtil.MIDDLE_RIGHT:
+                case AlignUtil.RIGHT:
+                case AlignUtil.TOP_RIGHT:
+                    position.x = outside ? bounds.right : bounds.right - targetWidth;
+                    break;
+            }
+            
+            switch (alignment) {
+                case AlignUtil.TOP:
+                case AlignUtil.TOP_CENTER:
+                case AlignUtil.TOP_LEFT:
+                case AlignUtil.TOP_RIGHT:
+                    position.y = outside ? bounds.y - targetHeight : bounds.y;
+                    break;
+                case AlignUtil.MIDDLE :
+                case AlignUtil.MIDDLE_CENTER :
+                case AlignUtil.MIDDLE_LEFT :
+                case AlignUtil.MIDDLE_RIGHT :
+                    position.y = (bounds.height - targetHeight) * 0.5 + bounds.y;
+                    break;
+                case AlignUtil.BOTTOM:
+                case AlignUtil.BOTTOM_CENTER:
+                case AlignUtil.BOTTOM_LEFT:
+                case AlignUtil.BOTTOM_RIGHT:
+                    position.y = outside ? bounds.bottom : bounds.bottom - targetHeight;
+                    break;
+            }
+            
+            return position;
+        }
+    }
+}</pre>
+</div>
+	<div class='classDescription'>
+	<span class='descriptionSummary'>Provides utility functions for aligning.</span></div>
+
+									<div class='toc'>
+		<h2 id='Summary'>Summary</h2>
+		<div class='docNav'>
+			<ul>
+									<li>
+						<span class='typeInfoHide'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>&times;</span>Hide type info</a></span>
+						<span class='typeInfoShow'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>+</span>Show type info</a></span>
+					</li>									<li>
+						<span class='summariesHide'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>&times;</span>Hide summaries</a></span>
+						<span class='summariesShow'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>+</span>Show summaries</a></span>
+					</li>			</ul>
+			<div class='clear'></div>
+		</div>
+				<div class='memberList'>
+							<div class='memberSummaryPart'>
+					<span class='title'>Constants</span>
+					<ul>
+													<li class=''>								
+								<a href="#BOTTOM">BOTTOM</a>
+																<span class='typeInfo'> : String</span>															</li>
+													<li class=''>								
+								<a href="#BOTTOM_CENTER">BOTTOM_CENTER</a>
+																<span class='typeInfo'> : String</span>															</li>
+													<li class=''>								
+								<a href="#BOTTOM_LEFT">BOTTOM_LEFT</a>
+																<span class='typeInfo'> : String</span>															</li>
+													<li class=''>								
+								<a href="#BOTTOM_RIGHT">BOTTOM_RIGHT</a>
+																<span class='typeInfo'> : String</span>															</li>
+													<li class=''>								
+								<a href="#CENTER">CENTER</a>
+																<span class='typeInfo'> : String</span>															</li>
+													<li class=''>								
+								<a href="#LEFT">LEFT</a>
+																<span class='typeInfo'> : String</span>															</li>
+													<li class=''>								
+								<a href="#MIDDLE">MIDDLE</a>
+																<span class='typeInfo'> : String</span>															</li>
+													<li class=''>								
+								<a href="#MIDDLE_CENTER">MIDDLE_CENTER</a>
+																<span class='typeInfo'> : String</span>															</li>
+													<li class=''>								
+								<a href="#MIDDLE_LEFT">MIDDLE_LEFT</a>
+																<span class='typeInfo'> : String</span>															</li>
+													<li class=''>								
+								<a href="#MIDDLE_RIGHT">MIDDLE_RIGHT</a>
+																<span class='typeInfo'> : String</span>															</li>
+													<li class=''>								
+								<a href="#RIGHT">RIGHT</a>
+																<span class='typeInfo'> : String</span>															</li>
+													<li class=''>								
+								<a href="#TOP">TOP</a>
+																<span class='typeInfo'> : String</span>															</li>
+													<li class=''>								
+								<a href="#TOP_CENTER">TOP_CENTER</a>
+																<span class='typeInfo'> : String</span>															</li>
+													<li class=''>								
+								<a href="#TOP_LEFT">TOP_LEFT</a>
+																<span class='typeInfo'> : String</span>															</li>
+													<li class=''>								
+								<a href="#TOP_RIGHT">TOP_RIGHT</a>
+																<span class='typeInfo'> : String</span>															</li>
+											</ul>
+									</div>
+							<div class='memberSummaryPart'>
+					<span class='title'>Class methods</span>
+					<ul>
+													<li class=''>								
+								<a href="#align">align</a>
+																<span class='typeInfo'>(alignment:String, displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null) : void</span>																<ul class='summary'>
+									<li>Aligns a DisplayObject to the bounding Rectangle acording to the defined alignment.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#alignRectangle">alignRectangle</a>
+																<span class='typeInfo'>(alignment:String, rectangle:Rectangle, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false) : Rectangle</span>																<ul class='summary'>
+									<li>Aligns a Rectangle to another Rectangle.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#alignToPixel">alignToPixel</a>
+																<span class='typeInfo'>(displayObject:DisplayObject) : void</span>																<ul class='summary'>
+									<li>Aligns a DisplayObject to the nearest Pixel.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#alignBottom">alignBottom</a>
+																<span class='typeInfo'>(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null) : void</span>																<ul class='summary'>
+									<li>Aligns a DisplayObject to the bottom of the bounding Rectangle.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#alignBottomLeft">alignBottomLeft</a>
+																<span class='typeInfo'>(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null) : void</span>																<ul class='summary'>
+									<li>Aligns a DisplayObject to the bottom left of the bounding Rectangle.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#alignBottomCenter">alignBottomCenter</a>
+																<span class='typeInfo'>(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null) : void</span>																<ul class='summary'>
+									<li>Aligns a DisplayObject to the bottom and horizontal center of the bounding Rectangle.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#alignBottomRight">alignBottomRight</a>
+																<span class='typeInfo'>(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null) : void</span>																<ul class='summary'>
+									<li>Aligns a DisplayObject to the bottom right of the bounding Rectangle.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#alignCenter">alignCenter</a>
+																<span class='typeInfo'>(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, targetCoordinateSpace:DisplayObject = null) : void</span>																<ul class='summary'>
+									<li>Aligns a DisplayObject to the horizontal center of the bounding Rectangle.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#alignLeft">alignLeft</a>
+																<span class='typeInfo'>(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null) : void</span>																<ul class='summary'>
+									<li>Aligns a DisplayObject to the left side of the bounding Rectangle.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#alignMiddle">alignMiddle</a>
+																<span class='typeInfo'>(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, targetCoordinateSpace:DisplayObject = null) : void</span>																<ul class='summary'>
+									<li>Aligns a DisplayObject to the vertical middle of the bounding Rectangle.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#alignMiddleLeft">alignMiddleLeft</a>
+																<span class='typeInfo'>(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null) : void</span>																<ul class='summary'>
+									<li>Aligns a DisplayObject to the vertical middle and left side of the bounding Rectangle.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#alignMiddleCenter">alignMiddleCenter</a>
+																<span class='typeInfo'>(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, targetCoordinateSpace:DisplayObject = null) : void</span>																<ul class='summary'>
+									<li>Aligns a DisplayObject to the vertical middle and horizontal center of the bounding Rectangle.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#alignMiddleRight">alignMiddleRight</a>
+																<span class='typeInfo'>(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null) : void</span>																<ul class='summary'>
+									<li>Aligns a DisplayObject to the vertical middle and right side of the bounding Rectangle.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#alignRight">alignRight</a>
+																<span class='typeInfo'>(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null) : void</span>																<ul class='summary'>
+									<li>Aligns a DisplayObject to the right side of the bounding Rectangle.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#alignTop">alignTop</a>
+																<span class='typeInfo'>(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null) : void</span>																<ul class='summary'>
+									<li>Aligns a DisplayObject to the top of the bounding Rectangle.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#alignTopLeft">alignTopLeft</a>
+																<span class='typeInfo'>(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null) : void</span>																<ul class='summary'>
+									<li>Aligns a DisplayObject to the top left of the bounding Rectangle.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#alignTopCenter">alignTopCenter</a>
+																<span class='typeInfo'>(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null) : void</span>																<ul class='summary'>
+									<li>Aligns a DisplayObject to the top side and horizontal center of the bounding Rectangle.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#alignTopRight">alignTopRight</a>
+																<span class='typeInfo'>(displayObject:DisplayObject, bounds:Rectangle, snapToPixel:Boolean = true, outside:Boolean = false, targetCoordinateSpace:DisplayObject = null) : void</span>																<ul class='summary'>
+									<li>Aligns a DisplayObject to the top right of the bounding Rectangle.</li>
+								</ul>							</li>
+											</ul>
+									</div>
+					</div>	</div>
+																					<div class='memberSection'>
+			<h2 id='Constants'>Constants</h2>
+							<div class='member' id='BOTTOM'>
+									<h3>BOTTOM</h3>											<div class='fullMemberString'>
+							<span class='code'>static const <strong>BOTTOM</strong>:String = 'bottom'</span>						</div>														</div>
+							<div class='member' id='BOTTOM_CENTER'>
+									<h3>BOTTOM_CENTER</h3>											<div class='fullMemberString'>
+							<span class='code'>static const <strong>BOTTOM_CENTER</strong>:String = 'bottomCenter'</span>						</div>														</div>
+							<div class='member' id='BOTTOM_LEFT'>
+									<h3>BOTTOM_LEFT</h3>											<div class='fullMemberString'>
+							<span class='code'>static const <strong>BOTTOM_LEFT</strong>:String = 'bottomLeft'</span>						</div>														</div>
+							<div class='member' id='BOTTOM_RIGHT'>
+									<h3>BOTTOM_RIGHT</h3>											<div class='fullMemberString'>
+							<span class='code'>static const <strong>BOTTOM_RIGHT</strong>:String = 'bottomRight'</span>						</div>														</div>
+							<div class='member' id='CENTER'>
+									<h3>CENTER</h3>											<div class='fullMemberString'>
+							<span class='code'>static const <strong>CENTER</strong>:String = 'center'</span>						</div>														</div>
+							<div class='member' id='LEFT'>
+									<h3>LEFT</h3>											<div class='fullMemberString'>
+							<span class='code'>static const <strong>LEFT</strong>:String = 'left'</span>						</div>														</div>
+							<div class='member' id='MIDDLE'>
+									<h3>MIDDLE</h3>											<div class='fullMemberString'>
+							<span class='code'>static const <strong>MIDDLE</strong>:String = 'middle'</span>						</div>														</div>
+							<div class='member' id='MIDDLE_CENTER'>
+									<h3>MIDDLE_CENTER</h3>											<div class='fullMemberString'>
+							<span class='code'>static const <strong>MIDDLE_CENTER</strong>:String = 'middleCenter'</span>						</div>														</div>
+							<div class='member' id='MIDDLE_LEFT'>
+									<h3>MIDDLE_LEFT</h3>											<div class='fullMemberString'>
+							<span class='code'>static const <strong>MIDDLE_LEFT</strong>:String = 'middleLeft'</span>						</div>														</div>
+							<div class='member' id='MIDDLE_RIGHT'>
+									<h3>MIDDLE_RIGHT</h3>											<div class='fullMemberString'>
+							<span class='code'>static const <strong>MIDDLE_RIGHT</strong>:String = 'middleRight'</span>						</div>														</div>
+							<div class='member' id='RIGHT'>
+									<h3>RIGHT</h3>											<div class='fullMemberString'>
+							<span class='code'>static const <strong>RIGHT</strong>:String = 'right'</span>						</div>														</div>
+							<div class='member' id='TOP'>
+									<h3>TOP</h3>											<div class='fullMemberString'>
+							<span class='code'>static const <strong>TOP</strong>:String = 'top'</span>						</div>														</div>
+							<div class='member' id='TOP_CENTER'>
+									<h3>TOP_CENTER</h3>											<div class='fullMemberString'>
+							<span class='code'>static const <strong>TOP_CENTER</strong>:String = 'topCenter'</span>						</div>														</div>
+							<div class='member' id='TOP_LEFT'>
+									<h3>TOP_LEFT</h3>											<div class='fullMemberString'>
+							<span class='code'>static const <strong>TOP_LEFT</strong>:String = 'topLeft'</span>						</div>														</div>
+							<div class='member' id='TOP_RIGHT'>
+									<h3>TOP_RIGHT</h3>											<div class='fullMemberString'>
+							<span class='code'>static const <strong>TOP_RIGHT</strong>:String = 'topRight'</span>						</div>														</div>
+					</div>
+				<div class='memberSection'>
+			<h2 id='Classmethods'>Class methods</h2>
+							<div class='member' id='align'>
+									<h3>align</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>align</strong>(alignment:String,
+                      displayObject:DisplayObject,
+                      bounds:Rectangle,
+                      snapToPixel:Boolean = true,
+                      outside:Boolean = false,
+                      targetCoordinateSpace:DisplayObject = null) : void</span>						</div>											<div class='description'>
+																			<p>Aligns a <code>DisplayObject</code> to the bounding <code><span class="codeIdentifier">Rectangle</span></code> acording to the defined alignment.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>alignment            <span class='itemSeparator'>:</span></span>The alignment type/position.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>displayObject        <span class='itemSeparator'>:</span></span>The <code>DisplayObject</code> to align.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>bounds               <span class='itemSeparator'>:</span></span>The area in which to align the <code>DisplayObject</code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel          <span class='itemSeparator'>:</span></span>Force the position to whole pixels <code><span class="codeIdentifier">true</span></code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>outside              <span class='itemSeparator'>:</span></span>Align the <code>DisplayObject</code> to the outside of the bounds <code><span class="codeIdentifier">true</span></code>, or the inside <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>targetCoordinateSpace<span class='itemSeparator'>:</span></span>The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code><span class="codeIdentifier">null</span></code> to use the <code>displayObject</code>'s coordinate space.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='alignBottom'>
+									<h3>alignBottom</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>alignBottom</strong>(displayObject:DisplayObject,
+                            bounds:Rectangle,
+                            snapToPixel:Boolean = true,
+                            outside:Boolean = false,
+                            targetCoordinateSpace:DisplayObject = null) : void</span>						</div>											<div class='description'>
+																			<p>Aligns a <code>DisplayObject</code> to the bottom of the bounding <code><span class="codeIdentifier">Rectangle</span></code>.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>displayObject        <span class='itemSeparator'>:</span></span>The <code>DisplayObject</code> to align.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>bounds               <span class='itemSeparator'>:</span></span>The area in which to align the <code>DisplayObject</code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel          <span class='itemSeparator'>:</span></span>Force the position to whole pixels <code><span class="codeIdentifier">true</span></code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>outside              <span class='itemSeparator'>:</span></span>Align the <code>DisplayObject</code> to the outside of the bounds <code><span class="codeIdentifier">true</span></code>, or the inside <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>targetCoordinateSpace<span class='itemSeparator'>:</span></span>The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code><span class="codeIdentifier">null</span></code> to use the <code>displayObject</code>'s coordinate space.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='alignBottomCenter'>
+									<h3>alignBottomCenter</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>alignBottomCenter</strong>(displayObject:DisplayObject,
+                                  bounds:Rectangle,
+                                  snapToPixel:Boolean = true,
+                                  outside:Boolean = false,
+                                  targetCoordinateSpace:DisplayObject = null) : void</span>						</div>											<div class='description'>
+																			<p>Aligns a <code>DisplayObject</code> to the bottom and horizontal center of the bounding <code><span class="codeIdentifier">Rectangle</span></code>.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>displayObject        <span class='itemSeparator'>:</span></span>The <code>DisplayObject</code> to align.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>bounds               <span class='itemSeparator'>:</span></span>The area in which to align the <code>DisplayObject</code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel          <span class='itemSeparator'>:</span></span>Force the position to whole pixels <code><span class="codeIdentifier">true</span></code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>outside              <span class='itemSeparator'>:</span></span>Align the <code>DisplayObject</code> to the outside of the bounds <code><span class="codeIdentifier">true</span></code>, or the inside <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>targetCoordinateSpace<span class='itemSeparator'>:</span></span>The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code><span class="codeIdentifier">null</span></code> to use the <code>displayObject</code>'s coordinate space.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='alignBottomLeft'>
+									<h3>alignBottomLeft</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>alignBottomLeft</strong>(displayObject:DisplayObject,
+                                bounds:Rectangle,
+                                snapToPixel:Boolean = true,
+                                outside:Boolean = false,
+                                targetCoordinateSpace:DisplayObject = null) : void</span>						</div>											<div class='description'>
+																			<p>Aligns a <code>DisplayObject</code> to the bottom left of the bounding <code><span class="codeIdentifier">Rectangle</span></code>.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>displayObject        <span class='itemSeparator'>:</span></span>The <code>DisplayObject</code> to align.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>bounds               <span class='itemSeparator'>:</span></span>The area in which to align the <code>DisplayObject</code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel          <span class='itemSeparator'>:</span></span>Force the position to whole pixels <code><span class="codeIdentifier">true</span></code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>outside              <span class='itemSeparator'>:</span></span>Align the <code>DisplayObject</code> to the outside of the bounds <code><span class="codeIdentifier">true</span></code>, or the inside <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>targetCoordinateSpace<span class='itemSeparator'>:</span></span>The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code><span class="codeIdentifier">null</span></code> to use the <code>displayObject</code>'s coordinate space.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='alignBottomRight'>
+									<h3>alignBottomRight</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>alignBottomRight</strong>(displayObject:DisplayObject,
+                                 bounds:Rectangle,
+                                 snapToPixel:Boolean = true,
+                                 outside:Boolean = false,
+                                 targetCoordinateSpace:DisplayObject = null) : void</span>						</div>											<div class='description'>
+																			<p>Aligns a <code>DisplayObject</code> to the bottom right of the bounding <code><span class="codeIdentifier">Rectangle</span></code>.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>displayObject        <span class='itemSeparator'>:</span></span>The <code>DisplayObject</code> to align.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>bounds               <span class='itemSeparator'>:</span></span>The area in which to align the <code>DisplayObject</code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel          <span class='itemSeparator'>:</span></span>Force the position to whole pixels <code><span class="codeIdentifier">true</span></code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>outside              <span class='itemSeparator'>:</span></span>Align the <code>DisplayObject</code> to the outside of the bounds <code><span class="codeIdentifier">true</span></code>, or the inside <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>targetCoordinateSpace<span class='itemSeparator'>:</span></span>The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code><span class="codeIdentifier">null</span></code> to use the <code>displayObject</code>'s coordinate space.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='alignCenter'>
+									<h3>alignCenter</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>alignCenter</strong>(displayObject:DisplayObject,
+                            bounds:Rectangle,
+                            snapToPixel:Boolean = true,
+                            targetCoordinateSpace:DisplayObject = null) : void</span>						</div>											<div class='description'>
+																			<p>Aligns a <code>DisplayObject</code> to the horizontal center of the bounding <code><span class="codeIdentifier">Rectangle</span></code>.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>displayObject        <span class='itemSeparator'>:</span></span>The <code>DisplayObject</code> to align.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>bounds               <span class='itemSeparator'>:</span></span>The area in which to align the <code>DisplayObject</code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel          <span class='itemSeparator'>:</span></span>Force the position to whole pixels <code><span class="codeIdentifier">true</span></code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>targetCoordinateSpace<span class='itemSeparator'>:</span></span>The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code><span class="codeIdentifier">null</span></code> to use the <code>displayObject</code>'s coordinate space.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='alignLeft'>
+									<h3>alignLeft</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>alignLeft</strong>(displayObject:DisplayObject,
+                          bounds:Rectangle,
+                          snapToPixel:Boolean = true,
+                          outside:Boolean = false,
+                          targetCoordinateSpace:DisplayObject = null) : void</span>						</div>											<div class='description'>
+																			<p>Aligns a <code>DisplayObject</code> to the left side of the bounding <code><span class="codeIdentifier">Rectangle</span></code>.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>displayObject        <span class='itemSeparator'>:</span></span>The <code>DisplayObject</code> to align.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>bounds               <span class='itemSeparator'>:</span></span>The area in which to align the <code>DisplayObject</code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel          <span class='itemSeparator'>:</span></span>Force the position to whole pixels <code><span class="codeIdentifier">true</span></code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>outside              <span class='itemSeparator'>:</span></span>Align the <code>DisplayObject</code> to the outside of the bounds <code><span class="codeIdentifier">true</span></code>, or the inside <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>targetCoordinateSpace<span class='itemSeparator'>:</span></span>The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code><span class="codeIdentifier">null</span></code> to use the <code>displayObject</code>'s coordinate space.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='alignMiddle'>
+									<h3>alignMiddle</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>alignMiddle</strong>(displayObject:DisplayObject,
+                            bounds:Rectangle,
+                            snapToPixel:Boolean = true,
+                            targetCoordinateSpace:DisplayObject = null) : void</span>						</div>											<div class='description'>
+																			<p>Aligns a <code>DisplayObject</code> to the vertical middle of the bounding <code><span class="codeIdentifier">Rectangle</span></code>.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>displayObject        <span class='itemSeparator'>:</span></span>The <code>DisplayObject</code> to align.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>bounds               <span class='itemSeparator'>:</span></span>The area in which to align the <code>DisplayObject</code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel          <span class='itemSeparator'>:</span></span>Force the position to whole pixels <code><span class="codeIdentifier">true</span></code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>targetCoordinateSpace<span class='itemSeparator'>:</span></span>The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code><span class="codeIdentifier">null</span></code> to use the <code>displayObject</code>'s coordinate space.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='alignMiddleCenter'>
+									<h3>alignMiddleCenter</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>alignMiddleCenter</strong>(displayObject:DisplayObject,
+                                  bounds:Rectangle,
+                                  snapToPixel:Boolean = true,
+                                  targetCoordinateSpace:DisplayObject = null) : void</span>						</div>											<div class='description'>
+																			<p>Aligns a <code>DisplayObject</code> to the vertical middle and horizontal center of the bounding <code><span class="codeIdentifier">Rectangle</span></code>.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>displayObject        <span class='itemSeparator'>:</span></span>The <code>DisplayObject</code> to align.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>bounds               <span class='itemSeparator'>:</span></span>The area in which to align the <code>DisplayObject</code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel          <span class='itemSeparator'>:</span></span>Force the position to whole pixels <code><span class="codeIdentifier">true</span></code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>targetCoordinateSpace<span class='itemSeparator'>:</span></span>The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code><span class="codeIdentifier">null</span></code> to use the <code>displayObject</code>'s coordinate space.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='alignMiddleLeft'>
+									<h3>alignMiddleLeft</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>alignMiddleLeft</strong>(displayObject:DisplayObject,
+                                bounds:Rectangle,
+                                snapToPixel:Boolean = true,
+                                outside:Boolean = false,
+                                targetCoordinateSpace:DisplayObject = null) : void</span>						</div>											<div class='description'>
+																			<p>Aligns a <code>DisplayObject</code> to the vertical middle and left side of the bounding <code><span class="codeIdentifier">Rectangle</span></code>.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>displayObject        <span class='itemSeparator'>:</span></span>The <code>DisplayObject</code> to align.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>bounds               <span class='itemSeparator'>:</span></span>The area in which to align the <code>DisplayObject</code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel          <span class='itemSeparator'>:</span></span>Force the position to whole pixels <code><span class="codeIdentifier">true</span></code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>outside              <span class='itemSeparator'>:</span></span>Align the <code>DisplayObject</code> to the outside of the bounds <code><span class="codeIdentifier">true</span></code>, or the inside <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>targetCoordinateSpace<span class='itemSeparator'>:</span></span>The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code><span class="codeIdentifier">null</span></code> to use the <code>displayObject</code>'s coordinate space.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='alignMiddleRight'>
+									<h3>alignMiddleRight</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>alignMiddleRight</strong>(displayObject:DisplayObject,
+                                 bounds:Rectangle,
+                                 snapToPixel:Boolean = true,
+                                 outside:Boolean = false,
+                                 targetCoordinateSpace:DisplayObject = null) : void</span>						</div>											<div class='description'>
+																			<p>Aligns a <code>DisplayObject</code> to the vertical middle and right side of the bounding <code><span class="codeIdentifier">Rectangle</span></code>.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>displayObject        <span class='itemSeparator'>:</span></span>The <code>DisplayObject</code> to align.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>bounds               <span class='itemSeparator'>:</span></span>The area in which to align the <code>DisplayObject</code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel          <span class='itemSeparator'>:</span></span>Force the position to whole pixels <code><span class="codeIdentifier">true</span></code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>outside              <span class='itemSeparator'>:</span></span>Align the <code>DisplayObject</code> to the outside of the bounds <code><span class="codeIdentifier">true</span></code>, or the inside <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>targetCoordinateSpace<span class='itemSeparator'>:</span></span>The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code><span class="codeIdentifier">null</span></code> to use the <code>displayObject</code>'s coordinate space.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='alignRectangle'>
+									<h3>alignRectangle</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>alignRectangle</strong>(alignment:String,
+                               rectangle:Rectangle,
+                               bounds:Rectangle,
+                               snapToPixel:Boolean = true,
+                               outside:Boolean = false) : Rectangle</span>						</div>											<div class='description'>
+																			<p>Aligns a <code><span class="codeIdentifier">Rectangle</span></code> to another <code><span class="codeIdentifier">Rectangle</span></code>.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>align      <span class='itemSeparator'>:</span></span>The alignment type/position.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>rectangle  <span class='itemSeparator'>:</span></span>The <code><span class="codeIdentifier">Rectangle</span></code> to align.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>bounds     <span class='itemSeparator'>:</span></span>The area in which to align the <code><span class="codeIdentifier">Rectangle</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel<span class='itemSeparator'>:</span></span>Force the position to whole pixels <code><span class="codeIdentifier">true</span></code>, or to let the <code><span class="codeIdentifier">Rectangle</span></code> be positioned on sub-pixels <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>outside    <span class='itemSeparator'>:</span></span>Align the <code><span class="codeIdentifier">Rectangle</span></code> to the outside of the bounds <code><span class="codeIdentifier">true</span></code>, or the inside <code><span class="codeIdentifier">false</span></code>.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Returns</span>
+					<div class='item'>
+					<ul>
+								<li>
+					A new aligned <code><span class="codeIdentifier">Rectangle</span></code>.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='alignRight'>
+									<h3>alignRight</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>alignRight</strong>(displayObject:DisplayObject,
+                           bounds:Rectangle,
+                           snapToPixel:Boolean = true,
+                           outside:Boolean = false,
+                           targetCoordinateSpace:DisplayObject = null) : void</span>						</div>											<div class='description'>
+																			<p>Aligns a <code>DisplayObject</code> to the right side of the bounding <code><span class="codeIdentifier">Rectangle</span></code>.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>displayObject        <span class='itemSeparator'>:</span></span>The <code>DisplayObject</code> to align.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>bounds               <span class='itemSeparator'>:</span></span>The area in which to align the <code>DisplayObject</code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel          <span class='itemSeparator'>:</span></span>Force the position to whole pixels <code><span class="codeIdentifier">true</span></code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>outside              <span class='itemSeparator'>:</span></span>Align the <code>DisplayObject</code> to the outside of the bounds <code><span class="codeIdentifier">true</span></code>, or the inside <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>targetCoordinateSpace<span class='itemSeparator'>:</span></span>The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code><span class="codeIdentifier">null</span></code> to use the <code>displayObject</code>'s coordinate space.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='alignToPixel'>
+									<h3>alignToPixel</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>alignToPixel</strong>(displayObject:DisplayObject) : void</span>						</div>											<div class='description'>
+																			<p>Aligns a <code>DisplayObject</code> to the nearest Pixel.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>displayObject<span class='itemSeparator'>:</span></span>The <code>DisplayObject</code> to align.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='alignTop'>
+									<h3>alignTop</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>alignTop</strong>(displayObject:DisplayObject,
+                         bounds:Rectangle,
+                         snapToPixel:Boolean = true,
+                         outside:Boolean = false,
+                         targetCoordinateSpace:DisplayObject = null) : void</span>						</div>											<div class='description'>
+																			<p>Aligns a <code>DisplayObject</code> to the top of the bounding <code><span class="codeIdentifier">Rectangle</span></code>.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>displayObject        <span class='itemSeparator'>:</span></span>The <code>DisplayObject</code> to align.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>bounds               <span class='itemSeparator'>:</span></span>The area in which to align the <code>DisplayObject</code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel          <span class='itemSeparator'>:</span></span>Force the position to whole pixels <code><span class="codeIdentifier">true</span></code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>outside              <span class='itemSeparator'>:</span></span>Align the <code>DisplayObject</code> to the outside of the bounds <code><span class="codeIdentifier">true</span></code>, or the inside <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>targetCoordinateSpace<span class='itemSeparator'>:</span></span>The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code><span class="codeIdentifier">null</span></code> to use the <code>displayObject</code>'s coordinate space.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='alignTopCenter'>
+									<h3>alignTopCenter</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>alignTopCenter</strong>(displayObject:DisplayObject,
+                               bounds:Rectangle,
+                               snapToPixel:Boolean = true,
+                               outside:Boolean = false,
+                               targetCoordinateSpace:DisplayObject = null) : void</span>						</div>											<div class='description'>
+																			<p>Aligns a <code>DisplayObject</code> to the top side and horizontal center of the bounding <code><span class="codeIdentifier">Rectangle</span></code>.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>displayObject        <span class='itemSeparator'>:</span></span>The <code>DisplayObject</code> to align.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>bounds               <span class='itemSeparator'>:</span></span>The area in which to align the <code>DisplayObject</code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel          <span class='itemSeparator'>:</span></span>Force the position to whole pixels <code><span class="codeIdentifier">true</span></code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>outside              <span class='itemSeparator'>:</span></span>Align the <code>DisplayObject</code> to the outside of the bounds <code><span class="codeIdentifier">true</span></code>, or the inside <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>targetCoordinateSpace<span class='itemSeparator'>:</span></span>The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code><span class="codeIdentifier">null</span></code> to use the <code>displayObject</code>'s coordinate space.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='alignTopLeft'>
+									<h3>alignTopLeft</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>alignTopLeft</strong>(displayObject:DisplayObject,
+                             bounds:Rectangle,
+                             snapToPixel:Boolean = true,
+                             outside:Boolean = false,
+                             targetCoordinateSpace:DisplayObject = null) : void</span>						</div>											<div class='description'>
+																			<p>Aligns a <code>DisplayObject</code> to the top left of the bounding <code><span class="codeIdentifier">Rectangle</span></code>.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>displayObject        <span class='itemSeparator'>:</span></span>The <code>DisplayObject</code> to align.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>bounds               <span class='itemSeparator'>:</span></span>The area in which to align the <code>DisplayObject</code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel          <span class='itemSeparator'>:</span></span>Force the position to whole pixels <code><span class="codeIdentifier">true</span></code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>outside              <span class='itemSeparator'>:</span></span>Align the <code>DisplayObject</code> to the outside of the bounds <code><span class="codeIdentifier">true</span></code>, or the inside <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>targetCoordinateSpace<span class='itemSeparator'>:</span></span>The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code><span class="codeIdentifier">null</span></code> to use the <code>displayObject</code>'s coordinate space.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='alignTopRight'>
+									<h3>alignTopRight</h3>											<div class='fullMemberString'>
+							<span class='code'>static function <strong>alignTopRight</strong>(displayObject:DisplayObject,
+                              bounds:Rectangle,
+                              snapToPixel:Boolean = true,
+                              outside:Boolean = false,
+                              targetCoordinateSpace:DisplayObject = null) : void</span>						</div>											<div class='description'>
+																			<p>Aligns a <code>DisplayObject</code> to the top right of the bounding <code><span class="codeIdentifier">Rectangle</span></code>.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>displayObject        <span class='itemSeparator'>:</span></span>The <code>DisplayObject</code> to align.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>bounds               <span class='itemSeparator'>:</span></span>The area in which to align the <code>DisplayObject</code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>snapToPixel          <span class='itemSeparator'>:</span></span>Force the position to whole pixels <code><span class="codeIdentifier">true</span></code>, or to let the <code>DisplayObject</code> be positioned on sub-pixels <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>outside              <span class='itemSeparator'>:</span></span>Align the <code>DisplayObject</code> to the outside of the bounds <code><span class="codeIdentifier">true</span></code>, or the inside <code><span class="codeIdentifier">false</span></code>.	</div>
+
+						<div class='item'>
+		<span class='colorizedCode code'>targetCoordinateSpace<span class='itemSeparator'>:</span></span>The display object that defines the coordinate system to use. Specify if the <code>displayObject</code> is not in the same scope as the desired coordinate space, or <code><span class="codeIdentifier">null</span></code> to use the <code>displayObject</code>'s coordinate space.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+											</div>				</div>
+					</div>
+		
+							</div>
+						</div>
+											<div id='sidebar'>
+		<div id='clearHeaderLeft'></div> 
+		<div id='sidebarContent'>
+				<div class="list">
+							<ul>
+		<li  class=''>											<li id='menu_index' class=''>				<a href="index.html">CASA Lib AS3 Docs</a>
+</li>
+						</li>
+</ul>
+
+					<ul id='treemenu'>
+		<li  class=''>									<h2>Packages and classes</h2>											<ul>
+		<li  id='menu_package_org_casalib_collection' class='package'>
+																	<a href="package_org_casalib_collection.html">org.casalib.collection</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_collection_IList' class='interface'>				<a href="org_casalib_collection_IList.html"><span class='packagePath'>org.casalib.collection.</span>IList</a>
+</li>
+							<li id='menu_org_casalib_collection_List' class=''>				<a href="org_casalib_collection_List.html"><span class='packagePath'>org.casalib.collection.</span>List</a>
+</li>
+							<li id='menu_org_casalib_collection_UniqueList' class=''>				<a href="org_casalib_collection_UniqueList.html"><span class='packagePath'>org.casalib.collection.</span>UniqueList</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_control' class='package'>
+																	<a href="package_org_casalib_control.html">org.casalib.control</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_control_IResumable' class='interface'>				<a href="org_casalib_control_IResumable.html"><span class='packagePath'>org.casalib.control.</span>IResumable</a>
+</li>
+							<li id='menu_org_casalib_control_IRunnable' class='interface'>				<a href="org_casalib_control_IRunnable.html"><span class='packagePath'>org.casalib.control.</span>IRunnable</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_core' class='package'>
+																	<a href="package_org_casalib_core.html">org.casalib.core</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_core_Destroyable' class=''>				<a href="org_casalib_core_Destroyable.html"><span class='packagePath'>org.casalib.core.</span>Destroyable</a>
+</li>
+							<li id='menu_org_casalib_core_IDestroyable' class='interface'>				<a href="org_casalib_core_IDestroyable.html"><span class='packagePath'>org.casalib.core.</span>IDestroyable</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_display' class='package'>
+																	<a href="package_org_casalib_display.html">org.casalib.display</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_display_CasaBitmap' class=''>				<a href="org_casalib_display_CasaBitmap.html"><span class='packagePath'>org.casalib.display.</span>CasaBitmap</a>
+</li>
+							<li id='menu_org_casalib_display_CasaMovieClip' class=''>				<a href="org_casalib_display_CasaMovieClip.html"><span class='packagePath'>org.casalib.display.</span>CasaMovieClip</a>
+</li>
+							<li id='menu_org_casalib_display_CasaShape' class=''>				<a href="org_casalib_display_CasaShape.html"><span class='packagePath'>org.casalib.display.</span>CasaShape</a>
+</li>
+							<li id='menu_org_casalib_display_CasaSimpleButton' class=''>				<a href="org_casalib_display_CasaSimpleButton.html"><span class='packagePath'>org.casalib.display.</span>CasaSimpleButton</a>
+</li>
+							<li id='menu_org_casalib_display_CasaSprite' class=''>				<a href="org_casalib_display_CasaSprite.html"><span class='packagePath'>org.casalib.display.</span>CasaSprite</a>
+</li>
+							<li id='menu_org_casalib_display_CasaTextField' class=''>				<a href="org_casalib_display_CasaTextField.html"><span class='packagePath'>org.casalib.display.</span>CasaTextField</a>
+</li>
+							<li id='menu_org_casalib_display_ReversibleMovieClip' class=''>				<a href="org_casalib_display_ReversibleMovieClip.html"><span class='packagePath'>org.casalib.display.</span>ReversibleMovieClip</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_errors' class='package'>
+																	<a href="package_org_casalib_errors.html">org.casalib.errors</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_errors_ArguementTypeError' class=''>				<a href="org_casalib_errors_ArguementTypeError.html"><span class='packagePath'>org.casalib.errors.</span>ArguementTypeError</a>
+</li>
+							<li id='menu_org_casalib_errors_ArrayContentsError' class=''>				<a href="org_casalib_errors_ArrayContentsError.html"><span class='packagePath'>org.casalib.errors.</span>ArrayContentsError</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_events' class='package'>
+																	<a href="package_org_casalib_events.html">org.casalib.events</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_events_InactivityEvent' class=''>				<a href="org_casalib_events_InactivityEvent.html"><span class='packagePath'>org.casalib.events.</span>InactivityEvent</a>
+</li>
+							<li id='menu_org_casalib_events_IRemovableEventDispatcher' class='interface'>				<a href="org_casalib_events_IRemovableEventDispatcher.html"><span class='packagePath'>org.casalib.events.</span>IRemovableEventDispatcher</a>
+</li>
+							<li id='menu_org_casalib_events_KeyComboEvent' class=''>				<a href="org_casalib_events_KeyComboEvent.html"><span class='packagePath'>org.casalib.events.</span>KeyComboEvent</a>
+</li>
+							<li id='menu_org_casalib_events_ListenerManager' class=''>				<a href="org_casalib_events_ListenerManager.html"><span class='packagePath'>org.casalib.events.</span>ListenerManager</a>
+</li>
+							<li id='menu_org_casalib_events_LoadEvent' class=''>				<a href="org_casalib_events_LoadEvent.html"><span class='packagePath'>org.casalib.events.</span>LoadEvent</a>
+</li>
+							<li id='menu_org_casalib_events_ProcessEvent' class=''>				<a href="org_casalib_events_ProcessEvent.html"><span class='packagePath'>org.casalib.events.</span>ProcessEvent</a>
+</li>
+							<li id='menu_org_casalib_events_RemovableEventDispatcher' class=''>				<a href="org_casalib_events_RemovableEventDispatcher.html"><span class='packagePath'>org.casalib.events.</span>RemovableEventDispatcher</a>
+</li>
+							<li id='menu_org_casalib_events_RetryEvent' class=''>				<a href="org_casalib_events_RetryEvent.html"><span class='packagePath'>org.casalib.events.</span>RetryEvent</a>
+</li>
+							<li id='menu_org_casalib_events_SequenceEvent' class=''>				<a href="org_casalib_events_SequenceEvent.html"><span class='packagePath'>org.casalib.events.</span>SequenceEvent</a>
+</li>
+							<li id='menu_org_casalib_events_StageEventProxy' class=''>				<a href="org_casalib_events_StageEventProxy.html"><span class='packagePath'>org.casalib.events.</span>StageEventProxy</a>
+</li>
+							<li id='menu_org_casalib_events_TweenEvent' class=''>				<a href="org_casalib_events_TweenEvent.html"><span class='packagePath'>org.casalib.events.</span>TweenEvent</a>
+</li>
+							<li id='menu_org_casalib_events_VideoInfoEvent' class=''>				<a href="org_casalib_events_VideoInfoEvent.html"><span class='packagePath'>org.casalib.events.</span>VideoInfoEvent</a>
+</li>
+							<li id='menu_org_casalib_events_VideoLoadEvent' class=''>				<a href="org_casalib_events_VideoLoadEvent.html"><span class='packagePath'>org.casalib.events.</span>VideoLoadEvent</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_layout' class='package'>
+																	<a href="package_org_casalib_layout.html">org.casalib.layout</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_layout_Distribution' class=''>				<a href="org_casalib_layout_Distribution.html"><span class='packagePath'>org.casalib.layout.</span>Distribution</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_load' class='package'>
+																	<a href="package_org_casalib_load.html">org.casalib.load</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_load_AudioLoad' class=''>				<a href="org_casalib_load_AudioLoad.html"><span class='packagePath'>org.casalib.load.</span>AudioLoad</a>
+</li>
+							<li id='menu_org_casalib_load_CasaLoader' class=''>				<a href="org_casalib_load_CasaLoader.html"><span class='packagePath'>org.casalib.load.</span>CasaLoader</a>
+</li>
+							<li id='menu_org_casalib_load_DataLoad' class=''>				<a href="org_casalib_load_DataLoad.html"><span class='packagePath'>org.casalib.load.</span>DataLoad</a>
+</li>
+							<li id='menu_org_casalib_load_GroupLoad' class=''>				<a href="org_casalib_load_GroupLoad.html"><span class='packagePath'>org.casalib.load.</span>GroupLoad</a>
+</li>
+							<li id='menu_org_casalib_load_ImageLoad' class=''>				<a href="org_casalib_load_ImageLoad.html"><span class='packagePath'>org.casalib.load.</span>ImageLoad</a>
+</li>
+							<li id='menu_org_casalib_load_LoadItem' class=''>				<a href="org_casalib_load_LoadItem.html"><span class='packagePath'>org.casalib.load.</span>LoadItem</a>
+</li>
+							<li id='menu_org_casalib_load_SwfLoad' class=''>				<a href="org_casalib_load_SwfLoad.html"><span class='packagePath'>org.casalib.load.</span>SwfLoad</a>
+</li>
+							<li id='menu_org_casalib_load_VideoLoad' class=''>				<a href="org_casalib_load_VideoLoad.html"><span class='packagePath'>org.casalib.load.</span>VideoLoad</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_math' class='package'>
+																	<a href="package_org_casalib_math.html">org.casalib.math</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_math_Percent' class=''>				<a href="org_casalib_math_Percent.html"><span class='packagePath'>org.casalib.math.</span>Percent</a>
+</li>
+							<li id='menu_org_casalib_math_Range' class=''>				<a href="org_casalib_math_Range.html"><span class='packagePath'>org.casalib.math.</span>Range</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_math_geom' class='package'>
+																	<a href="package_org_casalib_math_geom.html">org.casalib.math.geom</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_math_geom_Ellipse' class=''>				<a href="org_casalib_math_geom_Ellipse.html"><span class='packagePath'>org.casalib.math.geom.</span>Ellipse</a>
+</li>
+							<li id='menu_org_casalib_math_geom_Point3d' class=''>				<a href="org_casalib_math_geom_Point3d.html"><span class='packagePath'>org.casalib.math.geom.</span>Point3d</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_process' class='package'>
+																	<a href="package_org_casalib_process.html">org.casalib.process</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_process_Process' class=''>				<a href="org_casalib_process_Process.html"><span class='packagePath'>org.casalib.process.</span>Process</a>
+</li>
+							<li id='menu_org_casalib_process_ProcessGroup' class=''>				<a href="org_casalib_process_ProcessGroup.html"><span class='packagePath'>org.casalib.process.</span>ProcessGroup</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_time' class='package'>
+																	<a href="package_org_casalib_time.html">org.casalib.time</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_time_EnterFrame' class=''>				<a href="org_casalib_time_EnterFrame.html"><span class='packagePath'>org.casalib.time.</span>EnterFrame</a>
+</li>
+							<li id='menu_org_casalib_time_FrameDelay' class=''>				<a href="org_casalib_time_FrameDelay.html"><span class='packagePath'>org.casalib.time.</span>FrameDelay</a>
+</li>
+							<li id='menu_org_casalib_time_FrameTime' class=''>				<a href="org_casalib_time_FrameTime.html"><span class='packagePath'>org.casalib.time.</span>FrameTime</a>
+</li>
+							<li id='menu_org_casalib_time_FrameTimeStopwatch' class=''>				<a href="org_casalib_time_FrameTimeStopwatch.html"><span class='packagePath'>org.casalib.time.</span>FrameTimeStopwatch</a>
+</li>
+							<li id='menu_org_casalib_time_Inactivity' class=''>				<a href="org_casalib_time_Inactivity.html"><span class='packagePath'>org.casalib.time.</span>Inactivity</a>
+</li>
+							<li id='menu_org_casalib_time_Interval' class=''>				<a href="org_casalib_time_Interval.html"><span class='packagePath'>org.casalib.time.</span>Interval</a>
+</li>
+							<li id='menu_org_casalib_time_Sequence' class=''>				<a href="org_casalib_time_Sequence.html"><span class='packagePath'>org.casalib.time.</span>Sequence</a>
+</li>
+							<li id='menu_org_casalib_time_Stopwatch' class=''>				<a href="org_casalib_time_Stopwatch.html"><span class='packagePath'>org.casalib.time.</span>Stopwatch</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_transitions' class='package'>
+																	<a href="package_org_casalib_transitions.html">org.casalib.transitions</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_transitions_PropertyTween' class=''>				<a href="org_casalib_transitions_PropertyTween.html"><span class='packagePath'>org.casalib.transitions.</span>PropertyTween</a>
+</li>
+							<li id='menu_org_casalib_transitions_Tween' class=''>				<a href="org_casalib_transitions_Tween.html"><span class='packagePath'>org.casalib.transitions.</span>Tween</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_ui' class='package'>
+																	<a href="package_org_casalib_ui.html">org.casalib.ui</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_ui_Key' class=''>				<a href="org_casalib_ui_Key.html"><span class='packagePath'>org.casalib.ui.</span>Key</a>
+</li>
+							<li id='menu_org_casalib_ui_KeyCombo' class=''>				<a href="org_casalib_ui_KeyCombo.html"><span class='packagePath'>org.casalib.ui.</span>KeyCombo</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_util' class='package'>
+																	<a href="package_org_casalib_util.html">org.casalib.util</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_util_AlignUtil' class=''>				<a href="org_casalib_util_AlignUtil.html"><span class='packagePath'>org.casalib.util.</span>AlignUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ArrayUtil' class=''>				<a href="org_casalib_util_ArrayUtil.html"><span class='packagePath'>org.casalib.util.</span>ArrayUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ClassUtil' class=''>				<a href="org_casalib_util_ClassUtil.html"><span class='packagePath'>org.casalib.util.</span>ClassUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ColorUtil' class=''>				<a href="org_casalib_util_ColorUtil.html"><span class='packagePath'>org.casalib.util.</span>ColorUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ConversionUtil' class=''>				<a href="org_casalib_util_ConversionUtil.html"><span class='packagePath'>org.casalib.util.</span>ConversionUtil</a>
+</li>
+							<li id='menu_org_casalib_util_DateUtil' class=''>				<a href="org_casalib_util_DateUtil.html"><span class='packagePath'>org.casalib.util.</span>DateUtil</a>
+</li>
+							<li id='menu_org_casalib_util_DisplayObjectUtil' class=''>				<a href="org_casalib_util_DisplayObjectUtil.html"><span class='packagePath'>org.casalib.util.</span>DisplayObjectUtil</a>
+</li>
+							<li id='menu_org_casalib_util_DrawUtil' class=''>				<a href="org_casalib_util_DrawUtil.html"><span class='packagePath'>org.casalib.util.</span>DrawUtil</a>
+</li>
+							<li id='menu_org_casalib_util_FlashVarUtil' class=''>				<a href="org_casalib_util_FlashVarUtil.html"><span class='packagePath'>org.casalib.util.</span>FlashVarUtil</a>
+</li>
+							<li id='menu_org_casalib_util_FrameUtil' class=''>				<a href="org_casalib_util_FrameUtil.html"><span class='packagePath'>org.casalib.util.</span>FrameUtil</a>
+</li>
+							<li id='menu_org_casalib_util_GeomUtil' class=''>				<a href="org_casalib_util_GeomUtil.html"><span class='packagePath'>org.casalib.util.</span>GeomUtil</a>
+</li>
+							<li id='menu_org_casalib_util_LibraryManager' class=''>				<a href="org_casalib_util_LibraryManager.html"><span class='packagePath'>org.casalib.util.</span>LibraryManager</a>
+</li>
+							<li id='menu_org_casalib_util_LoadItemUtil' class=''>				<a href="org_casalib_util_LoadItemUtil.html"><span class='packagePath'>org.casalib.util.</span>LoadItemUtil</a>
+</li>
+							<li id='menu_org_casalib_util_LoadUtil' class=''>				<a href="org_casalib_util_LoadUtil.html"><span class='packagePath'>org.casalib.util.</span>LoadUtil</a>
+</li>
+							<li id='menu_org_casalib_util_LocationUtil' class=''>				<a href="org_casalib_util_LocationUtil.html"><span class='packagePath'>org.casalib.util.</span>LocationUtil</a>
+</li>
+							<li id='menu_org_casalib_util_NavigateUtil' class=''>				<a href="org_casalib_util_NavigateUtil.html"><span class='packagePath'>org.casalib.util.</span>NavigateUtil</a>
+</li>
+							<li id='menu_org_casalib_util_NumberUtil' class=''>				<a href="org_casalib_util_NumberUtil.html"><span class='packagePath'>org.casalib.util.</span>NumberUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ObjectUtil' class=''>				<a href="org_casalib_util_ObjectUtil.html"><span class='packagePath'>org.casalib.util.</span>ObjectUtil</a>
+</li>
+							<li id='menu_org_casalib_util_PropertySetter' class=''>				<a href="org_casalib_util_PropertySetter.html"><span class='packagePath'>org.casalib.util.</span>PropertySetter</a>
+</li>
+							<li id='menu_org_casalib_util_QueryStringUtil' class=''>				<a href="org_casalib_util_QueryStringUtil.html"><span class='packagePath'>org.casalib.util.</span>QueryStringUtil</a>
+</li>
+							<li id='menu_org_casalib_util_RatioUtil' class=''>				<a href="org_casalib_util_RatioUtil.html"><span class='packagePath'>org.casalib.util.</span>RatioUtil</a>
+</li>
+							<li id='menu_org_casalib_util_SingletonUtil' class=''>				<a href="org_casalib_util_SingletonUtil.html"><span class='packagePath'>org.casalib.util.</span>SingletonUtil</a>
+</li>
+							<li id='menu_org_casalib_util_StageReference' class=''>				<a href="org_casalib_util_StageReference.html"><span class='packagePath'>org.casalib.util.</span>StageReference</a>
+</li>
+							<li id='menu_org_casalib_util_StringUtil' class=''>				<a href="org_casalib_util_StringUtil.html"><span class='packagePath'>org.casalib.util.</span>StringUtil</a>
+</li>
+							<li id='menu_org_casalib_util_TextFieldUtil' class=''>				<a href="org_casalib_util_TextFieldUtil.html"><span class='packagePath'>org.casalib.util.</span>TextFieldUtil</a>
+</li>
+							<li id='menu_org_casalib_util_UrlVariablesUtil' class=''>				<a href="org_casalib_util_UrlVariablesUtil.html"><span class='packagePath'>org.casalib.util.</span>UrlVariablesUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ValidationUtil' class=''>				<a href="org_casalib_util_ValidationUtil.html"><span class='packagePath'>org.casalib.util.</span>ValidationUtil</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+				</li>
+</ul>
+
+			</div>					<div class="globalNav">
+							<ul>
+									<li>
+						<li id='menu_all-packages' class=''>				<a href="all-packages.html">Package tree</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-classes' class=''>				<a href="all-classes.html">Classes</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-methods' class=''>				<a href="all-methods.html">Methods</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-constants' class=''>				<a href="all-constants.html">Constants</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-properties' class=''>				<a href="all-properties.html">Properties</a>
+</li>					</li>
+									<li>
+						<li class=''></li>					</li>
+							</ul>	</div>
+		</div>
+	</div>
+
+					</div>
+					<div class='clear'>&nbsp;</div> 
+				</div>
+			</div>
+			<div id='header'>
+				<div id='headerContentWrapper'>
+					<div id='headerContent'>
+						<ul id='headerButtons'>
+															<li id='toggleTocButton'><a href="#"><span class='disclosure'>&#9660;</span><span class='closure'>&#9658;</span>Navigation</a></li>													</ul>
+					</div>
+				</div>
+			</div>
+			<div id="footer">
+	<div id="footerContent">
+		<ul>
+						<li class="copyright">
+				&copy; 2011 Aaron Clinger and the CASA Lib Team
+			</li>		</ul>
+	</div>
+</div>
+		</div>
+     </body>
+</html>

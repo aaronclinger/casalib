@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>StatedMovieClip</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_movieclip_StatedMovieClip"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Instanceproperties" accesskey="l">Instance <span class="accessKey">p</span>roperties</a></li><li><a href="#Classmethods" accesskey="a">Cl<span class="accessKey">a</span>ss methods</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li></ul><br class="clear" /></div><h1>StatedMovieClip</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_movieclip_CoreMovieClip.html">CoreMovieClip</a> &lt; MovieClip</td></tr><tr><th align="left">Known subclasses:</th><td><ul><li><a class="className" href="org_casalib_movieclip_LockingMovieClip.html">LockingMovieClip</a></li></ul></td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">05/13/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Toby Boudreaux, David Nelson, Aaron Clinger</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.movieclip.StatedMovieClip</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.movieclip.CoreMovieClip;
+import org.casalib.state.MovieClipEventHandlerState;
+import org.casalib.util.MovieClipUtil;
+
+/**
+    Provides state-switching mechanism for MovieClip event handlers and properties.
+
+    @author Toby Boudreaux
+    @author David Nelson
+    @author Aaron Clinger
+    @version 05/13/07
+    @example
+        &lt;code>
+            import org.casalib.util.MovieClipUtil;
+            
+            MovieClipUtil.attachMovieRegisterClass(org.casalib.movieclip.StatedMovieClip, this, "linkageMovieClip", "stated_mc");
+            
+            this.stated_mc.onRelease = function():Void {
+                trace("onRelease on " + this._name + " was called. Example one.");
+            }
+            
+            this.stated_mc.createState("exampleButtonOne");
+            
+            this.stated_mc.onRelease = function():Void {
+                trace("onRelease on " + this._name + " was called. Example two.");
+            }
+            
+            this.stated_mc.createState("exampleButtonTwo");
+        &lt;/code>
+    
+        Now you can switch between the states, example:
+        &lt;code>this.stated_mc.switchState("exampleButtonOne");&lt;/code> or &lt;code>this.stated_mc.switchState("exampleButtonTwo");&lt;/code>
+    
+        To return to the default creation state call:
+        &lt;code>this.stated_mc.switchState("default");&lt;/code>
+        
+        To remove all event handlers call:
+        &lt;code>this.stated_mc.switchState("blank");&lt;/code>
+    @usageNote Class creates &lt;code>"default"&lt;/code> and &lt;code>"blank"&lt;/code> states during MovieClip instance creation.
+*/
+
+class org.casalib.movieclip.StatedMovieClip extends CoreMovieClip {
+    private var $states:Object;
+    private var $currentState:String;
+    
+    
+    /**
+        Creates an empty instance of the StatedMovieClip class. Use this instead of a traditional &lt;code>new&lt;/code> constructor statement due to limitations of ActionScript 2.0.
+        
+        @param target: Location where the MovieClip should be attached.
+        @param instanceName: A unique instance name for the MovieClip.
+        @param depth: &lt;strong>[optional]&lt;/strong> The depth level where the MovieClip is placed; defaults to next highest open depth.
+        @param initObject: &lt;strong>[optional]&lt;/strong> An object that contains properties with which to populate the newly attached MovieClip.
+        @return Returns a reference to the created instance.
+        @example &lt;code>var myStated_mc:StatedMovieClip = StatedMovieClip.create(this, "example_mc");&lt;/code>
+        @usageNote If you want to extend a non empty MovieClip you can either define the ActionScript 2.0 class in the Flash IDE library or use {@link MovieClipUtil#attachMovieRegisterClass}.
+        @since Flash Player 7
+    */
+    public static function create(target:MovieClip, instanceName:String, depth:Number, initObject:Object):StatedMovieClip {
+        return StatedMovieClip(MovieClipUtil.createMovieRegisterClass('org.casalib.movieclip.StatedMovieClip', target, instanceName, depth, initObject));
+    }
+    
+    
+    private function StatedMovieClip() {
+        super();
+        
+        this.$states = new Object();
+        this.createState('blank', new Array());
+        this.createState('default');
+        
+        this.$setClassDescription('org.casalib.movieclip.StatedMovieClip');
+    }
+    
+    /**
+        Returns the current state of MovieClip. If no state has been created {@link #getState} will return &lt;code>"default"&lt;/code>.
+    
+        @return The name of current MovieClip state.
+        @usageNote {@link #getState} will always return last created or switched to state.
+    */
+    public function getState():String {
+        return this.$currentState;
+    }
+    
+    /**
+        Switches MovieClip's current state to a precreated state.
+    
+        @param stateName: Name of precreated MovieClip state.
+        @param inclusionList: &lt;strong>[optional]&lt;/strong> List of event handlers and properties to include/switch state of. Defaults to all MovieClip event handlers.
+        @return Returns &lt;code>true&lt;/code> if the precreated state was found and the MovieClip's state was successfully changed; otherwise &lt;code>false&lt;/code>.
+        @example &lt;code>this.stated_mc.switchState("uniqueStateName", new Array("onEnterFrame", "onRelease"));&lt;/code>
+        @see {@link #createState}
+    */
+    public function switchState(stateName:String, inclusionList:Array):Boolean {
+        if (stateName == undefined || this.$states[stateName] == undefined)
+            return false;
+        
+        this.$currentState = stateName;
+        
+        var keyList:Array = (inclusionList == undefined) ? this.$states[stateName].getValueKeys() : inclusionList;
+        var key:String;
+        
+        for (var i:String in keyList) {
+            key = keyList[i];
+            this[key] = this.$states[stateName].getValueForKey(key);
+        }
+        
+        return true;
+    }
+    
+    /**
+        Creates a new state and records event handlers.
+        
+        @param stateName: Unique name for MovieClip state.
+        @param inclusionList: &lt;strong>[optional]&lt;/strong> List of event handlers and properties to include. Defaults to all MovieClip event handlers.
+        @usageNote If parameter &lt;code>stateName&lt;/code> is identical to previously created state, {@link #createState} will overwrite it.
+        @example &lt;code>this.stated_mc.createState("uniqueStateName", new Array("onRollOver", "onRollOut", "onRelease"));&lt;/code>
+        @see {@link MovieClipEventHandlerState}
+    */
+    public function createState(stateName:String, inclusionList:Array):Void {
+        if (stateName == undefined)
+            return;
+        
+        this.$currentState = stateName;
+        this.$states[stateName] = new MovieClipEventHandlerState();
+        
+        var keyList:Array = (inclusionList == undefined) ? this.$states[stateName].getValueKeys() : inclusionList;
+        var key:String;
+        
+        for (var i:String in keyList) {
+            key = keyList[i];
+            this.$states[stateName].setValueForKey(key, this[key]);
+        }
+    }
+    
+    /**
+        Registers single value to a MovieClip property for a given state.
+    
+        @param stateName: Name of precreated MovieClip state, or new state.
+        @param keyName: Name of any MovieClip property or event handler.
+        @param value: Value of MovieClip property or event handler specified by parameter &lt;code>keyName&lt;/code>.
+        @example 
+            &lt;code>
+                var anonymousFunction:Function = function():Void {
+                    trace("onRollOver");
+                } 
+            
+                this.stated_mc.setKeyValueForState("stateName", "onRollOver", anonymousFunction);
+            &lt;/code>
+            
+            You can define any MovieClip properties, not just event handlers. Such as &lt;code>_alpha&lt;/code>, &lt;code>_x&lt;/code>, &lt;code>_yscale&lt;/code> etc...:
+            &lt;code>this.stated_mc.setKeyValueForState("stateName", "_alpha", 25);&lt;/code>
+    */
+    public function setKeyValueForState(stateName:String, keyName:String, value:Object):Void {
+        if (this.$states[stateName] == undefined)
+            this.$states[stateName] = new MovieClipEventHandlerState();
+        
+        this.$states[stateName].setValueForKey(keyName, value);
+    }
+    
+    /**
+        Removes/unregisters value from MovieClip property for a given state.
+        
+        @param stateName: Name of precreated MovieClip state.
+        @param keyName: Name of any MovieClip property or event handler.
+        @return Returns &lt;code>true&lt;/code> if the key was successfully found and removed from event handler state; otherwise &lt;code>false&lt;/code>.
+    */
+    public function removeKeyValueForState(stateName:String, keyName:String):Boolean {
+        if (this.$states[stateName] == undefined)
+            return false;
+        
+        return this.$states[stateName].removeValueForKey(keyName);
+    }
+    
+    /**
+        Deletes precreated MovieClip state.
+        
+        @param stateName: Name of precreated MovieClip state.
+        @return Returns &lt;code>true&lt;/code> if the state was successfully found and removed; otherwise &lt;code>false&lt;/code>.
+    */
+    public function removeState(stateName:String):Boolean {
+        if (stateName == undefined || this.$states[stateName] == undefined)
+            return false;
+        
+        delete this.$states[stateName];
+        
+        return true;
+    }
+    
+    public function destroy():Void {
+        delete this.$states;
+        delete this.$currentState;
+        
+        super.destroy();
+    }
+}
+
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Provides state-switching mechanism for MovieClip event handlers and properties.</span><div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">import</span> org.casalib.util.MovieClipUtil;
+
+MovieClipUtil.attachMovieRegisterClass(org.casalib.movieclip.StatedMovieClip, <span class="codeIdentifier">this</span>, <span class="codeString">"linkageMovieClip"</span>, <span class="codeString">"stated_mc"</span>);
+
+<span class="codeIdentifier">this</span>.stated_mc.onRelease = <span class="codeKeyword">function</span>():<span class="codeIdentifier">Void</span> {
+    <span class="codeIdentifier">trace</span>(<span class="codeString">"onRelease on "</span> + <span class="codeIdentifier">this</span>._name + <span class="codeString">" was called. Example one."</span>);
+}
+
+<span class="codeIdentifier">this</span>.stated_mc.createState(<span class="codeString">"exampleButtonOne"</span>);
+
+<span class="codeIdentifier">this</span>.stated_mc.onRelease = <span class="codeKeyword">function</span>():<span class="codeIdentifier">Void</span> {
+    <span class="codeIdentifier">trace</span>(<span class="codeString">"onRelease on "</span> + <span class="codeIdentifier">this</span>._name + <span class="codeString">" was called. Example two."</span>);
+}
+
+<span class="codeIdentifier">this</span>.stated_mc.createState(<span class="codeString">"exampleButtonTwo"</span>);</pre>	<br />		Now you can switch between the states, example:<br />		<code><span class="codeIdentifier">this</span>.stated_mc.switchState(<span class="codeString">"exampleButtonOne"</span>);</code> or <code><span class="codeIdentifier">this</span>.stated_mc.switchState(<span class="codeString">"exampleButtonTwo"</span>);</code>	<br />		To return to the default creation state call:<br />		<code><span class="codeIdentifier">this</span>.stated_mc.switchState(<span class="codeString">"default"</span>);</code>		<br />		To remove all event handlers call:<br />		<code><span class="codeIdentifier">this</span>.stated_mc.switchState(<span class="codeString">"blank"</span>);</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> Class creates <code><span class="codeString">"default"</span></code> and <code><span class="codeString">"blank"</span></code> states during MovieClip instance creation. </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class methods</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#create">create</a><span class="typeInfo"> (target:MovieClip, instanceName:String, depth:Number, initObject:Object) : <a class="className" href="org_casalib_movieclip_StatedMovieClip.html">StatedMovieClip</a></span><ul class="summary"><li>Creates an empty instance of the StatedMovieClip class.</li></ul></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Class methods inherited from <span class="superclass"><a class="className" href="org_casalib_movieclip_CoreMovieClip.html">CoreMovieClip</a></span></span><div class="item inheritedList"><a href="org_casalib_movieclip_CoreMovieClip.html#create">create</a></div></div></div></div></div><div class="memberSummaryPart"><span class="title">Instance methods</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#getState">getState</a><span class="typeInfo">  : String</span><ul class="summary"><li>Returns the current state of MovieClip.</li></ul></li><li class="sortli listnum2"><a href="#switchState">switchState</a><span class="typeInfo"> (stateName:String, inclusionList:Array) : Boolean</span><ul class="summary"><li>Switches MovieClip's current state to a precreated state.</li></ul></li><li class="sortli listnum3"><a href="#createState">createState</a><span class="typeInfo"> (stateName:String, inclusionList:Array) : Void</span><ul class="summary"><li>Creates a new state and records event handlers.</li></ul></li><li class="sortli listnum4"><a href="#setKeyValueForState">setKeyValueForState</a><span class="typeInfo"> (stateName:String, keyName:String, value:Object) : Void</span><ul class="summary"><li>Registers single value to a MovieClip property for a given state.</li></ul></li><li class="sortli listnum5"><a href="#removeKeyValueForState">removeKeyValueForState</a><span class="typeInfo"> (stateName:String, keyName:String) : Boolean</span><ul class="summary"><li>Removes/unregisters value from MovieClip property for a given state.</li></ul></li><li class="sortli listnum6"><a href="#removeState">removeState</a><span class="typeInfo"> (stateName:String) : Boolean</span><ul class="summary"><li>Deletes precreated MovieClip state.</li></ul></li><li class="sortli listnum7"><a href="#destroy">destroy</a><span class="typeInfo">  : Void</span></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_movieclip_CoreMovieClip.html">CoreMovieClip</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_movieclip_CoreMovieClip.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_movieclip_CoreMovieClip.html#destroy">destroy</a>  <a href="org_casalib_movieclip_CoreMovieClip.html#removeMovieClip">removeMovieClip</a>  <a href="org_casalib_movieclip_CoreMovieClip.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Classmethods">Class methods</h2><div class="member" id="create"><h3>create</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>create</b> (
+
+
+
+</div><div class="code">target:MovieClip,
+instanceName:String,
+depth:Number,
+initObject:Object) : <a class="className" href="org_casalib_movieclip_StatedMovieClip.html">StatedMovieClip</a></div><br class="clear" /></div></div><div class="description"> Creates an empty instance of the StatedMovieClip class. Use this instead of a traditional <code><span class="codeKeyword">new</span></code> constructor statement due to limitations of ActionScript 2.0. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">target      <span class="itemSeparator">:</span></div><div>Location where the MovieClip should be attached.</div></div><div class="item"><div class="floatbox code colorizedCode">instanceName<span class="itemSeparator">:</span></div><div>A unique instance name for the MovieClip.</div></div><div class="item"><div class="floatbox code colorizedCode">depth       <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> The depth level where the MovieClip is placed; defaults to next highest open depth.</div></div><div class="item"><div class="floatbox code colorizedCode">initObject  <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> An object that contains properties with which to populate the newly attached MovieClip.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns a reference to the created instance. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <code><span class="codeKeyword">var</span> myStated_mc:StatedMovieClip = StatedMovieClip.create(<span class="codeIdentifier">this</span>, <span class="codeString">"example_mc"</span>);</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> If you want to extend a non empty MovieClip you can either define the ActionScript 2.0 class in the Flash IDE library or use <a href="org_casalib_util_MovieClipUtil.html#attachMovieRegisterClass">org.casalib.util.MovieClipUtil.attachMovieRegisterClass</a>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Since:</span><div class="item"><ul><li> Flash Player 7 </li></ul></div></div></div></div></div></div><div class="memberSection"><h2 id="Instancemethods">Instance methods</h2><div class="member" id="createState"><h3>createState</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>createState</b> (
+
+</div><div class="code">stateName:String,
+inclusionList:Array) : Void</div><br class="clear" /></div></div><div class="description"> Creates a new state and records event handlers. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">stateName    <span class="itemSeparator">:</span></div><div>Unique name for MovieClip state.</div></div><div class="item"><div class="floatbox code colorizedCode">inclusionList<span class="itemSeparator">:</span></div><div><strong>[optional]</strong> List of event handlers and properties to include. Defaults to all MovieClip event handlers.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> If parameter <code>stateName</code> is identical to previously created state, <a href="org_casalib_movieclip_StatedMovieClip.html#createState">createState</a> will overwrite it. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <code><span class="codeIdentifier">this</span>.stated_mc.createState(<span class="codeString">"uniqueStateName"</span>, <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeString">"onRollOver"</span>, <span class="codeString">"onRollOut"</span>, <span class="codeString">"onRelease"</span>));</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">See also:</span><div class="item"><ul><li> <a class="className" href="org_casalib_state_MovieClipEventHandlerState.html">org.casalib.state.MovieClipEventHandlerState</a> </li></ul></div></div></div></div></div><div class="member" id="destroy"><h3>destroy</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>destroy</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Overrides:</span><div class="item"><ul><li> <a href="org_casalib_movieclip_CoreMovieClip.html#destroy">CoreMovieClip.destroy</a> </li></ul></div></div></div></div></div><div class="member" id="getState"><h3>getState</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>getState</b> (
+</div><div class="code">) : String</div><br class="clear" /></div></div><div class="description"> Returns the current state of MovieClip. If no state has been created <a href="org_casalib_movieclip_StatedMovieClip.html#getState">getState</a> will return <code><span class="codeString">"default"</span></code>. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> The name of current MovieClip state. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> <a href="org_casalib_movieclip_StatedMovieClip.html#getState">getState</a> will always return last created or switched to state. </li></ul></div></div></div></div></div><div class="member" id="removeKeyValueForState"><h3>removeKeyValueForState</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>removeKeyValueForState</b> (
+
+</div><div class="code">stateName:String,
+keyName:String) : Boolean</div><br class="clear" /></div></div><div class="description"> Removes/unregisters value from MovieClip property for a given state. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">stateName<span class="itemSeparator">:</span></div><div>Name of precreated MovieClip state.</div></div><div class="item"><div class="floatbox code colorizedCode">keyName  <span class="itemSeparator">:</span></div><div>Name of any MovieClip property or event handler.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if the key was successfully found and removed from event handler state; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div><div class="member" id="removeState"><h3>removeState</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>removeState</b> (
+</div><div class="code">stateName:String) : Boolean</div><br class="clear" /></div></div><div class="description"> Deletes precreated MovieClip state. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">stateName<span class="itemSeparator">:</span></div><div>Name of precreated MovieClip state.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if the state was successfully found and removed; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div><div class="member" id="setKeyValueForState"><h3>setKeyValueForState</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>setKeyValueForState</b> (
+
+
+</div><div class="code">stateName:String,
+keyName:String,
+value:Object) : Void</div><br class="clear" /></div></div><div class="description"> Registers single value to a MovieClip property for a given state. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">stateName<span class="itemSeparator">:</span></div><div>Name of precreated MovieClip state, or new state.</div></div><div class="item"><div class="floatbox code colorizedCode">keyName  <span class="itemSeparator">:</span></div><div>Name of any MovieClip property or event handler.</div></div><div class="item"><div class="floatbox code colorizedCode">value    <span class="itemSeparator">:</span></div><div>Value of MovieClip property or event handler specified by parameter <code>keyName</code>.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> anonymousFunction:<span class="codeIdentifier">Function</span> = <span class="codeKeyword">function</span>():<span class="codeIdentifier">Void</span> {
+    <span class="codeIdentifier">trace</span>(<span class="codeString">"onRollOver"</span>);
+} 
+
+<span class="codeIdentifier">this</span>.stated_mc.setKeyValueForState(<span class="codeString">"stateName"</span>, <span class="codeString">"onRollOver"</span>, anonymousFunction);</pre>			<br />			You can define any MovieClip properties, not just event handlers. Such as <code><span class="codeProperty">_alpha</span></code>, <code><span class="codeProperty">_x</span></code>, <code><span class="codeProperty">_yscale</span></code> etc...:<br />			<code><span class="codeIdentifier">this</span>.stated_mc.setKeyValueForState(<span class="codeString">"stateName"</span>, <span class="codeString">"_alpha"</span>, <span class="codeNumber">25</span>);</code> </li></ul></div></div></div></div></div><div class="member" id="switchState"><h3>switchState</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>switchState</b> (
+
+</div><div class="code">stateName:String,
+inclusionList:Array) : Boolean</div><br class="clear" /></div></div><div class="description"> Switches MovieClip's current state to a precreated state. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">stateName    <span class="itemSeparator">:</span></div><div>Name of precreated MovieClip state.</div></div><div class="item"><div class="floatbox code colorizedCode">inclusionList<span class="itemSeparator">:</span></div><div><strong>[optional]</strong> List of event handlers and properties to include/switch state of. Defaults to all MovieClip event handlers.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if the precreated state was found and the MovieClip's state was successfully changed; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <code><span class="codeIdentifier">this</span>.stated_mc.switchState(<span class="codeString">"uniqueStateName"</span>, <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeString">"onEnterFrame"</span>, <span class="codeString">"onRelease"</span>));</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">See also:</span><div class="item"><ul><li> <a href="org_casalib_movieclip_StatedMovieClip.html#createState">createState</a> </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

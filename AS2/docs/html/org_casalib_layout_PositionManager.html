@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>PositionManager</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_layout_PositionManager"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Instanceproperties" accesskey="l">Instance <span class="accessKey">p</span>roperties</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li></ul><br class="clear" /></div><h1>PositionManager</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">04/06/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.layout.PositionManager</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.core.CoreObject;
+import org.casalib.stage.EventStage;
+import org.casalib.util.StyleSheetUtil;
+import org.casalib.util.TypeUtil;
+import TextField.StyleSheet;
+
+/**
+    Gives the ablility to position and size &lt;code>MovieClip&lt;/code>s, &lt;code>TextField&lt;/code>s and &lt;code>Button&lt;/code>s with either an external CSS file or an internal &lt;code>StyleSheet&lt;/code> object.
+
+    @author Aaron Clinger
+    @version 04/06/07
+    @since Flash Player 7
+    @example
+        &lt;code>
+            var positionManager:PositionManager = new PositionManager();
+            
+            this.positionManager.setStyleSheet(this.styleSheet);
+            
+            this.positionManager.addItem(this.text_txt);
+            this.positionManager.addItem(this.button_btn);
+            this.positionManager.addItem(this.movie_mc, {left:"0", height:"100%"});
+            this.positionManager.positionItems();
+        &lt;/code>
+    @see "For information on which CSS properties are supported by {@link PositionManager} see {@link StyleSheetUtil#positionItemWithStyleObject}."
+*/
+//@TODO Add DistributionCollection support.
+class org.casalib.layout.PositionManager extends CoreObject {
+    private var $style:StyleSheet;
+    private var $updateItemsMap:Object;
+    
+    
+    /**
+        Creates a new PositionManager instance.
+    */
+    public function PositionManager() {
+        super();
+        
+        this.$updateItemsMap = new Object();
+        
+        this.$setClassDescription('org.casalib.layout.PositionManager');
+    }
+    
+    /**
+        Defines a global stylesheet. 
+        
+        Class maps style IDs to instance names of added items. Style &lt;code>#square_mc { width: 200px; height: 200px; }&lt;/code> would apply to an item with an instance name of &lt;code>"square_mc&lt;/code>.
+        
+        @param style: A StyleSheet to apply to added items.
+        @see "For information on which CSS properties are supported by {@link PositionManager} see {@link StyleSheetUtil#positionItemWithStyleObject}."
+    */
+    public function setStyleSheet(style:StyleSheet):Void {
+        this.$style = style;
+        this.positionItems();
+    }
+    
+    /**
+        Adds item to be positioned and sized by styles.
+        
+        @param item: A &lt;code>MovieClip&lt;/code>, &lt;code>TextField&lt;/code> or &lt;code>Button&lt;/code>.
+        @param style: &lt;strong>[optional]&lt;/strong> An object with style properties defined. Any properties defined here overwrite the values of any identical properties that may have been defined by {@link #setStyleSheet}.
+        @return Returns &lt;code>true&lt;/code> if item was of type &lt;code>MovieClip&lt;/code>, &lt;code>TextField&lt;/code> or &lt;code>Button&lt;/code> and was successfully added; otherwise &lt;code>false&lt;/code>.
+        @example &lt;code>this.positionManager.addItem(this.movie_mc, {left:"0", height:"100%"});&lt;/code> or &lt;code>this.positionManager.addItem(this.movie_mc, this.styleSheet.getStyle("styleName"));&lt;/code>
+        @see "For information on which CSS properties are supported by {@link PositionManager} see {@link StyleSheetUtil#positionItemWithStyleObject}."
+    */
+    public function addItem(item:Object, style:Object):Boolean {
+        switch (TypeUtil.getTypeOf(item)) {
+            case 'movieclip' :
+            case 'textfield' :
+            case 'button' :
+                var positionItem:Object = new Object();
+                positionItem.item  = item;
+                positionItem.name  = item._name;
+                if (style != undefined) positionItem.style = style;
+                
+                this.$updateItemsMap[item] = positionItem;
+                break;
+            default :
+                return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+        Removes item previously added with {@link #addItem} from receiving style and position updates from PositionManager. Leaves item at its current size and position.
+        
+        @param item: A &lt;code>MovieClip&lt;/code>, &lt;code>TextField&lt;/code> or &lt;code>Button&lt;/code> you wish to remove.
+        @return Returns &lt;code>true&lt;/code> if item was successfully found and removed; otherwise &lt;code>false&lt;/code>.
+    */
+    public function removeItem(item:Object):Boolean {
+        if (this.$updateItemsMap[item] != undefined) {
+            delete this.$updateItemsMap[item];
+            
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
+        Positions all items added with {@link #addItem} with the defined styles.
+        
+        @usageNote &lt;code>positionItems&lt;/code> is automatically called after {@link #setStyleSheet}.
+    */
+    public function positionItems():Void {
+        var style:Object;
+        var positionItem:Object;
+        var isGlobalStyle:Boolean = this.$style != undefined;
+        
+        for (var i:String in this.$updateItemsMap) {
+            positionItem = this.$updateItemsMap[i];
+            
+            if (isGlobalStyle) {
+                style = this.$style.getStyle('#' + positionItem.name);
+                
+                if (style != undefined)
+                    StyleSheetUtil.positionItemWithStyleObject(positionItem.item, style);
+            }
+            
+            if (positionItem.style != undefined)
+                StyleSheetUtil.positionItemWithStyleObject(positionItem.item, positionItem.style);
+        }
+    }
+}
+
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Gives the ablility to position and size <code><span class="codeIdentifier">MovieClip</span></code>s, <code><span class="codeIdentifier">TextField</span></code>s and <code><span class="codeIdentifier">Button</span></code>s with either an external CSS file or an internal <code><span class="codeIdentifier">StyleSheet</span></code> object.</span><div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Since:</span><div class="item"><ul><li> Flash Player 7 </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> positionManager:PositionManager = <span class="codeKeyword">new</span> PositionManager();
+
+<span class="codeIdentifier">this</span>.positionManager.setStyleSheet(<span class="codeIdentifier">this</span><span class="codeIdentifier">.styleSheet</span>);
+
+<span class="codeIdentifier">this</span>.positionManager.addItem(<span class="codeIdentifier">this</span>.text_txt);
+<span class="codeIdentifier">this</span>.positionManager.addItem(<span class="codeIdentifier">this</span>.button_btn);
+<span class="codeIdentifier">this</span>.positionManager.addItem(<span class="codeIdentifier">this</span>.movie_mc, {left:<span class="codeString">"0"</span>, height:<span class="codeString">"100%"</span>});
+<span class="codeIdentifier">this</span>.positionManager.positionItems();</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">See also:</span><div class="item"><ul><li> "For information on which CSS properties are supported by <a class="className" href="org_casalib_layout_PositionManager.html">PositionManager</a> see <a href="org_casalib_util_StyleSheetUtil.html#positionItemWithStyleObject">org.casalib.util.StyleSheetUtil.positionItemWithStyleObject</a>." </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Constructor</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#PositionManager">PositionManager</a></li></ul></div><div class="memberSummaryPart"><span class="title">Instance methods</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#setStyleSheet">setStyleSheet</a><span class="typeInfo"> (style:StyleSheet) : Void</span><ul class="summary"><li>Defines a global stylesheet.</li></ul></li><li class="sortli listnum2"><a href="#addItem">addItem</a><span class="typeInfo"> (item:Object, style:Object) : Boolean</span><ul class="summary"><li>Adds item to be positioned and sized by styles.</li></ul></li><li class="sortli listnum3"><a href="#removeItem">removeItem</a><span class="typeInfo"> (item:Object) : Boolean</span><ul class="summary"><li>Removes item previously added with addItem from receiving style and position updates from PositionManager.</li></ul></li><li class="sortli listnum4"><a href="#positionItems">positionItems</a><span class="typeInfo">  : Void</span><ul class="summary"><li>Positions all items added with addItem with the defined styles.</li></ul></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_core_CoreObject.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_core_CoreObject.html#destroy">destroy</a>  <a href="org_casalib_core_CoreObject.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Constructor">Constructor</h2><div class="member" id="PositionManager"><h3>PositionManager</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>PositionManager</b> (
+</div><div class="code">)</div><br class="clear" /></div></div><div class="description"> Creates a new PositionManager instance. </div></div></div><div class="memberSection"><h2 id="Instancemethods">Instance methods</h2><div class="member" id="addItem"><h3>addItem</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>addItem</b> (
+
+</div><div class="code">item:Object,
+style:Object) : Boolean</div><br class="clear" /></div></div><div class="description"> Adds item to be positioned and sized by styles. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">item <span class="itemSeparator">:</span></div><div>A <code><span class="codeIdentifier">MovieClip</span></code>, <code><span class="codeIdentifier">TextField</span></code> or <code><span class="codeIdentifier">Button</span></code>.</div></div><div class="item"><div class="floatbox code colorizedCode">style<span class="itemSeparator">:</span></div><div><strong>[optional]</strong> An object with style properties defined. Any properties defined here overwrite the values of any identical properties that may have been defined by <a href="org_casalib_layout_PositionManager.html#setStyleSheet">setStyleSheet</a>.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if item was of type <code><span class="codeIdentifier">MovieClip</span></code>, <code><span class="codeIdentifier">TextField</span></code> or <code><span class="codeIdentifier">Button</span></code> and was successfully added; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <code><span class="codeIdentifier">this</span>.positionManager.addItem(<span class="codeIdentifier">this</span>.movie_mc, {left:<span class="codeString">"0"</span>, height:<span class="codeString">"100%"</span>});</code> or <code><span class="codeIdentifier">this</span>.positionManager.addItem(<span class="codeIdentifier">this</span>.movie_mc, <span class="codeIdentifier">this</span><span class="codeIdentifier">.styleSheet</span><span class="codeIdentifier">.getStyle</span>(<span class="codeString">"styleName"</span>));</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">See also:</span><div class="item"><ul><li> "For information on which CSS properties are supported by <a class="className" href="org_casalib_layout_PositionManager.html">PositionManager</a> see <a href="org_casalib_util_StyleSheetUtil.html#positionItemWithStyleObject">org.casalib.util.StyleSheetUtil.positionItemWithStyleObject</a>." </li></ul></div></div></div></div></div><div class="member" id="positionItems"><h3>positionItems</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>positionItems</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> Positions all items added with <a href="org_casalib_layout_PositionManager.html#addItem">addItem</a> with the defined styles. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> <code>positionItems</code> is automatically called after <a href="org_casalib_layout_PositionManager.html#setStyleSheet">setStyleSheet</a>. </li></ul></div></div></div></div></div><div class="member" id="removeItem"><h3>removeItem</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>removeItem</b> (
+</div><div class="code">item:Object) : Boolean</div><br class="clear" /></div></div><div class="description"> Removes item previously added with <a href="org_casalib_layout_PositionManager.html#addItem">addItem</a> from receiving style and position updates from PositionManager. Leaves item at its current size and position. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">item<span class="itemSeparator">:</span></div><div>A <code><span class="codeIdentifier">MovieClip</span></code>, <code><span class="codeIdentifier">TextField</span></code> or <code><span class="codeIdentifier">Button</span></code> you wish to remove.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if item was successfully found and removed; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div><div class="member" id="setStyleSheet"><h3>setStyleSheet</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>setStyleSheet</b> (
+</div><div class="code">style:StyleSheet) : Void</div><br class="clear" /></div></div><div class="description"> Defines a global stylesheet. <br />		<br />		Class maps style IDs to instance names of added items. Style <code>#square_mc { width: 200px; height: 200px; }</code> would apply to an item with an instance name of <code>"square_mc</code>. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">style<span class="itemSeparator">:</span></div><div>A StyleSheet to apply to added items.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">See also:</span><div class="item"><ul><li> "For information on which CSS properties are supported by <a class="className" href="org_casalib_layout_PositionManager.html">PositionManager</a> see <a href="org_casalib_util_StyleSheetUtil.html#positionItemWithStyleObject">org.casalib.util.StyleSheetUtil.positionItemWithStyleObject</a>." </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

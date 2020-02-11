@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>LoadUtil</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_util_LoadUtil"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classmethods" accesskey="a">Cl<span class="accessKey">a</span>ss methods</a></li></ul><br class="clear" /></div><h1>LoadUtil</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td>none</td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">02/10/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger, Mike Creighton</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.util.LoadUtil</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.util.ConversionUtil;
+import org.casalib.util.NumberUtil;
+import org.casalib.math.Percent;
+
+/**
+    @author Aaron Clinger
+    @author Mike Creighton
+    @version 02/10/07
+*/
+
+class org.casalib.util.LoadUtil {
+    
+    /**
+        Calculates the percent loaded.
+        
+        @param loadTarget: Any object that has either &lt;code>getBytesLoaded&lt;/code>/&lt;code>getBytesTotal&lt;/code> or &lt;code>bytesLoaded&lt;/code>/&lt;code>bytesTotal&lt;/code> methods.
+        @return Percent loaded.
+    */
+    public static function getPercentLoaded(loadTarget:Object):Percent {
+        if (loadTarget.getBytesLoaded != undefined)
+            return new Percent(loadTarget.getBytesLoaded() / loadTarget.getBytesTotal());
+        else if (loadTarget.bytesLoaded != undefined)
+            return new Percent(loadTarget.bytesLoaded / loadTarget.bytesTotal);
+    }
+    
+    /**
+        Calculates the load speed in bytes per second (Bps).
+        
+        @param bytesLoaded: Number of bytes that have loaded between &lt;code>startTime&lt;/code> and &lt;code>elapsedTime&lt;/code>.
+        @param startTime: Time in milliseconds when the load started. Can be &lt;code>0&lt;/code>.
+        @param elapsedTime: Time in milliseconds since the load started or time when load completed.
+        @return bytes per second.
+        @usageNote This gets BYTES per second, not bits per second.
+    */
+    public static function calculateBps(bytesLoaded:Number, startTime:Number, elapsedTime:Number):Number {
+        var elapsed:Number = (elapsedTime - startTime) / 1000;
+        return bytesLoaded / elapsed;
+    }
+    
+    /**
+        Calculates the load speed in KBps.
+        
+        @param bytesLoaded: Number of bytes that have loaded between &lt;code>startTime&lt;/code> and &lt;code>elapsedTime&lt;/code>.
+        @param startTime: Time in milliseconds when the load started. Can be &lt;code>0&lt;/code>.
+        @param elapsedTime: Time in milliseconds since the load started or time when load completed.
+        @return Kilobytes per second.
+        @usageNote This gets kiloBYTES per second, not kilobits per second.
+    */
+    public static function calculateKBps(bytesLoaded:Number, startTime:Number, elapsedTime:Number):Number {
+        var elapsed:Number   = (elapsedTime - startTime) / 1000;
+        var sizeInKBs:Number = ConversionUtil.bytesToKilobytes(bytesLoaded);
+        
+        return sizeInKBs / elapsed;
+    }
+    
+    /**
+        Calculates the load speed in kbps.
+        
+        @param bytesLoaded: Number of bytes that have loaded between &lt;code>startTime&lt;/code> and &lt;code>elapsedTime&lt;/code>.
+        @param startTime: Time in milliseconds when the load started. Can be &lt;code>0&lt;/code>.
+        @param elapsedTime: Time in milliseconds since the load started or time when load completed.
+        @return Kilobits per second.
+        @usageNote This gets kiloBITS per second, not kilobytes per second.
+    */
+    public static function calculateKbps(bytesLoaded:Number, startTime:Number, elapsedTime:Number):Number {
+        var elapsed:Number   = (elapsedTime - startTime) / 1000;
+        var sizeInKbs:Number = ConversionUtil.bytesToKilobits(bytesLoaded);
+        
+        return sizeInKbs / elapsed;
+    }
+    
+    /**
+        Calculates the time and percentage until movie/animation has buffered.
+        
+        @param bytesLoaded: Number of bytes that have loaded between &lt;code>startTime&lt;/code> and &lt;code>elapsedTime&lt;/code>.
+        @param bytesTotal: Number of bytes total to be loaded.
+        @param startTime: Time in milliseconds when the load started. Can be &lt;code>0&lt;/code>.
+        @param elapsedTime: The current time in milliseconds or time when load completed.
+        @param lengthInSeconds: Length in seconds of the video or animation being loaded. Can also be calculated by dividing &lt;code>_totalframes&lt;/code> by the FPS (frames per second).
+        @return An object with properties &lt;code>seconds&lt;/code> and &lt;code>percent&lt;/code> defined. Property &lt;code>percent&lt;/code> is a {@link Percent} object.
+        @usage
+            &lt;code>
+                var bufferInfo:Object = LoadUtil.calculateBuffer(102400, 1536000, 0, 5000, 30);
+                trace("File will be buffered in " + bufferInfo.seconds + " seconds.");
+                trace("File is " + bufferInfo.percent.getPercentage() + "% buffered.");
+            &lt;/code>
+    */
+    public static function calculateBuffer(bytesLoaded:Number, bytesTotal:Number, startTime:Number, elapsedTime:Number, lengthInSeconds:Number):Object {
+        var transferRate:Number = LoadUtil.calculateBps(bytesLoaded, startTime, elapsedTime);
+        var totalWait:Number    = bytesTotal / transferRate - lengthInSeconds;
+        var secsTillLoad:Number = Math.ceil((bytesTotal - bytesLoaded) / transferRate);
+        
+        var buffer:Object = new Object();
+        buffer.seconds = Math.max(secsTillLoad - lengthInSeconds, 0);
+        buffer.percent = totalWait == Number.POSITIVE_INFINITY ? new Percent(0) : new Percent(NumberUtil.makeBetween(1 - buffer.seconds / totalWait, 0, 1)); 
+        
+        return buffer;
+    }
+    
+    private function LoadUtil() {} // Prevents instance creation
+}
+</textarea></div></div></div><div class="classDescription"></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class methods</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#getPercentLoaded">getPercentLoaded</a><span class="typeInfo"> (loadTarget:Object) : <a class="className" href="org_casalib_math_Percent.html">Percent</a></span><ul class="summary"><li>	Calculates the percent loaded.</li></ul></li><li class="sortli listnum2"><a href="#calculateBps">calculateBps</a><span class="typeInfo"> (bytesLoaded:Number, startTime:Number, elapsedTime:Number) : Number</span><ul class="summary"><li>Calculates the load speed in bytes per second (Bps).</li></ul></li><li class="sortli listnum3"><a href="#calculateKBps">calculateKBps</a><span class="typeInfo"> (bytesLoaded:Number, startTime:Number, elapsedTime:Number) : Number</span><ul class="summary"><li>Calculates the load speed in KBps.</li></ul></li><li class="sortli listnum4"><a href="#calculateKbps">calculateKbps</a><span class="typeInfo"> (bytesLoaded:Number, startTime:Number, elapsedTime:Number) : Number</span><ul class="summary"><li>Calculates the load speed in kbps.</li></ul></li><li class="sortli listnum5"><a href="#calculateBuffer">calculateBuffer</a><span class="typeInfo"> (bytesLoaded:Number, bytesTotal:Number, startTime:Number, elapsedTime:Number, lengthInSeconds:Number) : Object</span><ul class="summary"><li>Calculates the time and percentage until movie/animation has buffered.</li></ul></li></ul></div></div></div><div class="memberSection"><h2 id="Classmethods">Class methods</h2><div class="member" id="calculateBps"><h3>calculateBps</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>calculateBps</b> (
+
+
+</div><div class="code">bytesLoaded:Number,
+startTime:Number,
+elapsedTime:Number) : Number</div><br class="clear" /></div></div><div class="description"> Calculates the load speed in bytes per second (Bps). </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">bytesLoaded<span class="itemSeparator">:</span></div><div>Number of bytes that have loaded between <code>startTime</code> and <code>elapsedTime</code>.</div></div><div class="item"><div class="floatbox code colorizedCode">startTime  <span class="itemSeparator">:</span></div><div>Time in milliseconds when the load started. Can be <code><span class="codeNumber">0</span></code>.</div></div><div class="item"><div class="floatbox code colorizedCode">elapsedTime<span class="itemSeparator">:</span></div><div>Time in milliseconds since the load started or time when load completed.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> bytes per second. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> This gets BYTES per second, not bits per second. </li></ul></div></div></div></div></div><div class="member" id="calculateBuffer"><h3>calculateBuffer</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>calculateBuffer</b> (
+
+
+
+
+</div><div class="code">bytesLoaded:Number,
+bytesTotal:Number,
+startTime:Number,
+elapsedTime:Number,
+lengthInSeconds:Number) : Object</div><br class="clear" /></div></div><div class="description"> Calculates the time and percentage until movie/animation has buffered. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">bytesLoaded    <span class="itemSeparator">:</span></div><div>Number of bytes that have loaded between <code>startTime</code> and <code>elapsedTime</code>.</div></div><div class="item"><div class="floatbox code colorizedCode">bytesTotal     <span class="itemSeparator">:</span></div><div>Number of bytes total to be loaded.</div></div><div class="item"><div class="floatbox code colorizedCode">startTime      <span class="itemSeparator">:</span></div><div>Time in milliseconds when the load started. Can be <code><span class="codeNumber">0</span></code>.</div></div><div class="item"><div class="floatbox code colorizedCode">elapsedTime    <span class="itemSeparator">:</span></div><div>The current time in milliseconds or time when load completed.</div></div><div class="item"><div class="floatbox code colorizedCode">lengthInSeconds<span class="itemSeparator">:</span></div><div>Length in seconds of the video or animation being loaded. Can also be calculated by dividing <code><span class="codeProperty">_totalframes</span></code> by the FPS (frames per second).</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> An object with properties <code>seconds</code> and <code>percent</code> defined. Property <code>percent</code> is a <a class="className" href="org_casalib_math_Percent.html">org.casalib.math.Percent</a> object. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> bufferInfo:<span class="codeIdentifier">Object</span> = LoadUtil.calculateBuffer(<span class="codeNumber">102400</span>, <span class="codeNumber">1536000</span>, <span class="codeNumber">0</span>, <span class="codeNumber">5000</span>, <span class="codeNumber">30</span>);
+<span class="codeIdentifier">trace</span>(<span class="codeString">"File will be buffered in "</span> + bufferInfo.seconds + <span class="codeString">" seconds."</span>);
+<span class="codeIdentifier">trace</span>(<span class="codeString">"File is "</span> + bufferInfo.percent.getPercentage() + <span class="codeString">"% buffered."</span>);</pre> </li></ul></div></div></div></div></div><div class="member" id="calculateKBps"><h3>calculateKBps</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>calculateKBps</b> (
+
+
+</div><div class="code">bytesLoaded:Number,
+startTime:Number,
+elapsedTime:Number) : Number</div><br class="clear" /></div></div><div class="description"> Calculates the load speed in KBps. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">bytesLoaded<span class="itemSeparator">:</span></div><div>Number of bytes that have loaded between <code>startTime</code> and <code>elapsedTime</code>.</div></div><div class="item"><div class="floatbox code colorizedCode">startTime  <span class="itemSeparator">:</span></div><div>Time in milliseconds when the load started. Can be <code><span class="codeNumber">0</span></code>.</div></div><div class="item"><div class="floatbox code colorizedCode">elapsedTime<span class="itemSeparator">:</span></div><div>Time in milliseconds since the load started or time when load completed.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Kilobytes per second. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> This gets kiloBYTES per second, not kilobits per second. </li></ul></div></div></div></div></div><div class="member" id="calculateKbps"><h3>calculateKbps</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>calculateKbps</b> (
+
+
+</div><div class="code">bytesLoaded:Number,
+startTime:Number,
+elapsedTime:Number) : Number</div><br class="clear" /></div></div><div class="description"> Calculates the load speed in kbps. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">bytesLoaded<span class="itemSeparator">:</span></div><div>Number of bytes that have loaded between <code>startTime</code> and <code>elapsedTime</code>.</div></div><div class="item"><div class="floatbox code colorizedCode">startTime  <span class="itemSeparator">:</span></div><div>Time in milliseconds when the load started. Can be <code><span class="codeNumber">0</span></code>.</div></div><div class="item"><div class="floatbox code colorizedCode">elapsedTime<span class="itemSeparator">:</span></div><div>Time in milliseconds since the load started or time when load completed.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Kilobits per second. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> This gets kiloBITS per second, not kilobytes per second. </li></ul></div></div></div></div></div><div class="member" id="getPercentLoaded"><h3>getPercentLoaded</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>getPercentLoaded</b> (
+</div><div class="code">loadTarget:Object) : <a class="className" href="org_casalib_math_Percent.html">Percent</a></div><br class="clear" /></div></div><div class="description"> 	Calculates the percent loaded. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">loadTarget<span class="itemSeparator">:</span></div><div>Any object that has either <code><span class="codeIdentifier">getBytesLoaded</span></code>/<code><span class="codeIdentifier">getBytesTotal</span></code> or <code>bytesLoaded</code>/<code>bytesTotal</code> methods.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Percent loaded. </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

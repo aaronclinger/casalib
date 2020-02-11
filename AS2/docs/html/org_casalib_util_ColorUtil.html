@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>ColorUtil</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_util_ColorUtil"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classmethods" accesskey="a">Cl<span class="accessKey">a</span>ss methods</a></li></ul><br class="clear" /></div><h1>ColorUtil</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td>none</td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">04/02/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.util.ColorUtil</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.math.Percent;
+
+/**
+    Provides utility functions for dealing with color.
+    
+    @author Aaron Clinger
+    @version 04/02/07
+*/
+
+class org.casalib.util.ColorUtil {
+    
+    /**
+        Converts a color in hexadecimal format into an RGB object.
+        
+        @param colorHex: The hexadecimal color.
+        @return Returns an object with the properties r, g and b defined.
+        @example
+            &lt;code>
+                var myRGB:Object = ColorUtil.getRGBFromHex(0xFF00FF);
+                trace("Red = " + myRGB.r);
+                trace("Green = " + myRGB.g);
+                trace("Blue = " + myRGB.b);
+            &lt;/code>
+    */
+    public static function getRGBFromHex(colorHex:Number):Object {
+        var rgb:Object = new Object();
+        
+        rgb.r = (colorHex >> 16);
+        rgb.g = (colorHex >> 8 ^ rgb.r &lt;&lt; 8);
+        rgb.b = (colorHex ^ (rgb.r &lt;&lt; 16 | rgb.g &lt;&lt; 8));
+        
+        return rgb;
+    }
+    
+    /**
+        Converts a RGB color into a hexadecimal color string.
+        
+        @param r: The number value of red.
+        @param g: The number value of green.
+        @param b: The number value of blue.
+        @return Returns a hexadecimal color as a string.
+        @example &lt;code>trace(ColorUtil.getHexStringFromRGB(255, 0, 255));&lt;/code>
+    */
+    public static function getHexStringFromRGB(r:Number, g:Number, b:Number):String {
+        var red:String   = r.toString(16);
+        var green:String = g.toString(16);
+        var blue:String  = b.toString(16);
+        
+        red   = (red.length &lt; 2) ? '0' + red : red;
+        green = (green.length &lt; 2) ? '0' + green : green;
+        blue  = (blue.length &lt; 2) ? '0' + blue : blue;
+        
+        return (red + green + blue).toUpperCase();
+    }
+    
+    /**
+        Converts a RGB color into a hexadecimal color number.
+        
+        @param r: The number value of red.
+        @param g: The number value of green.
+        @param b: The number value of blue.
+        @return Returns a hexadecimal color as a number.
+        @example &lt;code>trace(ColorUtil.getHexFromRGB(255, 0, 255));&lt;/code>
+    */
+    public static function getHexFromRGB(r:Number, g:Number, b:Number):Number {
+        return Number('0x' + ColorUtil.getHexStringFromRGB(r, g, b));
+    }
+    
+    /**
+        Specifies the tint color and tint percentage of a MovieClip.
+        
+        @param target_mc: The MovieClip to tint.
+        @param tintColor: The hexadecimal color to be set.
+        @param percent: The tint percentage, from transparent to completely saturated.
+        @example &lt;code>ColorUtil.setTint(myMovie_mc, 0xFF00FF, new Percent(.8));&lt;/code>
+    */
+    public static function setTint(target_mc:MovieClip, tintColor:Number, percent:Percent):Void {
+        var targetColor:Color    = new Color(target_mc);
+        var currentColor:Number  = targetColor.getRGB();
+        var invertPercent:Number = 100 - percent.getPercentage();
+        
+        if (currentColor != 0) {
+            var r:Number = ((currentColor &amp; 0xff) * invertPercent + (tintColor &amp; 0xff) * percent.getPercentage()) / 100;
+            var g:Number = ((currentColor &amp; 0xff00) / 0x100 * invertPercent + (tintColor &amp; 0xff00) / 0x100 * percent.getPercentage()) / 100;
+            var b:Number = ((currentColor &amp; 0xff0000) / 0x10000 * invertPercent + (tintColor &amp; 0xff0000) / 0x10000 * percent.getPercentage()) / 100;
+            
+            targetColor.setRGB(r | g &lt;&lt; 8 | b &lt;&lt; 16);
+            return;
+        }
+        
+        var rgb:Object   = ColorUtil.getRGBFromHex(tintColor);
+        var trans:Object = new Object();
+        
+        trans.ra = trans.ga = trans.ba = invertPercent;
+        trans.rb = rgb.r * percent.getDecimalPercentage();
+        trans.gb = rgb.g * percent.getDecimalPercentage();
+        trans.bb = rgb.b * percent.getDecimalPercentage();
+        
+        targetColor.setTransform(trans);
+    }
+    
+    private function ColorUtil() {} // Prevents instance creation
+}
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Provides utility functions for dealing with color.</span></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class methods</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#getRGBFromHex">getRGBFromHex</a><span class="typeInfo"> (colorHex:Number) : Object</span><ul class="summary"><li>	Converts a color in hexadecimal format into an RGB object.</li></ul></li><li class="sortli listnum2"><a href="#getHexStringFromRGB">getHexStringFromRGB</a><span class="typeInfo"> (r:Number, g:Number, b:Number) : String</span><ul class="summary"><li>Converts a RGB color into a hexadecimal color string.</li></ul></li><li class="sortli listnum3"><a href="#getHexFromRGB">getHexFromRGB</a><span class="typeInfo"> (r:Number, g:Number, b:Number) : Number</span><ul class="summary"><li>Converts a RGB color into a hexadecimal color number.</li></ul></li><li class="sortli listnum4"><a href="#setTint">setTint</a><span class="typeInfo"> (target_mc:MovieClip, tintColor:Number, percent:<a class="className" href="org_casalib_math_Percent.html">Percent</a>) : Void</span><ul class="summary"><li>Specifies the tint color and tint percentage of a MovieClip.</li></ul></li></ul></div></div></div><div class="memberSection"><h2 id="Classmethods">Class methods</h2><div class="member" id="getHexFromRGB"><h3>getHexFromRGB</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>getHexFromRGB</b> (
+
+
+</div><div class="code">r:Number,
+g:Number,
+b:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts a RGB color into a hexadecimal color number. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">r<span class="itemSeparator">:</span></div><div>The number value of red.</div></div><div class="item"><div class="floatbox code colorizedCode">g<span class="itemSeparator">:</span></div><div>The number value of green.</div></div><div class="item"><div class="floatbox code colorizedCode">b<span class="itemSeparator">:</span></div><div>The number value of blue.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns a hexadecimal color as a number. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <code><span class="codeIdentifier">trace</span>(ColorUtil.getHexFromRGB(<span class="codeNumber">255</span>, <span class="codeNumber">0</span>, <span class="codeNumber">255</span>));</code> </li></ul></div></div></div></div></div><div class="member" id="getHexStringFromRGB"><h3>getHexStringFromRGB</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>getHexStringFromRGB</b> (
+
+
+</div><div class="code">r:Number,
+g:Number,
+b:Number) : String</div><br class="clear" /></div></div><div class="description"> Converts a RGB color into a hexadecimal color string. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">r<span class="itemSeparator">:</span></div><div>The number value of red.</div></div><div class="item"><div class="floatbox code colorizedCode">g<span class="itemSeparator">:</span></div><div>The number value of green.</div></div><div class="item"><div class="floatbox code colorizedCode">b<span class="itemSeparator">:</span></div><div>The number value of blue.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns a hexadecimal color as a string. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <code><span class="codeIdentifier">trace</span>(ColorUtil.getHexStringFromRGB(<span class="codeNumber">255</span>, <span class="codeNumber">0</span>, <span class="codeNumber">255</span>));</code> </li></ul></div></div></div></div></div><div class="member" id="getRGBFromHex"><h3>getRGBFromHex</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>getRGBFromHex</b> (
+</div><div class="code">colorHex:Number) : Object</div><br class="clear" /></div></div><div class="description"> 	Converts a color in hexadecimal format into an RGB object. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">colorHex<span class="itemSeparator">:</span></div><div>The hexadecimal color.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns an object with the properties r, g and b defined. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> myRGB:<span class="codeIdentifier">Object</span> = ColorUtil.getRGBFromHex(0xFF00FF);
+<span class="codeIdentifier">trace</span>(<span class="codeString">"Red = "</span> + myRGB.r);
+<span class="codeIdentifier">trace</span>(<span class="codeString">"Green = "</span> + myRGB.g);
+<span class="codeIdentifier">trace</span>(<span class="codeString">"Blue = "</span> + myRGB.b);</pre> </li></ul></div></div></div></div></div><div class="member" id="setTint"><h3>setTint</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>setTint</b> (
+
+
+</div><div class="code">target_mc:MovieClip,
+tintColor:Number,
+percent:<a class="className" href="org_casalib_math_Percent.html">Percent</a>) : Void</div><br class="clear" /></div></div><div class="description"> Specifies the tint color and tint percentage of a MovieClip. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">target_mc<span class="itemSeparator">:</span></div><div>The MovieClip to tint.</div></div><div class="item"><div class="floatbox code colorizedCode">tintColor<span class="itemSeparator">:</span></div><div>The hexadecimal color to be set.</div></div><div class="item"><div class="floatbox code colorizedCode">percent  <span class="itemSeparator">:</span></div><div>The tint percentage, from transparent to completely saturated.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <code>ColorUtil.setTint(myMovie_mc, 0xFF00FF, <span class="codeKeyword">new</span> Percent(.<span class="codeNumber">8</span>));</code> </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

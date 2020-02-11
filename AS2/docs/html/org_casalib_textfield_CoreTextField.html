@@ -1,0 +1,764 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>CoreTextField</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_textfield_CoreTextField"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Instanceproperties" accesskey="l">Instance <span class="accessKey">p</span>roperties</a></li><li><a href="#Classmethods" accesskey="a">Cl<span class="accessKey">a</span>ss methods</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li><li><a href="#Eventhandlers" accesskey="e"><span class="accessKey">E</span>vent handlers</a></li></ul><br class="clear" /></div><h1>CoreTextField</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_movieclip_CoreMovieClip.html">CoreMovieClip</a> &lt; MovieClip</td></tr><tr><th align="left">Known subclasses:</th><td><ul><li><a class="className" href="org_casalib_textfield_DispatchableTextField.html">DispatchableTextField</a></li></ul></td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">07/19/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger, Mike Creighton</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.textfield.CoreTextField</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.movieclip.CoreMovieClip;
+import org.casalib.util.MovieClipUtil;
+import TextField.StyleSheet;
+
+/**
+    CoreTextField is actually a CoreMovieClip class that uses composition to emulate the standard Flash TextField class. By doing this, it is now possible to extend TextFields where it would otherwise be impossible due to the limitations of TextField instantiation in AS 2.0. All TextField classes should extend from here.
+    
+    @author Aaron Clinger
+    @author Mike Creighton
+    @version 07/19/07
+    @example
+        &lt;code>
+            var myText_mc:CoreTextField = CoreTextField.create(this, "text_mc", null, 250, 50);
+            this.myText_mc.border = this.myText_mc.background = true;
+            this.myText_mc.text = "Hello World!";
+        &lt;/code>
+    @usageNote If you are wanting to set focus to the CoreTextField use {@link #setFocus} instead of &lt;code>Selection.setFocus()&lt;/code>.
+*/
+
+class org.casalib.textfield.CoreTextField extends CoreMovieClip {
+    public  var field_txt:TextField; /**&lt; @exclude */
+    
+    
+    /**
+        Creates an empty instance of the CoreTextField class. Use this instead of a traditional &lt;code>new&lt;/code> constructor statement due to limitations of ActionScript 2.0.
+        
+        @param target: Location where the TextField should be attached.
+        @param instanceName: A unique instance name for the TextField.
+        @param depth: &lt;strong>[optional]&lt;/strong> The depth level where the TextField is placed; defaults to next highest open depth.
+        @param width: A positive integer that specifies the width of the new text field.
+        @param height: A positive integer that specifies the height of the new text field.
+        @return Returns a reference to the created instance.
+        @example &lt;code>var myText_mc:CoreTextField = CoreTextField.create(this, "text_mc", null, 250, 50);&lt;/code>
+        @since Flash Player 7 
+    */
+    public static function create(target:MovieClip, instanceName:String, depth:Number, width:Number, height:Number):CoreTextField {
+        var tf:CoreTextField = CoreTextField(MovieClipUtil.createMovieRegisterClass('org.casalib.textfield.CoreTextField', target, instanceName, depth));
+        
+        tf.width  = width;
+        tf.height = height;
+        
+        return tf;
+    }
+    
+    
+    private function CoreTextField() {
+        super();
+        
+        this.createTextField('field_txt', 1, 0, 0, 200, 100);
+        
+        var context:CoreTextField = this;
+        
+        this.field_txt.onChanged = function(changedField:TextField):Void {
+            context.onChanged(changedField);
+        };
+        
+        this.field_txt.onKillFocus = function(newFocus:Object):Void {
+            context.onKillFocus(newFocus);
+        };
+        
+        this.field_txt.onScroller = function(scrolledField:TextField):Void {
+            context.onScroller(scrolledField);
+        };
+        
+        this.field_txt.onSetFocus = function(oldFocus:Object):Void {
+            context.onSetFocus(oldFocus);
+        };
+        
+        this.$setClassDescription('org.casalib.textfield.CoreTextField');
+    }
+    
+    /**
+        @exclude 
+    */
+    public static function getFontList():Array {
+        return TextField.getFontList();
+    }
+    
+    /**
+        @exclude
+    */
+    public function addListener(listener:Object):Boolean {
+        return this.field_txt.addListener(listener);
+    }
+    
+    /**
+        @exclude
+    */
+    public function getNewTextFormat():TextFormat {
+        return this.field_txt.getNewTextFormat();
+    }
+    
+    /**
+        @exclude
+    */
+    public function getTextFormat(beginIndex:Number, endIndex:Number):TextFormat {
+        return this.field_txt.getTextFormat(beginIndex, endIndex);
+    }
+    
+    /**
+        @exclude
+    */
+    public function onChanged(changedField:TextField):Void {}
+    
+    /**
+        @exclude
+    */
+    public function onKillFocus(newFocus:Object):Void {}
+    
+    /**
+        @exclude
+    */
+    public function onScroller(scrolledField:TextField):Void {}
+    
+    /**
+        @exclude
+    */
+    public function onSetFocus(oldFocus:Object):Void {}
+    
+    /**
+        @exclude
+    */
+    public function removeListener(listener:Object):Boolean {
+        return this.field_txt.removeListener(listener);
+    }
+    
+    /**
+        @exclude
+    */
+    public function replaceSel(newText:String):Void {
+        this.field_txt.replaceSel(newText);
+    }
+    
+    /**
+        @exclude
+    */
+    public function replaceText(beginIndex:Number, endIndex:Number, newText:String):Void {
+        this.field_txt.replaceText(beginIndex, endIndex, newText);
+    }
+    
+    /**
+        @exclude
+    */
+    public function setNewTextFormat(tf:TextFormat):Void {
+        this.field_txt.setNewTextFormat(tf);
+    }
+    
+    /**
+        @exclude
+    */
+    public function setTextFormat():Void {
+        this.field_txt.setTextFormat.apply(this.field_txt, arguments);
+    }
+    
+    /**
+        @exclude
+    */
+    public function get menu():ContextMenu {
+        return this.field_txt.menu;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set menu(m:ContextMenu):Void {
+        this.field_txt.menu = m;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get antiAliasType():String {
+        return this.field_txt.antiAliasType;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set antiAliasType(a:String):Void {
+        this.field_txt.antiAliasType = a;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get autoSize():Object {
+        return this.field_txt.autoSize;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set autoSize(s:Object):Void {
+        this.field_txt.autoSize = s;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get background():Boolean {
+        return this.field_txt.background;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set background(b:Boolean):Void {
+        this.field_txt.background = b;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get backgroundColor():Number {
+        return this.field_txt.backgroundColor;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set backgroundColor(c:Number):Void {
+        this.field_txt.backgroundColor = c;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get border():Boolean {
+        return this.field_txt.border;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set border(b:Boolean):Void {
+        this.field_txt.border = b;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get borderColor():Number {
+        return this.field_txt.borderColor;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set borderColor(c:Number):Void {
+        this.field_txt.borderColor = c;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get bottomScroll():Number {
+        return this.field_txt.bottomScroll;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set bottomScroll(s:Number):Void {
+        this.field_txt.bottomScroll = s;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get condensWhite():Boolean {
+        return this.field_txt.condensWhite;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set condensWhite(c:Boolean):Void {
+        this.field_txt.condensWhite = c;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get embedFonts():Boolean {
+        return this.field_txt.embedFonts;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set embedFonts(e:Boolean):Void {
+        this.field_txt.embedFonts = e;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get gridFitType():String {
+        return this.field_txt.gridFitType;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set gridFitType(t:String):Void {
+        this.field_txt.gridFitType = t;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get hscroll():Number {
+        return this.field_txt.hscroll;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set hscroll(s:Number):Void {
+        this.field_txt.hscroll = s;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get html():Boolean {
+        return this.field_txt.html;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set html(h:Boolean):Void {
+        this.field_txt.html = h;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get htmlText():String {
+        return this.field_txt.htmlText;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set htmlText(t:String):Void {
+        this.field_txt.htmlText = t;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get length():Number {
+        return this.field_txt.length;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set length(l:Number):Void {
+        this.field_txt.length = l;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get maxChars():Number {
+        return this.field_txt.maxChars;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set maxChars(m:Number):Void {
+        this.field_txt.maxChars = m;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get maxhscroll():Number {
+        return this.field_txt.maxhscroll;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set maxhscroll(m:Number):Void {
+        this.field_txt.maxhscroll = m;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get maxscroll():Number {
+        return this.field_txt.maxscroll;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set maxscroll(m:Number):Void {
+        this.field_txt.maxscroll = m;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get mouseWheelEnabled():Boolean {
+        return this.field_txt.mouseWheelEnabled;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set mouseWheelEnabled(e:Boolean):Void {
+        this.field_txt.mouseWheelEnabled = e;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get multiline():Boolean {
+        return this.field_txt.multiline;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set multiline(m:Boolean):Void {
+        this.field_txt.multiline = m;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get password():Boolean {
+        return this.field_txt.password;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set password(p:Boolean):Void {
+        this.field_txt.password = p;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get restrict():String {
+        return this.field_txt.restrict;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set restrict(r:String):Void {
+        this.field_txt.restrict = r;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get scroll():Number {
+        return this.field_txt.scroll;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set scroll(s:Number):Void {
+        this.field_txt.scroll = s;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get selectable():Boolean {
+        return this.field_txt.selectable;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set selectable(s:Boolean):Void {
+        this.field_txt.selectable = s;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get sharpness():Number {
+        return this.field_txt.sharpness;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set sharpness(s:Number):Void {
+        this.field_txt.sharpness = s;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get styleSheet():StyleSheet {
+        return this.field_txt.styleSheet;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set styleSheet(s:StyleSheet):Void {
+        this.field_txt.styleSheet = s;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get tabEnabled():Boolean {
+        return this.field_txt.tabEnabled;
+    }
+    
+    /**        @exclude
+    */
+    public function set tabEnabled(e:Boolean):Void {
+        this.field_txt.tabEnabled = e;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get tabIndex():Number {
+        return this.field_txt.tabIndex;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set tabIndex(i:Number):Void {
+        this.field_txt.tabIndex = i;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get text():String {
+        return this.field_txt.text;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set text(t:String):Void {
+        this.field_txt.text = t;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get textColor():Number {
+        return this.field_txt.textColor;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set textColor(c:Number):Void {
+        this.field_txt.textColor = c;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get textHeight():Number {
+        return this.field_txt.textHeight;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set textHeight(h:Number):Void {
+        this.field_txt.textHeight = h;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get textWidth():Number {
+        return this.field_txt.textWidth;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set textWidth(w:Number):Void {
+        this.field_txt.textWidth = w;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get thickness():Number {
+        return this.field_txt.thickness;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set thickness(t:Number):Void {
+        this.field_txt.thickness = t;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get type():String {
+        return this.field_txt.type;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set type(t:String):Void {
+        this.field_txt.type = t;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get variable():String {
+        return this.field_txt.variable;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set variable(v:String):Void {
+        this.field_txt.variable = v;
+    }
+    
+    /**
+        @exclude
+    */
+    public function get wordWrap():Boolean {
+        return this.field_txt.wordWrap;
+    }
+    
+    /**
+        @exclude
+    */
+    public function set wordWrap(w:Boolean):Void {
+        this.field_txt.wordWrap = w;
+    }
+    
+    /**
+        The width of the TextField in pixels.
+        
+        @usageNote Always use {@link #width} instead of &lt;code>_width&lt;/code> to properly get/set the TextField's width.
+    */
+    public function get width():Number {
+        return this.field_txt._width;
+    }
+    
+    public function set width(w:Number):Void {
+        this.field_txt._width = w;
+    }
+    
+    /**
+        The height of the TextField in pixels.
+        
+        @usageNote Always use {@link #height} instead of &lt;code>_height&lt;/code> to properly get/set the TextField's height.
+    */
+    public function get height():Number {
+        return this.field_txt._height;
+    }
+    
+    public function set height(h:Number):Void {
+        this.field_txt._height = h;
+    }
+    
+    /**
+        Gives focus to the TextField if the TextField is type &lt;code>"input"&lt;/code>.
+        
+        @return Returns &lt;code>true&lt;/code> if the focus attempt was successful; otherwise &lt;code>false&lt;/code>.
+    */
+    public function setFocus():Boolean {
+        return Selection.setFocus(this.field_txt);
+    }
+    
+    /**
+        Removes the TextField after automatically calling {@link #destroy}.
+        
+        @usageNote &lt;code>removeTextField&lt;/code> and {@link #destroy} work identically; you can call either method to destroy and remove the TextField.
+    */
+    public function removeTextField():Void {
+        this.destroy();
+    }
+    
+    public function destroy():Void {
+        delete this.field_txt.onChanged;
+        delete this.field_txt.onKillFocus;
+        delete this.field_txt.onScroller;
+        delete this.field_txt.onSetFocus;
+        
+        this.field_txt.removeTextField();
+        
+        super.destroy();
+    }
+}
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">CoreTextField is actually a CoreMovieClip class that uses composition to emulate the standard Flash TextField class.</span> By doing this, it is now possible to extend TextFields where it would otherwise be impossible due to the limitations of TextField instantiation in AS 2.0. All TextField classes should extend from here.<div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> myText_mc:CoreTextField = CoreTextField.create(<span class="codeIdentifier">this</span>, <span class="codeString">"text_mc"</span>, <span class="codeIdentifier">null</span>, <span class="codeNumber">250</span>, <span class="codeNumber">50</span>);
+<span class="codeIdentifier">this</span>.myText_mc<span class="codeIdentifier">.border</span> = <span class="codeIdentifier">this</span>.myText_mc<span class="codeIdentifier">.background</span> = <span class="codeIdentifier">true</span>;
+<span class="codeIdentifier">this</span>.myText_mc<span class="codeIdentifier">.text</span> = <span class="codeString">"Hello World!"</span>;</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> If you are wanting to set focus to the CoreTextField use <a href="org_casalib_textfield_CoreTextField.html#setFocus">setFocus</a> instead of <code>Selection.setFocus()</code>. </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Instance properties</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#width">width</a><span class="typeInfo">  : Number</span><ul class="summary"><li>The width of the TextField in pixels.</li></ul></li><li class="sortli listnum2"><a href="#height">height</a><span class="typeInfo">  : Number</span><ul class="summary"><li>The height of the TextField in pixels.</li></ul></li></ul></div><div class="memberSummaryPart"><span class="title">Class methods</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#create">create</a><span class="typeInfo"> (target:MovieClip, instanceName:String, depth:Number, width:Number, height:Number) : <a class="className" href="org_casalib_textfield_CoreTextField.html">CoreTextField</a></span><ul class="summary"><li>	Creates an empty instance of the CoreTextField class.</li></ul></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Class methods inherited from <span class="superclass"><a class="className" href="org_casalib_movieclip_CoreMovieClip.html">CoreMovieClip</a></span></span><div class="item inheritedList"><a href="org_casalib_movieclip_CoreMovieClip.html#create">create</a></div></div></div></div></div><div class="memberSummaryPart"><span class="title">Instance methods</span><ul class="sortable" id="sortul3"><li class="sortli listnum1"><a href="#setFocus">setFocus</a><span class="typeInfo">  : Boolean</span><ul class="summary"><li>Gives focus to the TextField if the TextField is type <span class="codeString">"input"</span>.</li></ul></li><li class="sortli listnum2"><a href="#removeTextField">removeTextField</a><span class="typeInfo">  : Void</span><ul class="summary"><li>Removes the TextField after automatically calling destroy.</li></ul></li><li class="sortli listnum3"><a href="#destroy">destroy</a><span class="typeInfo">  : Void</span></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_movieclip_CoreMovieClip.html">CoreMovieClip</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_movieclip_CoreMovieClip.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_movieclip_CoreMovieClip.html#destroy">destroy</a>  <a href="org_casalib_movieclip_CoreMovieClip.html#removeMovieClip">removeMovieClip</a>  <a href="org_casalib_movieclip_CoreMovieClip.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Instanceproperties">Instance properties</h2><div class="member" id="height"><h3>height</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><b>height</b>:Number
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div><div class="description"> The height of the TextField in pixels. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> Always use <a href="org_casalib_textfield_CoreTextField.html#height">height</a> instead of <code><span class="codeProperty">_height</span></code> to properly get/set the TextField's height. </li></ul></div></div></div></div></div><div class="member" id="width"><h3>width</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><b>width</b>:Number
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div><div class="description"> The width of the TextField in pixels. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> Always use <a href="org_casalib_textfield_CoreTextField.html#width">width</a> instead of <code><span class="codeProperty">_width</span></code> to properly get/set the TextField's width. </li></ul></div></div></div></div></div></div><div class="memberSection"><h2 id="Classmethods">Class methods</h2><div class="member" id="create"><h3>create</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>create</b> (
+
+
+
+
+</div><div class="code">target:MovieClip,
+instanceName:String,
+depth:Number,
+width:Number,
+height:Number) : <a class="className" href="org_casalib_textfield_CoreTextField.html">CoreTextField</a></div><br class="clear" /></div></div><div class="description"> 	Creates an empty instance of the CoreTextField class. Use this instead of a traditional <code><span class="codeKeyword">new</span></code> constructor statement due to limitations of ActionScript 2.0. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">target      <span class="itemSeparator">:</span></div><div>Location where the TextField should be attached.</div></div><div class="item"><div class="floatbox code colorizedCode">instanceName<span class="itemSeparator">:</span></div><div>A unique instance name for the TextField.</div></div><div class="item"><div class="floatbox code colorizedCode">depth       <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> The depth level where the TextField is placed; defaults to next highest open depth.</div></div><div class="item"><div class="floatbox code colorizedCode">width       <span class="itemSeparator">:</span></div><div>A positive integer that specifies the width of the new text field.</div></div><div class="item"><div class="floatbox code colorizedCode">height      <span class="itemSeparator">:</span></div><div>A positive integer that specifies the height of the new text field.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns a reference to the created instance. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <code><span class="codeKeyword">var</span> myText_mc:CoreTextField = CoreTextField.create(<span class="codeIdentifier">this</span>, <span class="codeString">"text_mc"</span>, <span class="codeIdentifier">null</span>, <span class="codeNumber">250</span>, <span class="codeNumber">50</span>);</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Since:</span><div class="item"><ul><li> Flash Player 7 </li></ul></div></div></div></div></div></div><div class="memberSection"><h2 id="Instancemethods">Instance methods</h2><div class="member" id="destroy"><h3>destroy</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>destroy</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Overrides:</span><div class="item"><ul><li> <a href="org_casalib_movieclip_CoreMovieClip.html#destroy">org.casalib.movieclip.CoreMovieClip.destroy</a> </li></ul></div></div></div></div></div><div class="member" id="removeTextField"><h3>removeTextField</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>removeTextField</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> Removes the TextField after automatically calling <a href="org_casalib_textfield_CoreTextField.html#destroy">destroy</a>. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> <code>removeTextField</code> and <a href="org_casalib_textfield_CoreTextField.html#destroy">destroy</a> work identically; you can call either method to destroy and remove the TextField. </li></ul></div></div></div></div></div><div class="member" id="setFocus"><h3>setFocus</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>setFocus</b> (
+</div><div class="code">) : Boolean</div><br class="clear" /></div></div><div class="description"> Gives focus to the TextField if the TextField is type <code><span class="codeString">"input"</span></code>. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if the focus attempt was successful; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>StyleSheetUtil</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_util_StyleSheetUtil"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classmethods" accesskey="a">Cl<span class="accessKey">a</span>ss methods</a></li></ul><br class="clear" /></div><h1>StyleSheetUtil</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td>none</td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">12/22/06</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.util.StyleSheetUtil</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.util.TypeUtil;
+import org.casalib.util.StringUtil;
+import org.casalib.util.NumberUtil;
+
+/**
+    @author Aaron Clinger
+    @version 12/22/06
+    @since Flash Player 7
+*/
+
+class org.casalib.util.StyleSheetUtil {
+
+    /**
+        Positions a TextField, MovieClip or Button relative to the stage using an object of defined properties that mimic the CSS equivalents. This object can be created manually or passed from a &lt;code>StyleSheet&lt;/code> object.
+        &lt;table border="1">
+            &lt;tr style="background-color:#e1e1e1;">
+                &lt;th width="150px">CSS property&lt;/th>
+                &lt;th width="150px">ActionScript property&lt;/th>
+                &lt;th>Usage and supported values&lt;/th>
+            &lt;/tr>
+            &lt;tr>
+                &lt;td>top&lt;/td>
+                &lt;td>top&lt;/td>
+                &lt;td>Defines object's distance from the top of the stage. Position can be defined in pixels &lt;code>"15px"&lt;/code> or as a percentage of the stage height &lt;code>"5%"&lt;/code>.&lt;/td>
+            &lt;/tr>
+            &lt;tr style="background-color:#f0f5f9;">
+                &lt;td>right&lt;/td>
+                &lt;td>right&lt;/td>
+                &lt;td>Defines object's distance from the right of the stage. Position can be defined in pixels &lt;code>"15px"&lt;/code> or as a percentage of the stage width &lt;code>"5%"&lt;/code>.&lt;/td>
+            &lt;/tr>
+            &lt;tr>
+                &lt;td>bottom&lt;/td>
+                &lt;td>bottom&lt;/td>
+                &lt;td>Defines object's distance from the bottom of the stage. Position can be defined in pixels &lt;code>"15px"&lt;/code> or as a percentage of the stage height &lt;code>"5%"&lt;/code>.&lt;/td>
+            &lt;/tr>
+            &lt;tr style="background-color:#f0f5f9;">
+                &lt;td>left&lt;/td>
+                &lt;td>left&lt;/td>
+                &lt;td>Defines object's distance from the left of the stage. Position can be defined in pixels &lt;code>"15px"&lt;/code> or as a percentage of the stage width &lt;code>"5%"&lt;/code>.&lt;/td>
+            &lt;/tr>
+            &lt;tr>
+                &lt;td>margin-top&lt;/td>
+                &lt;td>marginTop&lt;/td>
+                &lt;td>Defines the vertical spacing from top position. Position can be defined in pixels &lt;code>"15px"&lt;/code> or as a percentage of the stage height &lt;code>"5%"&lt;/code>.&lt;/td>
+            &lt;/tr>
+            &lt;tr style="background-color:#f0f5f9;">
+                &lt;td>margin-right&lt;/td>
+                &lt;td>marginRight&lt;/td>
+                &lt;td>Defines the horizontal spacing from right position. Position can be defined in pixels &lt;code>"15px"&lt;/code> or as a percentage of the stage width &lt;code>"5%"&lt;/code>.&lt;/td>
+            &lt;/tr>
+            &lt;tr>
+                &lt;td>margin-bottom&lt;/td>
+                &lt;td>marginBottom&lt;/td>
+                &lt;td>Defines the vertical spacing from bottom position. Position can be defined in pixels &lt;code>"15px"&lt;/code> or as a percentage of the stage height &lt;code>"5%"&lt;/code>.&lt;/td>
+            &lt;/tr>
+            &lt;tr style="background-color:#f0f5f9;">
+                &lt;td>margin-left&lt;/td>
+                &lt;td>marginLeft&lt;/td>
+                &lt;td>Defines the horizontal spacing from left position. Position can be defined in pixels &lt;code>"15px"&lt;/code> or as a percentage of the stage width &lt;code>"5%"&lt;/code>.&lt;/td>
+            &lt;/tr>
+            &lt;tr>
+                &lt;td>margin&lt;/td>
+                &lt;td>margin&lt;/td>
+                &lt;td>A shorthand property for setting the four margin properties in one declaration; see documentation above. Values should be seperated by spaces and are defined in the following order: top, right, bottom and left.&lt;/td>
+            &lt;/tr>
+            &lt;tr style="background-color:#f0f5f9;">
+                &lt;td>width&lt;/td>
+                &lt;td>width&lt;/td>
+                &lt;td>Defines the width of the object. Value can be defined in pixels &lt;code>"250px"&lt;/code> or as a percentage of the stage width &lt;code>"25%"&lt;/code>.&lt;/td>
+            &lt;/tr>
+            &lt;tr>
+                &lt;td>height&lt;/td>
+                &lt;td>height&lt;/td>
+                &lt;td>Defines the height of the object. Value can be defined in pixels &lt;code>"250px"&lt;/code> or as a percentage of the stage height &lt;code>"25%"&lt;/code>.&lt;/td>
+            &lt;/tr>
+            &lt;tr style="background-color:#f0f5f9;">
+                &lt;td>max-width&lt;/td>
+                &lt;td>maxWidth&lt;/td>
+                &lt;td>Defines the maximum width of an object. This is most helpful when the width of an object is set to a percentage and the max width is set to a pixel value. Value can be defined in pixels &lt;code>"250px"&lt;/code> or as a percentage of the stage width &lt;code>"25%"&lt;/code>.&lt;/td>
+            &lt;/tr>
+            &lt;tr>
+                &lt;td>max-height&lt;/td>
+                &lt;td>maxHeight&lt;/td>
+                &lt;td>Defines the maximum height of an object. This is most helpful when the height of an object is set to a percentage and the max height is set to a pixel value. Value can be defined in pixels &lt;code>"250px"&lt;/code> or as a percentage of the stage height &lt;code>"25%"&lt;/code>.&lt;/td>
+            &lt;/tr>
+            &lt;tr style="background-color:#f0f5f9;">
+                &lt;td>min-width&lt;/td>
+                &lt;td>minWidth&lt;/td>
+                &lt;td>Defines the minimum width of an object. This is most helpful when the width of an object is set to a percentage and the min width is set to a pixel value. Value can be defined in pixels &lt;code>"250px"&lt;/code> or as a percentage of the stage width &lt;code>"25%"&lt;/code>.&lt;/td>
+            &lt;/tr>
+            &lt;tr>
+                &lt;td>min-height&lt;/td>
+                &lt;td>minHeight&lt;/td>
+                &lt;td>Defines the minimum height of an object. This is most helpful when the height of an object is set to a percentage and the min height is set to a pixel value. Value can be defined in pixels &lt;code>"250px"&lt;/code> or as a percentage of the stage height &lt;code>"25%"&lt;/code>.&lt;/td>
+            &lt;/tr>
+            &lt;tr style="background-color:#f0f5f9;">
+                &lt;td>background-color&lt;/td>
+                &lt;td>backgroundColor&lt;/td>
+                &lt;td>Defines the background color of TextFields and the object color of MovieClips and Buttons. Only hexadecimal color values are supported. Named colors (such as &lt;code>"blue"&lt;/code>) are not supported. Colors are written in the following format: &lt;code>"#FF00FF"&lt;/code>.&lt;/td>
+            &lt;/tr>
+            &lt;tr>
+                &lt;td>border-color&lt;/td>
+                &lt;td>borderColor&lt;/td>
+                &lt;td>Defines the border color of a Textfield. Only hexadecimal color values are supported. Named colors (such as &lt;code>"blue"&lt;/code>) are not supported. Colors are written in the following format: &lt;code>"#FF00FF"&lt;/code>.&lt;/td>
+            &lt;/tr>
+            &lt;tr style="background-color:#f0f5f9;">
+                &lt;td>opacity&lt;/td>
+                &lt;td>opacity&lt;/td>
+                &lt;td>Defines the alpha transparency of the object. Valid value range is &lt;code>"0.0"&lt;/code> to &lt;code>"1.0"&lt;/code>&lt;/td>
+            &lt;/tr>
+        &lt;/table>
+        
+        @param item: A &lt;code>MovieClip&lt;/code>, &lt;code>TextField&lt;/code> or &lt;code>Button&lt;/code>.
+        @param style: An object that describes the style with the supported properties above.
+        @return Returns &lt;code>true&lt;/code> if item was of type &lt;code>MovieClip&lt;/code>, &lt;code>TextField&lt;/code> or &lt;code>Button&lt;/code> and was successfully styled; otherwise &lt;code>false&lt;/code>.
+        @example
+            &lt;code>
+                Stage.align = "TL";
+                Stage.scaleMode = "noScale";
+                
+                var myStylePosition:Object = new Object();
+                this.myStylePosition.top      = "25px";
+                this.myStylePosition.left     = "0";
+                this.myStylePosition.margin   = "0 5px 0 5px";
+                this.myStylePosition.width    = "100%";
+                this.myStylePosition.height   = "200px";
+                
+                StyleSheetUtil.positionItemWithStyleObject(this.myMovieClip_mc, this.myStylePosition);
+            &lt;/code>
+            Or you can use a stylesheet object:
+            &lt;code>
+                StyleSheetUtil.positionItemWithStyleObject(this.myMovieClip_mc, myStyleSheet.getStyle());
+            &lt;/code>
+    */
+    public static function positionItemWithStyleObject(item:Object, style:Object):Boolean {
+        var isText:Boolean = false;
+        
+        switch (TypeUtil.getTypeOf(item)) {
+            case 'textfield' :
+                isText = true;
+            case 'movieclip' :
+            case 'button' :
+                break;
+            default :
+                return false;
+        }
+        
+        var margin:Object = {top:0, right:0, bottom:0, left:0};
+        
+        var i:String;
+        var val:String;
+        var width:Number;
+        var height:Number;
+        var topMin:Number;
+        var topMax:Number;
+        var leftMin:Number;
+        var leftMax:Number;
+        var maxWidth:Number;
+        var maxHeight:Number;
+        var minWidth:Number;
+        var minHeight:Number;
+        
+        for (i in style) {
+            val = style[i];
+            switch (i) {
+                case 'margin' :
+                    var sides:Array = StringUtil.removeExtraSpaces(val).split(' ');
+                    if (sides.length == 1) {
+                        margin.top = margin.bottom = StyleSheetUtil.$getVerticalValue(sides[0]);
+                        margin.right = margin.left = StyleSheetUtil.$getHorizontalValue(sides[0]);
+                        break;
+                    }
+                    
+                    if (sides[0] != undefined) margin.top    = StyleSheetUtil.$getVerticalValue(sides[0]);
+                    if (sides[1] != undefined) margin.right  = StyleSheetUtil.$getHorizontalValue(sides[1]);
+                    if (sides[2] != undefined) margin.bottom = StyleSheetUtil.$getVerticalValue(sides[2]);
+                    if (sides[3] != undefined) margin.left   = StyleSheetUtil.$getHorizontalValue(sides[3]);
+                    break;
+                case 'marginTop' :
+                    margin.top = StyleSheetUtil.$getVerticalValue(val);
+                    break;
+                case 'marginRight' :
+                    margin.right = StyleSheetUtil.$getHorizontalValue(val);
+                    break;
+                case 'marginBottom' :
+                    margin.bottom = StyleSheetUtil.$getVerticalValue(val);
+                    break;
+                case 'marginLeft' :
+                    margin.left = StyleSheetUtil.$getHorizontalValue(val);
+                    break;
+                case 'width' :
+                    width = StyleSheetUtil.$getHorizontalValue(val);
+                    break;
+                case 'maxWidth' :
+                    maxWidth = StyleSheetUtil.$getHorizontalValue(val);
+                    break;
+                case 'minWidth' :
+                    minWidth = StyleSheetUtil.$getHorizontalValue(val);
+                    break;
+                case 'height' :
+                    height = StyleSheetUtil.$getVerticalValue(val);
+                    break;
+                case 'maxHeight' :
+                    maxHeight = StyleSheetUtil.$getVerticalValue(val);
+                    break;
+                case 'minHeight' :
+                    minHeight = StyleSheetUtil.$getVerticalValue(val);
+                    break;
+                case 'backgroundColor' :
+                    if (val.substr(0, 1) == '#') {
+                        var colorString:String = '0x' + val.substr(1);
+                        if (!isNaN(colorString)) {
+                            if (isText) {
+                                item.border = item.background = true;
+                                item.backgroundColor = Number(colorString);
+                            } else {
+                                var backColor:Color = new Color(item);
+                                backColor.setRGB(Number(colorString));
+                            }
+                        }
+                    }
+                    break;
+                case 'borderColor' :
+                    if (isText) {
+                        if (val.substr(0, 1) == '#') {
+                            var colorString:String = '0x' + val.substr(1);
+                            if (!isNaN(colorString)) {
+                                if (!item.border) item.border = true;
+                                item.borderColor = colorString;
+                            }
+                        }
+                    }
+                    break;
+                case 'opacity' :
+                    if (!isNaN(val)) if (NumberUtil.isBetween(Number(val), 0, 1)) item._alpha = Math.round(100 * Number(val));
+                    break;
+            }
+        }
+        
+        width  = NumberUtil.max(NumberUtil.min(width, maxWidth), minWidth);
+        height = NumberUtil.max(NumberUtil.min(height, maxHeight), minHeight);
+        
+        if (height != undefined) item._height = height - margin.top - margin.bottom;
+        if (width  != undefined) item._width  = width - margin.right - margin.left;
+        
+        for (i in style) {
+            val = style[i];
+            switch (i) {
+                case 'top' :
+                    item._y = margin.top + StyleSheetUtil.$getVerticalValue(val);
+                    break;
+                case 'right' :
+                    item._x = (StyleSheetUtil.$getStylePropertyUnitByValue(val) == 'px') ? Stage.width - item._width - margin.right - StyleSheetUtil.$getHorizontalValue(val) : Stage.width - item._width - margin.right - StyleSheetUtil.$getHorizontalValue(val);
+                    break;
+                case 'bottom' :
+                    item._y = (StyleSheetUtil.$getStylePropertyUnitByValue(val) == 'px') ? Stage.height - item._height - margin.bottom - StyleSheetUtil.$getVerticalValue(val) : Stage.height - item._height - margin.bottom - StyleSheetUtil.$getVerticalValue(val);
+                    break;
+                case 'left' :
+                    item._x = margin.left + StyleSheetUtil.$getHorizontalValue(val);
+                    break;
+                case 'minTop' :
+                case 'maxBottom' :
+                    topMin = StyleSheetUtil.$getVerticalValue(val);
+                    break;
+                case 'maxTop' :
+                case 'minBottom' :
+                    topMax = StyleSheetUtil.$getVerticalValue(val);
+                    break;
+                case 'minLeft' :
+                case 'maxRight' :
+                    leftMin = StyleSheetUtil.$getHorizontalValue(val);
+                    break;
+                case 'maxLeft' :
+                case 'minRight' :
+                    leftMax = StyleSheetUtil.$getHorizontalValue(val);
+                    break;
+            }
+        }
+        
+        item._x = NumberUtil.max(NumberUtil.min(item._x, leftMax), leftMin);
+        item._y = NumberUtil.max(NumberUtil.min(item._y, topMax), topMin);
+        
+        return true;
+    }
+    
+    private static function $getStylePropertyUnitByValue(value:String):String {
+        if (!isNaN(value)) return 'px';
+        else if (value.substr(-2).toLowerCase() == 'px') if (!isNaN(value.substr(0, -2))) return 'px';
+        else if (value.substr(-1) == '%') if (!isNaN(value.substr(0, -1))) return '%';
+    }
+    
+    private static function $getValue(value:String):Number {
+        if (value.substr(-2).toLowerCase() == "px") {
+            var num:Number = Number(value.substr(0, -2));
+            if (!isNaN(num)) return num;
+        } else if (value.substr(-1) == "%") {
+            var num:Number = Number(value.substr(0, -1));
+            if (!isNaN(num)) return num * .01;
+        } else if (!isNaN(value)) return Number(value);
+    }
+    
+    private static function $getHorizontalValue(value:String):Number {
+        return (StyleSheetUtil.$getStylePropertyUnitByValue(value) == 'px') ? StyleSheetUtil.$getValue(value) : StyleSheetUtil.$getValue(value) * Stage.width;
+    }
+    
+    private static function $getVerticalValue(value:String):Number {
+        return (StyleSheetUtil.$getStylePropertyUnitByValue(value) == 'px') ? StyleSheetUtil.$getValue(value) : StyleSheetUtil.$getValue(value) * Stage.height;
+    }
+    
+    
+    private function StyleSheetUtil() {} // Prevents instance creation
+}
+
+</textarea></div></div></div><div class="classDescription"><div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Since:</span><div class="item"><ul><li> Flash Player 7 </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class methods</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#positionItemWithStyleObject">positionItemWithStyleObject</a><span class="typeInfo"> (item:Object, style:Object) : Boolean</span><ul class="summary"><li>	Positions a TextField, MovieClip or Button relative to the stage using an object of defined properties that mimic the CSS equivalents.</li></ul></li></ul></div></div></div><div class="memberSection"><h2 id="Classmethods">Class methods</h2><div class="member" id="positionItemWithStyleObject"><h3>positionItemWithStyleObject</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>positionItemWithStyleObject</b> (
+
+</div><div class="code">item:Object,
+style:Object) : Boolean</div><br class="clear" /></div></div><div class="description"> 	Positions a TextField, MovieClip or Button relative to the stage using an object of defined properties that mimic the CSS equivalents. This object can be created manually or passed from a <code><span class="codeIdentifier">StyleSheet</span></code> object.<br />		<table border="1"><br />			<tr style="background-color:#e1e1e1;"><br />				<th width="150px">CSS property</th><th width="150px">ActionScript property</th><th>Usage and supported values</th></tr><tr><td>top</td><td>top</td><td>Defines object's distance from the top of the stage. Position can be defined in pixels <code><span class="codeString">"15px"</span></code> or as a percentage of the stage height <code><span class="codeString">"5%"</span></code>.</td></tr><tr style="background-color:#f0f5f9;"><td>right</td><td>right</td><td>Defines object's distance from the right of the stage. Position can be defined in pixels <code><span class="codeString">"15px"</span></code> or as a percentage of the stage width <code><span class="codeString">"5%"</span></code>.</td></tr><tr><td>bottom</td><td>bottom</td><td>Defines object's distance from the bottom of the stage. Position can be defined in pixels <code><span class="codeString">"15px"</span></code> or as a percentage of the stage height <code><span class="codeString">"5%"</span></code>.</td></tr><tr style="background-color:#f0f5f9;"><td>left</td><td>left</td><td>Defines object's distance from the left of the stage. Position can be defined in pixels <code><span class="codeString">"15px"</span></code> or as a percentage of the stage width <code><span class="codeString">"5%"</span></code>.</td></tr><tr><td>margin-top</td><td>marginTop</td><td>Defines the vertical spacing from top position. Position can be defined in pixels <code><span class="codeString">"15px"</span></code> or as a percentage of the stage height <code><span class="codeString">"5%"</span></code>.</td></tr><tr style="background-color:#f0f5f9;"><td>margin-right</td><td>marginRight</td><td>Defines the horizontal spacing from right position. Position can be defined in pixels <code><span class="codeString">"15px"</span></code> or as a percentage of the stage width <code><span class="codeString">"5%"</span></code>.</td></tr><tr><td>margin-bottom</td><td>marginBottom</td><td>Defines the vertical spacing from bottom position. Position can be defined in pixels <code><span class="codeString">"15px"</span></code> or as a percentage of the stage height <code><span class="codeString">"5%"</span></code>.</td></tr><tr style="background-color:#f0f5f9;"><td>margin-left</td><td>marginLeft</td><td>Defines the horizontal spacing from left position. Position can be defined in pixels <code><span class="codeString">"15px"</span></code> or as a percentage of the stage width <code><span class="codeString">"5%"</span></code>.</td></tr><tr><td>margin</td><td>margin</td><td>A shorthand property for setting the four margin properties in one declaration; see documentation above. Values should be seperated by spaces and are defined in the following order: top, right, bottom and left.</td></tr><tr style="background-color:#f0f5f9;"><td>width</td><td>width</td><td>Defines the width of the object. Value can be defined in pixels <code><span class="codeString">"250px"</span></code> or as a percentage of the stage width <code><span class="codeString">"25%"</span></code>.</td></tr><tr><td>height</td><td>height</td><td>Defines the height of the object. Value can be defined in pixels <code><span class="codeString">"250px"</span></code> or as a percentage of the stage height <code><span class="codeString">"25%"</span></code>.</td></tr><tr style="background-color:#f0f5f9;"><td>max-width</td><td>maxWidth</td><td>Defines the maximum width of an object. This is most helpful when the width of an object is set to a percentage and the max width is set to a pixel value. Value can be defined in pixels <code><span class="codeString">"250px"</span></code> or as a percentage of the stage width <code><span class="codeString">"25%"</span></code>.</td></tr><tr><td>max-height</td><td>maxHeight</td><td>Defines the maximum height of an object. This is most helpful when the height of an object is set to a percentage and the max height is set to a pixel value. Value can be defined in pixels <code><span class="codeString">"250px"</span></code> or as a percentage of the stage height <code><span class="codeString">"25%"</span></code>.</td></tr><tr style="background-color:#f0f5f9;"><td>min-width</td><td>minWidth</td><td>Defines the minimum width of an object. This is most helpful when the width of an object is set to a percentage and the min width is set to a pixel value. Value can be defined in pixels <code><span class="codeString">"250px"</span></code> or as a percentage of the stage width <code><span class="codeString">"25%"</span></code>.</td></tr><tr><td>min-height</td><td>minHeight</td><td>Defines the minimum height of an object. This is most helpful when the height of an object is set to a percentage and the min height is set to a pixel value. Value can be defined in pixels <code><span class="codeString">"250px"</span></code> or as a percentage of the stage height <code><span class="codeString">"25%"</span></code>.</td></tr><tr style="background-color:#f0f5f9;"><td>background-color</td><td>backgroundColor</td><td>Defines the background color of TextFields and the object color of MovieClips and Buttons. Only hexadecimal color values are supported. Named colors (such as <code><span class="codeString">"blue"</span></code>) are not supported. Colors are written in the following format: <code><span class="codeString">"#FF00FF"</span></code>.</td></tr><tr><td>border-color</td><td>borderColor</td><td>Defines the border color of a Textfield. Only hexadecimal color values are supported. Named colors (such as <code><span class="codeString">"blue"</span></code>) are not supported. Colors are written in the following format: <code><span class="codeString">"#FF00FF"</span></code>.</td></tr><tr style="background-color:#f0f5f9;"><td>opacity</td><td>opacity</td><td>Defines the alpha transparency of the object. Valid value range is <code><span class="codeString">"0.0"</span></code> to<code><span class="codeString">"1.0"</span></code></td></tr></table> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">item <span class="itemSeparator">:</span></div><div>A <code><span class="codeIdentifier">MovieClip</span></code>, <code><span class="codeIdentifier">TextField</span></code> or <code><span class="codeIdentifier">Button</span></code>.</div></div><div class="item"><div class="floatbox code colorizedCode">style<span class="itemSeparator">:</span></div><div>An object that describes the style with the supported properties above.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if item was of type <code><span class="codeIdentifier">MovieClip</span></code>, <code><span class="codeIdentifier">TextField</span></code> or <code><span class="codeIdentifier">Button</span></code> and was successfully styled; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+Stage<span class="codeIdentifier">.align</span> = <span class="codeString">"TL"</span>;
+Stage.scaleMode = <span class="codeString">"noScale"</span>;
+
+<span class="codeKeyword">var</span> myStylePosition:<span class="codeIdentifier">Object</span> = <span class="codeKeyword">new</span> <span class="codeIdentifier">Object</span>();
+<span class="codeIdentifier">this</span>.myStylePosition.top      = <span class="codeString">"25px"</span>;
+<span class="codeIdentifier">this</span>.myStylePosition.left     = <span class="codeString">"0"</span>;
+<span class="codeIdentifier">this</span>.myStylePosition.margin   = <span class="codeString">"0 5px 0 5px"</span>;
+<span class="codeIdentifier">this</span>.myStylePosition<span class="codeIdentifier">.width</span>    = <span class="codeString">"100%"</span>;
+<span class="codeIdentifier">this</span>.myStylePosition<span class="codeIdentifier">.height</span>   = <span class="codeString">"200px"</span>;
+
+StyleSheetUtil.positionItemWithStyleObject(<span class="codeIdentifier">this</span>.myMovieClip_mc, <span class="codeIdentifier">this</span>.myStylePosition);</pre>			Or you can use a stylesheet object:<br />			<pre>
+StyleSheetUtil.positionItemWithStyleObject(<span class="codeIdentifier">this</span>.myMovieClip_mc, myStyleSheet<span class="codeIdentifier">.getStyle</span>());</pre> </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

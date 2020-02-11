@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>EventXml</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_xml_EventXml"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classproperties" accesskey="l">C<span class="accessKey">l</span>ass properties</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li><li><a href="#Eventhandlers" accesskey="e"><span class="accessKey">E</span>vent handlers</a></li></ul><br class="clear" /></div><h1>EventXml</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_xml_DispatchableXml.html">DispatchableXml</a> &lt; <a class="className" href="org_casalib_xml_CoreXml.html">CoreXml</a> &lt; XML</td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">04/03/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger, Mike Creighton</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.xml.EventXml</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.xml.DispatchableXml;
+
+/**
+    Dispatches XML event handler notification using {@link EventDispatcher}.
+    
+    @author Aaron Clinger
+    @author Mike Creighton
+    @version 04/03/07
+    @example
+        &lt;code>
+            import org.casalib.xml.EventXml;
+            
+            function onXmlLoad(sender:EventXml, success:Boolean, status:Number):Void {
+                if (success) {
+                    trace("Xml loaded: " + sender);
+                } else {
+                    trace("Xml error: " + status);
+                }
+            }
+            
+            var myXml:EventXml = new EventXml();
+            this.myXml.addEventObserver(this, EventXml.EVENT_LOAD, "onXmlLoad");
+            this.myXml.load("example.xml");
+        &lt;/code>
+*/
+
+class org.casalib.xml.EventXml extends DispatchableXml {
+    public static var EVENT_LOAD:String        = 'onLoad';
+    public static var EVENT_DATA:String        = 'onData';
+    public static var EVENT_HTTP_STATUS:String = 'onHttpStatus';
+    
+    
+    /**
+        @param text: The XML text parsed to create the new XML object.
+    */
+    public function EventXml(text:String) {
+        super(text);
+        
+        this.$setClassDescription('org.casalib.xml.EventXml');
+    }
+    
+    /**
+        @exclude
+        @sends onData = function(sender:EventXml, src:String) {}
+    */
+    public function onData(src:String) {
+        super.onData(src);
+        this.dispatchEvent(EventXml.EVENT_DATA, this, src);
+    }
+    
+    /**
+        @exclude
+        @sends onHttpStatus = function(sender:EventXml, httpStatus:Number) {}
+    */
+    public function onHTTPStatus(httpStatus:Number) {
+        super.onHTTPStatus(httpStatus);
+        this.dispatchEvent(EventXml.EVENT_HTTP_STATUS, this, httpStatus);
+    }
+    
+    /**
+        @exclude
+        @sends onLoad = function(sender:EventXml, success:Boolean, status:Number) {}
+    */
+    public function onLoad(success:Boolean) {
+        super.onLoad(success);
+        this.dispatchEvent(EventXml.EVENT_LOAD, this, success, this.status);
+    }
+}
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Dispatches XML event handler notification using <a class="className" href="org_casalib_event_EventDispatcher.html">org.casalib.event.EventDispatcher</a>.</span><div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">import</span> org.casalib.xml.EventXml;
+
+<span class="codeKeyword">function</span> onXmlLoad(sender:EventXml, success:<span class="codeIdentifier">Boolean</span>, status:<span class="codeIdentifier">Number</span>):<span class="codeIdentifier">Void</span> {
+    <span class="codeKeyword">if</span> (success) {
+        <span class="codeIdentifier">trace</span>(<span class="codeString">"Xml loaded: "</span> + sender);
+    } <span class="codeKeyword">else</span> {
+        <span class="codeIdentifier">trace</span>(<span class="codeString">"Xml error: "</span> + status);
+    }
+}
+
+<span class="codeKeyword">var</span> myXml:EventXml = <span class="codeKeyword">new</span> EventXml();
+<span class="codeIdentifier">this</span>.myXml.addEventObserver(<span class="codeIdentifier">this</span>, EventXml.EVENT_LOAD, <span class="codeString">"onXmlLoad"</span>);
+<span class="codeIdentifier">this</span>.myXml<span class="codeIdentifier">.load</span>(<span class="codeString">"example.xml"</span>);</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Events broadcasted to listeners:</span><div class="item"><ul><li><code>onData = function (sender:EventXml, src:String) {}</code> </li><li><code>onHttpStatus = function (sender:EventXml, httpStatus:Number) {}</code> </li><li><code>onLoad = function (sender:EventXml, success:Boolean, status:Number) {}</code> </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Constructor</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#EventXml">EventXml</a><span class="typeInfo"> (text:String)</span></li></ul></div><div class="memberSummaryPart"><span class="title">Class properties</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#EVENT_LOAD">EVENT_LOAD</a><span class="typeInfo">  : String</span></li><li class="sortli listnum2"><a href="#EVENT_DATA">EVENT_DATA</a><span class="typeInfo">  : String</span></li><li class="sortli listnum3"><a href="#EVENT_HTTP_STATUS">EVENT_HTTP_STATUS</a><span class="typeInfo">  : String</span></li></ul></div><div class="memberSummaryPart"><span class="title">Instance methods</span><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_xml_DispatchableXml.html">DispatchableXml</a></span></span><div class="item inheritedList"><a href="org_casalib_xml_DispatchableXml.html#addEventObserver">addEventObserver</a>  <a href="org_casalib_xml_DispatchableXml.html#destroy">destroy</a>  <a href="org_casalib_xml_DispatchableXml.html#dispatchEvent">dispatchEvent</a>  <a href="org_casalib_xml_DispatchableXml.html#removeAllEventObservers">removeAllEventObservers</a>  <a href="org_casalib_xml_DispatchableXml.html#removeEventObserver">removeEventObserver</a>  <a href="org_casalib_xml_DispatchableXml.html#removeEventObserversForEvent">removeEventObserversForEvent</a>  <a href="org_casalib_xml_DispatchableXml.html#removeEventObserversForScope">removeEventObserversForScope</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_xml_CoreXml.html">CoreXml</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_xml_CoreXml.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_xml_CoreXml.html#destroy">destroy</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Constructor">Constructor</h2><div class="member" id="EventXml"><h3>EventXml</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>EventXml</b> (
+</div><div class="code">text:String)</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">text<span class="itemSeparator">:</span></div><div>The XML text parsed to create the new XML object.</div></div></div></div></div></div></div><div class="memberSection"><h2 id="Classproperties">Class properties</h2><div class="member" id="EVENT_DATA"><h3>EVENT_DATA</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_DATA</b>:String = <span class="codeString">'onData'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_HTTP_STATUS"><h3>EVENT_HTTP_STATUS</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_HTTP_STATUS</b>:String = <span class="codeString">'onHttpStatus'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_LOAD"><h3>EVENT_LOAD</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_LOAD</b>:String = <span class="codeString">'onLoad'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

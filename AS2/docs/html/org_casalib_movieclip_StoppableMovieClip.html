@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>StoppableMovieClip</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_movieclip_StoppableMovieClip"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Instanceproperties" accesskey="l">Instance <span class="accessKey">p</span>roperties</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li></ul><br class="clear" /></div><h1>StoppableMovieClip</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_movieclip_ReversibleMovieClip.html">ReversibleMovieClip</a> &lt; <a class="className" href="org_casalib_movieclip_CoreMovieClip.html">CoreMovieClip</a> &lt; MovieClip</td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">04/09/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.movieclip.StoppableMovieClip</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.movieclip.ReversibleMovieClip;
+import org.casalib.time.EnterFrame;
+import org.casalib.util.ArrayUtil;
+
+/**
+    Gives the ability to dynamically place and change &lt;code>stop()&lt;/code> actions on frames.
+
+    @author Aaron Clinger
+    @version 04/09/07
+    @since Flash Player 7
+    @example This will start playing a MovieClip at frame 5 and will stop once the MovieClip has reached frame 10:
+        &lt;code>
+            this.stoppable_mc.addStopFrame(10);
+        &lt;/code>
+    @usageNote See {@link ReversibleMovieClip}.
+*/
+
+class org.casalib.movieclip.StoppableMovieClip extends ReversibleMovieClip {
+    private var $stopFrames:Array;
+    private var $framePulse:EnterFrame;
+    private var $hasStoppedBefore:Boolean;
+    
+    
+    private function StoppableMovieClip() {
+        super();
+        
+        this.$framePulse       = EnterFrame.getInstance();
+        this.$stopFrames       = new Array();
+        this.$hasStoppedBefore = false;
+        
+        this.$setClassDescription('org.casalib.movieclip.StoppableMovieClip');
+    }
+    
+    /**
+        Marks a frame which will trigger &lt;code>stop&lt;/code> when playhead reaches it.
+
+        @param frame: A number representing the frame number.
+        @return Returns &lt;code>true&lt;/code> frame was successfully added and unique; otherwise &lt;code>false&lt;/code>.
+    */
+    public function addStopFrame(frame:Number):Boolean {
+        if (frame > this._totalframes || ArrayUtil.contains(this.$stopFrames, frame) > 0) return false;
+        this.$stopFrames.push(frame);
+        
+        if (!this.$hasStoppedBefore) this.$addStopFrameCheck();
+        
+        return true;
+    }
+    
+    /**
+        Removes frame number from triggering &lt;code>stop&lt;/code> when playhead reaches.
+
+        @param frame: A number representing the frame number.
+        @return Returns &lt;code>true&lt;/code> frame was found and removed; otherwise &lt;code>false&lt;/code>.
+    */
+    public function removeStopFrame(frame:Number):Boolean {
+        return ArrayUtil.removeArrayItem(this.$stopFrames, frame) >= 1;
+    }
+    
+    private function $addStopFrameCheck():Void {
+        if (this.$stopFrames.length == 0) return;
+        this.$framePulse.addEventObserver(this, EnterFrame.EVENT_ENTER_FRAME, '$checkForStopFrame');
+    }
+    
+    private function $checkForStopFrame():Void {
+        if (ArrayUtil.contains(this.$stopFrames, this._currentframe) > 0) this.stop();
+    }
+    
+    /**
+        @exclude 
+    */
+    public function playBackwards():Void {
+        this.$addStopFrameCheck();
+        super.playBackwards();
+    }
+    
+    /**
+        @exclude 
+    */
+    public function gotoAndPlayBackwards(frame:Object):Void {
+        this.$addStopFrameCheck();
+        super.gotoAndPlayBackwards(frame);
+    }
+    
+    /**
+        @exclude
+    */
+    public function gotoAndPlay(frame:Object):Void {
+        this.$addStopFrameCheck();
+        super.gotoAndPlay(frame);
+    }
+    
+    /**
+        @exclude
+    */
+    public function play():Void {
+        this.$addStopFrameCheck();
+        super.play();
+    }
+    
+    /**
+        @exclude
+    */
+    public function stop():Void {
+        this.$hasStoppedBefore = true;
+        this.$framePulse.removeEventObserver(this, EnterFrame.EVENT_ENTER_FRAME, '$checkForStopFrame');
+        super.stop();
+    }
+    
+    /**
+        @exclude 
+    */
+    public function gotoAndStop(frame:Object):Void {
+        this.$hasStoppedBefore = true;
+        this.$framePulse.removeEventObserver(this, EnterFrame.EVENT_ENTER_FRAME, '$checkForStopFrame');
+        super.gotoAndStop(frame);
+    }
+    
+    public function destroy():Void {
+        this.$framePulse.removeEventObserversForScope(this);
+        
+        delete this.$stopFrames;
+        delete this.$framePulse;
+        delete this.$hasStoppedBefore;
+        
+        super.destroy();
+    }
+}
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Gives the ability to dynamically place and change <code><span class="codeIdentifier">stop</span>()</code> actions on frames.</span><div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Since:</span><div class="item"><ul><li> Flash Player 7 </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> This will start playing a MovieClip at frame 5 and will stop once the MovieClip has reached frame 10:<br />		<pre>
+<span class="codeIdentifier">this</span>.stoppable_mc.addStopFrame(<span class="codeNumber">10</span>);</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> See <a class="className" href="org_casalib_movieclip_ReversibleMovieClip.html">ReversibleMovieClip</a>. </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class methods</span><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Class methods inherited from <span class="superclass"><a class="className" href="org_casalib_movieclip_ReversibleMovieClip.html">ReversibleMovieClip</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_movieclip_ReversibleMovieClip.html#create">create</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Class methods inherited from <span class="superclass"><a class="className" href="org_casalib_movieclip_CoreMovieClip.html">CoreMovieClip</a></span></span><div class="item inheritedList"><a href="org_casalib_movieclip_CoreMovieClip.html#create">create</a></div></div></div></div></div><div class="memberSummaryPart"><span class="title">Instance methods</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#addStopFrame">addStopFrame</a><span class="typeInfo"> (frame:Number) : Boolean</span><ul class="summary"><li>Marks a frame which will trigger <span class="codeIdentifier">stop</span> when playhead reaches it.</li></ul></li><li class="sortli listnum2"><a href="#removeStopFrame">removeStopFrame</a><span class="typeInfo"> (frame:Number) : Boolean</span><ul class="summary"><li>Removes frame number from triggering <span class="codeIdentifier">stop</span> when playhead reaches.</li></ul></li><li class="sortli listnum3"><a href="#destroy">destroy</a><span class="typeInfo">  : Void</span></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_movieclip_ReversibleMovieClip.html">ReversibleMovieClip</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_movieclip_ReversibleMovieClip.html#$gotoFrameBefore">$gotoFrameBefore</a>  <a class="private" href="org_casalib_movieclip_ReversibleMovieClip.html#$gotoLastFrame">$gotoLastFrame</a>  <a class="private" href="org_casalib_movieclip_ReversibleMovieClip.html#$playInReverse">$playInReverse</a>  <a class="private" href="org_casalib_movieclip_ReversibleMovieClip.html#$stopReversing">$stopReversing</a>  <a href="org_casalib_movieclip_ReversibleMovieClip.html#destroy">destroy</a>  <a href="org_casalib_movieclip_ReversibleMovieClip.html#gotoAndPlay">gotoAndPlay</a>  <a href="org_casalib_movieclip_ReversibleMovieClip.html#gotoAndPlayBackwards">gotoAndPlayBackwards</a>  <a href="org_casalib_movieclip_ReversibleMovieClip.html#gotoAndStop">gotoAndStop</a>  <a href="org_casalib_movieclip_ReversibleMovieClip.html#isPlayingBackwards">isPlayingBackwards</a>  <a href="org_casalib_movieclip_ReversibleMovieClip.html#play">play</a>  <a href="org_casalib_movieclip_ReversibleMovieClip.html#playBackwards">playBackwards</a>  <a href="org_casalib_movieclip_ReversibleMovieClip.html#stop">stop</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_movieclip_CoreMovieClip.html">CoreMovieClip</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_movieclip_CoreMovieClip.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_movieclip_CoreMovieClip.html#destroy">destroy</a>  <a href="org_casalib_movieclip_CoreMovieClip.html#removeMovieClip">removeMovieClip</a>  <a href="org_casalib_movieclip_CoreMovieClip.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Instancemethods">Instance methods</h2><div class="member" id="addStopFrame"><h3>addStopFrame</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>addStopFrame</b> (
+</div><div class="code">frame:Number) : Boolean</div><br class="clear" /></div></div><div class="description"> Marks a frame which will trigger <code><span class="codeIdentifier">stop</span></code> when playhead reaches it. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">frame<span class="itemSeparator">:</span></div><div>A number representing the frame number.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> frame was successfully added and unique; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div><div class="member" id="destroy"><h3>destroy</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>destroy</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Overrides:</span><div class="item"><ul><li> <a href="org_casalib_movieclip_ReversibleMovieClip.html#destroy">ReversibleMovieClip.destroy</a> </li></ul></div></div></div></div></div><div class="member" id="removeStopFrame"><h3>removeStopFrame</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>removeStopFrame</b> (
+</div><div class="code">frame:Number) : Boolean</div><br class="clear" /></div></div><div class="description"> Removes frame number from triggering <code><span class="codeIdentifier">stop</span></code> when playhead reaches. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">frame<span class="itemSeparator">:</span></div><div>A number representing the frame number.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> frame was found and removed; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

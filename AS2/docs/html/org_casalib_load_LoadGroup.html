@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>LoadGroup</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_load_LoadGroup"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classproperties" accesskey="l">C<span class="accessKey">l</span>ass properties</a></li><li><a href="#Instanceproperties" accesskey="l">Instance <span class="accessKey">p</span>roperties</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li></ul><br class="clear" /></div><h1>LoadGroup</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_event_EventDispatcher.html">EventDispatcher</a> &lt; <a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></td></tr><tr><th align="left">Implements:</th><td><ul><li><a class="className" href="org_casalib_load_base_LoadInterface.html">LoadInterface</a></li></ul></td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">06/08/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.load.LoadGroup</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.event.EventDispatcher;
+import org.casalib.load.base.LoadInterface;
+import org.casalib.load.base.BytesLoadInterface;
+import org.casalib.load.base.BytesLoad;
+import org.casalib.math.Percent;
+
+/**
+    Allows multiple loads to be treated as one larger load item.
+    
+    @author Aaron Clinger
+    @version 06/08/07
+    @example
+        &lt;code>
+            var xmlLoad:XmlLoad = new XmlLoad("test.xml");
+            var imageLoad:MediaLoad = new MediaLoad(this.loadZone_mc, "test.jpg");
+            
+            var myLoadGroup = new LoadGroup();
+            this.myLoadGroup.addLoad(this.xmlLoad);
+            this.myLoadGroup.addLoad(this.imageLoad);
+            this.myLoadGroup.addEventObserver(this, LoadGroup.EVENT_LOAD_PERCENT, "onGroupLoadPercent");
+            this.myLoadGroup.addEventObserver(this, LoadGroup.EVENT_LOAD_ERROR, "onGroupLoadError");
+            
+            function onGroupLoadPercent(sender:LoadGroup, progress:Percent):Void {
+                trace("My group is " + progress.getPercentage() + "% loaded.");
+            }
+            
+            function onGroupLoadError(sender:LoadGroup, failedLoad:BytesLoadInterface):Void {
+                this.myLoadGroup.removeLoad(failedLoad);
+                this.myLoadGroup.start();
+            }
+            
+            this.myLoadGroup.start();
+        &lt;/code>
+*/
+
+class org.casalib.load.LoadGroup extends EventDispatcher implements LoadInterface {
+    public static var EVENT_LOAD_START:String    = 'onLoadStart';
+    public static var EVENT_LOAD_STOP:String     = 'onLoadStop';
+    public static var EVENT_LOAD_ERROR:String    = 'onLoadError';
+    public static var EVENT_LOAD_PERCENT:String  = 'onLoadPercent';
+    public static var EVENT_LOAD_COMPLETE:String = 'onLoadComplete';
+    private var $hasLoaded:Boolean;
+    private var $isLoading:Boolean;
+    private var $group: /*Object*/ Array;
+    private var $position:Number;
+    private var $percent:Number;
+    
+    
+    /**
+        Creates a new LoadGroup object.
+    */
+    public function LoadGroup() {
+        super();
+        
+        this.$group = new Array();
+        this.$hasLoaded = this.$isLoading = false;
+        
+        this.$setClassDescription('org.casalib.load.LoadGroup');
+    }
+    
+    /**
+        Add a load item to the group.
+        
+        @param loadItem: Load to be added to the load group. Can be any class that implements {@link BytesLoadInterface} and dispatches events &lt;code>"onLoadProgress"&lt;/code>, &lt;code>"onLoadComplete"&lt;/code> and &lt;code>"onLoadError"&lt;/code>.
+        @param percentOfGroup: &lt;strong>[optional]&lt;/strong> Defines the percentage of the total group the size of the load item represents; defaults to equal increments.
+    */
+    public function addLoad(loadItem:BytesLoadInterface, percentOfGroup:Percent):Void {
+        if (this.isLoading() || this.hasLoaded())
+            return;
+        
+        this.removeLoad(loadItem);
+        
+        var loadInfo:Object = new Object();
+        loadInfo.load       = loadItem;
+        loadInfo.percent    = (percentOfGroup != undefined) ? percentOfGroup.clone() : new Percent(.01);
+        
+        this.$group.push(loadInfo);
+    }
+    
+    /**
+        Removes a load item from the group.
+        
+        @param loadItem: Load to be removed from the load group.
+        @return Returns &lt;code>true&lt;/code> if item was successfully found and removed; otherwise &lt;code>false&lt;/code>.
+        @usageNote You cannot remove a load item when the LoadGroup is in the process of loading.
+    */
+    public function removeLoad(loadItem:BytesLoadInterface):Boolean {
+        if (this.isLoading())
+            return false;
+        
+        var l:Number = this.$group.length;
+        while (l--) {
+            if (loadItem == this.$group[l].load) {
+                this.$group.splice(l, 1);
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+        @return Returns an Array contains all load items in the {@link LoadGroup}.
+    */
+    public function getLoads(): /*BytesLoadInterface*/ Array {
+        var l:Number = this.$group.length;
+        var loads: /*BytesLoadInterface*/ Array = new Array();
+        
+        while (l--)
+            loads.push(this.$group[l].load);
+        
+        return loads;
+    }
+    
+    /**
+        Starts the group load process and begins reporting of the total load percentage of all files to observers.
+        
+        @sends onLoadStart = function(sender:LoadGroup) {}
+    */
+    public function start():Void {
+        if (this.isLoading() || this.hasLoaded() || this.$group.length == 0)
+            return;
+        
+        this.$isLoading = true;
+        this.$position  = -1;
+        this.$percent   = 0;
+        
+        this.$checkTotalPercentValidity();
+        this.$loadNextItem();
+        
+        this.dispatchEvent(LoadGroup.EVENT_LOAD_START, this);
+    }
+    
+    /**
+        Stops the group load process.
+        
+        @sends onLoadStop = function(sender:LoadGroup) {}
+    */
+    public function stop():Void {
+        if (!this.isLoading())
+            return;
+        
+        this.$stopLoad();
+        
+        this.dispatchEvent(LoadGroup.EVENT_LOAD_STOP, this);
+    }
+    
+    public function hasLoaded():Boolean {
+        return this.$hasLoaded;
+    }
+    
+    public function isLoading():Boolean {
+        return this.$isLoading;
+    }
+    
+    /**
+        @exclude
+        
+        This is needed to adhere to LoadInterface but isn't used in this class.
+    */
+    public function getFilePath():String {
+        return null;
+    }
+    
+    public function destroy():Void {
+        if (this.isLoading())
+            this.$group[this.$position].load.removeEventObserversForScope(this);
+        
+        var i:Number = this.$group.length;
+        while (i--)
+            this.$group[i].percent.destroy();
+        
+        this.$group.splice(0);
+        
+        delete this.$hasLoaded;
+        delete this.$isLoading;
+        delete this.$group;
+        delete this.$position;
+        delete this.$percent;
+        
+        super.destroy();
+    }
+    
+    private function $stopLoad():Void {
+        this.$isLoading = false;
+        this.$group[this.$position].load.removeEventObserversForScope(this);
+    }
+    
+    /**
+        @sends onLoadComplete = function(sender:LoadGroup) {}
+    */
+    private function $loadNextItem():Void {
+        if (++this.$position >= this.$group.length) {
+            this.$hasLoaded = true;
+            this.$isLoading = false;
+            
+            if (this.$percent != 1)
+                this.dispatchEvent(LoadGroup.EVENT_LOAD_PERCENT, this, new Percent(1));
+            
+            this.dispatchEvent(LoadGroup.EVENT_LOAD_COMPLETE, this);
+            return;
+        }
+            
+        var loadItem:Object = this.$group[this.$position];
+        
+        if (loadItem.load.hasLoaded()) {
+            this.$loadProgress(loadItem.load, 1, 1);
+            this.$loadCompleted(loadItem.load);
+            return;
+        } else {
+            loadItem.load.addEventObserver(this, BytesLoad.EVENT_LOAD_ERROR, '$loadError');
+            loadItem.load.addEventObserver(this, BytesLoad.EVENT_LOAD_PROGRESS, '$loadProgress');
+            loadItem.load.addEventObserver(this, BytesLoad.EVENT_LOAD_COMPLETE, '$loadCompleted');
+            loadItem.load.start();
+        }
+    }
+    
+    /**
+        @sends onLoadPercent = function(sender:LoadGroup, progress:Percent) {}
+    */
+    private function $loadProgress(sender:BytesLoadInterface, bytesLoaded:Number, bytesTotal:Number):Void {
+        this.dispatchEvent(LoadGroup.EVENT_LOAD_PERCENT, this, new Percent((bytesLoaded / bytesTotal) * this.$group[this.$position].percent.getDecimalPercentage() + this.$percent));
+    }
+    
+    private function $loadCompleted(sender:BytesLoadInterface):Void {
+        var loadItem:Object = this.$group[this.$position];
+        
+        loadItem.load.removeEventObserversForScope(this);
+        this.$percent += loadItem.percent.getDecimalPercentage();
+        
+        this.$loadNextItem();
+    }
+    
+    /**
+        @sends onLoadError = function(sender:LoadGroup, failedLoad:BytesLoadInterface) {}
+    */
+    private function $loadError():Void {
+        this.$stopLoad();
+        this.dispatchEvent(LoadGroup.EVENT_LOAD_ERROR, this, this.$group[this.$position].load);
+    }
+    
+    private function $checkTotalPercentValidity():Void {
+        var l:Number = this.$group.length;
+        var perTotal:Number = 0;
+        var loadItem:Object;
+        
+        while (l--) {
+            loadItem = this.$group[l];
+            
+            if (loadItem.percent.getDecimalPercentage() &lt;= 0)
+                loadItem.percent.setDecimalPercentage(.01);
+            
+            perTotal += loadItem.percent.getDecimalPercentage();
+        }
+        
+        if (perTotal != 1) {
+            l = this.$group.length;
+            
+            while (l--) {
+                loadItem = this.$group[l];
+                loadItem.percent.setDecimalPercentage((loadItem.percent.getDecimalPercentage() / perTotal) * 1);
+            }
+        }
+    }
+}
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Allows multiple loads to be treated as one larger load item.</span><div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> xmlLoad:XmlLoad = <span class="codeKeyword">new</span> XmlLoad(<span class="codeString">"test.xml"</span>);
+<span class="codeKeyword">var</span> imageLoad:MediaLoad = <span class="codeKeyword">new</span> MediaLoad(<span class="codeIdentifier">this</span>.loadZone_mc, <span class="codeString">"test.jpg"</span>);
+
+<span class="codeKeyword">var</span> myLoadGroup = <span class="codeKeyword">new</span> LoadGroup();
+<span class="codeIdentifier">this</span>.myLoadGroup.addLoad(<span class="codeIdentifier">this</span>.xmlLoad);
+<span class="codeIdentifier">this</span>.myLoadGroup.addLoad(<span class="codeIdentifier">this</span>.imageLoad);
+<span class="codeIdentifier">this</span>.myLoadGroup.addEventObserver(<span class="codeIdentifier">this</span>, LoadGroup.EVENT_LOAD_PERCENT, <span class="codeString">"onGroupLoadPercent"</span>);
+<span class="codeIdentifier">this</span>.myLoadGroup.addEventObserver(<span class="codeIdentifier">this</span>, LoadGroup.EVENT_LOAD_ERROR, <span class="codeString">"onGroupLoadError"</span>);
+
+<span class="codeKeyword">function</span> onGroupLoadPercent(sender:LoadGroup, progress:Percent):<span class="codeIdentifier">Void</span> {
+    <span class="codeIdentifier">trace</span>(<span class="codeString">"My group is "</span> + progress.getPercentage() + <span class="codeString">"% loaded."</span>);
+}
+
+<span class="codeKeyword">function</span> onGroupLoadError(sender:LoadGroup, failedLoad:BytesLoadInterface):<span class="codeIdentifier">Void</span> {
+    <span class="codeIdentifier">this</span>.myLoadGroup.removeLoad(failedLoad);
+    <span class="codeIdentifier">this</span>.myLoadGroup<span class="codeIdentifier">.start</span>();
+}
+
+<span class="codeIdentifier">this</span>.myLoadGroup<span class="codeIdentifier">.start</span>();</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Events broadcasted to listeners:</span><div class="item"><ul><li><code>onLoadStart = function (sender:LoadGroup) {}</code> </li><li><code>onLoadStop = function (sender:LoadGroup) {}</code> </li><li><code>onLoadComplete = function (sender:LoadGroup) {}</code> </li><li><code>onLoadPercent = function (sender:LoadGroup, progress:Percent) {}</code> </li><li><code>onLoadError = function (sender:LoadGroup, failedLoad:BytesLoadInterface) {}</code> </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Constructor</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#LoadGroup">LoadGroup</a></li></ul></div><div class="memberSummaryPart"><span class="title">Class properties</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#EVENT_LOAD_START">EVENT_LOAD_START</a><span class="typeInfo">  : String</span></li><li class="sortli listnum2"><a href="#EVENT_LOAD_STOP">EVENT_LOAD_STOP</a><span class="typeInfo">  : String</span></li><li class="sortli listnum3"><a href="#EVENT_LOAD_ERROR">EVENT_LOAD_ERROR</a><span class="typeInfo">  : String</span></li><li class="sortli listnum4"><a href="#EVENT_LOAD_PERCENT">EVENT_LOAD_PERCENT</a><span class="typeInfo">  : String</span></li><li class="sortli listnum5"><a href="#EVENT_LOAD_COMPLETE">EVENT_LOAD_COMPLETE</a><span class="typeInfo">  : String</span></li></ul></div><div class="memberSummaryPart"><span class="title">Instance methods</span><ul class="sortable" id="sortul3"><li class="sortli listnum1"><a href="#addLoad">addLoad</a><span class="typeInfo"> (loadItem:<a class="className" href="org_casalib_load_base_BytesLoadInterface.html">BytesLoadInterface</a>) : Void</span><ul class="summary"><li>Add a load item to the group.</li></ul></li><li class="sortli listnum2"><a href="#removeLoad">removeLoad</a><span class="typeInfo"> (loadItem:<a class="className" href="org_casalib_load_base_BytesLoadInterface.html">BytesLoadInterface</a>) : Boolean</span><ul class="summary"><li>Removes a load item from the group.</li></ul></li><li class="sortli listnum3"><a href="#getLoads">getLoads</a><span class="typeInfo">  : Array</span></li><li class="sortli listnum4"><a href="#start">start</a><span class="typeInfo">  : Void</span><ul class="summary"><li>Starts the group load process and begins reporting of the total load percentage of all files to observers.</li></ul></li><li class="sortli listnum5"><a href="#stop">stop</a><span class="typeInfo">  : Void</span><ul class="summary"><li>Stops the group load process.</li></ul></li><li class="sortli listnum6"><a href="#hasLoaded">hasLoaded</a><span class="typeInfo">  : Boolean</span><ul class="summary"><li><div class="inheritDoc">Determines whether the requested file has finished loading.</li></ul></li><li class="sortli listnum7"><a href="#isLoading">isLoading</a><span class="typeInfo">  : Boolean</span><ul class="summary"><li><div class="inheritDoc">Determines whether the requested file is in the process of loading.</li></ul></li><li class="sortli listnum8"><a href="#destroy">destroy</a><span class="typeInfo">  : Void</span><ul class="summary"><li><div class="inheritDoc">Removes any internal variables, intervals, enter frames, internal MovieClips and event observers to allow the object to be garbage collected.</li></ul></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_event_EventDispatcher.html">EventDispatcher</a></span></span><div class="item inheritedList"><a href="org_casalib_event_EventDispatcher.html#addEventObserver">addEventObserver</a>  <a href="org_casalib_event_EventDispatcher.html#destroy">destroy</a>  <a href="org_casalib_event_EventDispatcher.html#dispatchEvent">dispatchEvent</a>  <a href="org_casalib_event_EventDispatcher.html#removeAllEventObservers">removeAllEventObservers</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserver">removeEventObserver</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForEvent">removeEventObserversForEvent</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForScope">removeEventObserversForScope</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_core_CoreObject.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_core_CoreObject.html#destroy">destroy</a>  <a href="org_casalib_core_CoreObject.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Constructor">Constructor</h2><div class="member" id="LoadGroup"><h3>LoadGroup</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>LoadGroup</b> (
+</div><div class="code">)</div><br class="clear" /></div></div><div class="description"> Creates a new LoadGroup object. </div></div></div><div class="memberSection"><h2 id="Classproperties">Class properties</h2><div class="member" id="EVENT_LOAD_COMPLETE"><h3>EVENT_LOAD_COMPLETE</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_LOAD_COMPLETE</b>:String = <span class="codeString">'onLoadComplete'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_LOAD_ERROR"><h3>EVENT_LOAD_ERROR</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_LOAD_ERROR</b>:String = <span class="codeString">'onLoadError'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_LOAD_PERCENT"><h3>EVENT_LOAD_PERCENT</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_LOAD_PERCENT</b>:String = <span class="codeString">'onLoadPercent'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_LOAD_START"><h3>EVENT_LOAD_START</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_LOAD_START</b>:String = <span class="codeString">'onLoadStart'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_LOAD_STOP"><h3>EVENT_LOAD_STOP</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_LOAD_STOP</b>:String = <span class="codeString">'onLoadStop'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div></div><div class="memberSection"><h2 id="Instancemethods">Instance methods</h2><div class="member" id="addLoad"><h3>addLoad</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>addLoad</b> (
+
+</div><div class="code">loadItem:<a class="className" href="org_casalib_load_base_BytesLoadInterface.html">BytesLoadInterface</a>,
+percentOfGroup:<a class="className" href="org_casalib_math_Percent.html">Percent</a>) : Void</div><br class="clear" /></div></div><div class="description"> Add a load item to the group. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">loadItem      <span class="itemSeparator">:</span></div><div>Load to be added to the load group. Can be any class that implements <a class="className" href="org_casalib_load_base_BytesLoadInterface.html">org.casalib.load.base.BytesLoadInterface</a> and dispatches events <code><span class="codeString">"onLoadProgress"</span></code>, <code><span class="codeString">"onLoadComplete"</span></code> and <code><span class="codeString">"onLoadError"</span></code>.</div></div><div class="item"><div class="floatbox code colorizedCode">percentOfGroup<span class="itemSeparator">:</span></div><div><strong>[optional]</strong> Defines the percentage of the total group the size of the load item represents; defaults to equal increments.</div></div></div></div></div></div><div class="member" id="destroy"><h3>destroy</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>destroy</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Removes any internal variables, intervals, enter frames, internal MovieClips and event observers to allow the object to be garbage collected.<br />		<br />		<strong>Always call <pre>
+<span class="codeKeyword">var</span> xmlLoad:XmlLoad = <span class="codeKeyword">new</span> XmlLoad(<span class="codeString">"test.xml"</span>);
+<span class="codeKeyword">var</span> imageLoad:MediaLoad = <span class="codeKeyword">new</span> MediaLoad(<span class="codeIdentifier">this</span>.loadZone_mc, <span class="codeString">"test.jpg"</span>);
+
+<span class="codeKeyword">var</span> myLoadGroup = <span class="codeKeyword">new</span> LoadGroup();
+<span class="codeIdentifier">this</span>.myLoadGroup.addLoad(<span class="codeIdentifier">this</span>.xmlLoad);
+<span class="codeIdentifier">this</span>.myLoadGroup.addLoad(<span class="codeIdentifier">this</span>.imageLoad);
+<span class="codeIdentifier">this</span>.myLoadGroup.addEventObserver(<span class="codeIdentifier">this</span>, LoadGroup.EVENT_LOAD_PERCENT, <span class="codeString">"onGroupLoadPercent"</span>);
+<span class="codeIdentifier">this</span>.myLoadGroup.addEventObserver(<span class="codeIdentifier">this</span>, LoadGroup.EVENT_LOAD_ERROR, <span class="codeString">"onGroupLoadError"</span>);
+
+<span class="codeKeyword">function</span> onGroupLoadPercent(sender:LoadGroup, progress:Percent):<span class="codeIdentifier">Void</span> {
+    <span class="codeIdentifier">trace</span>(<span class="codeString">"My group is "</span> + progress.getPercentage() + <span class="codeString">"% loaded."</span>);
+}
+
+<span class="codeKeyword">function</span> onGroupLoadError(sender:LoadGroup, failedLoad:BytesLoadInterface):<span class="codeIdentifier">Void</span> {
+    <span class="codeIdentifier">this</span>.myLoadGroup.removeLoad(failedLoad);
+    <span class="codeIdentifier">this</span>.myLoadGroup<span class="codeIdentifier">.start</span>();
+}
+
+<span class="codeIdentifier">this</span>.myLoadGroup<span class="codeIdentifier">.start</span>();</pre> before deleting last object pointer.</strong></div><a class="followInheritDoc" href="org_casalib_core_CoreInterface.html#destroy">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Overrides:</span><div class="item"><ul><li> <a href="org_casalib_event_EventDispatcher.html#destroy">org.casalib.event.EventDispatcher.destroy</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_core_CoreInterface.html#destroy">org.casalib.core.CoreInterface.destroy</a> </li></ul></div></div></div></div></div><div class="member" id="getLoads"><h3>getLoads</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>getLoads</b> (
+</div><div class="code">) : Array</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns an Array contains all load items in the <a class="className" href="org_casalib_load_LoadGroup.html">LoadGroup</a>. </li></ul></div></div></div></div></div><div class="member" id="hasLoaded"><h3>hasLoaded</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>hasLoaded</b> (
+</div><div class="code">) : Boolean</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Determines whether the requested file has finished loading.</div><a class="followInheritDoc" href="org_casalib_load_base_LoadInterface.html#hasLoaded">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> <div class="inheritDoc">Returns <pre>
+<span class="codeKeyword">var</span> xmlLoad:XmlLoad = <span class="codeKeyword">new</span> XmlLoad(<span class="codeString">"test.xml"</span>);
+<span class="codeKeyword">var</span> imageLoad:MediaLoad = <span class="codeKeyword">new</span> MediaLoad(<span class="codeIdentifier">this</span>.loadZone_mc, <span class="codeString">"test.jpg"</span>);
+
+<span class="codeKeyword">var</span> myLoadGroup = <span class="codeKeyword">new</span> LoadGroup();
+<span class="codeIdentifier">this</span>.myLoadGroup.addLoad(<span class="codeIdentifier">this</span>.xmlLoad);
+<span class="codeIdentifier">this</span>.myLoadGroup.addLoad(<span class="codeIdentifier">this</span>.imageLoad);
+<span class="codeIdentifier">this</span>.myLoadGroup.addEventObserver(<span class="codeIdentifier">this</span>, LoadGroup.EVENT_LOAD_PERCENT, <span class="codeString">"onGroupLoadPercent"</span>);
+<span class="codeIdentifier">this</span>.myLoadGroup.addEventObserver(<span class="codeIdentifier">this</span>, LoadGroup.EVENT_LOAD_ERROR, <span class="codeString">"onGroupLoadError"</span>);
+
+<span class="codeKeyword">function</span> onGroupLoadPercent(sender:LoadGroup, progress:Percent):<span class="codeIdentifier">Void</span> {
+    <span class="codeIdentifier">trace</span>(<span class="codeString">"My group is "</span> + progress.getPercentage() + <span class="codeString">"% loaded."</span>);
+}
+
+<span class="codeKeyword">function</span> onGroupLoadError(sender:LoadGroup, failedLoad:BytesLoadInterface):<span class="codeIdentifier">Void</span> {
+    <span class="codeIdentifier">this</span>.myLoadGroup.removeLoad(failedLoad);
+    <span class="codeIdentifier">this</span>.myLoadGroup<span class="codeIdentifier">.start</span>();
+}
+
+<span class="codeIdentifier">this</span>.myLoadGroup<span class="codeIdentifier">.start</span>();</pre> if file has completely loaded; otherwise <code><span class="codeString">"onLoadProgress"</span></code>.</div><a class="followInheritDoc" href="org_casalib_load_base_LoadInterface.html#hasLoaded">#</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_load_base_LoadInterface.html#hasLoaded">org.casalib.load.base.LoadInterface.hasLoaded</a> </li></ul></div></div></div></div></div><div class="member" id="isLoading"><h3>isLoading</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>isLoading</b> (
+</div><div class="code">) : Boolean</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Determines whether the requested file is in the process of loading.</div><a class="followInheritDoc" href="org_casalib_load_base_LoadInterface.html#isLoading">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> <div class="inheritDoc">Returns <code><span class="codeString">"onLoadComplete"</span></code> if the file is currently loading; otherwise <code><span class="codeString">"onLoadError"</span></code>.</div><a class="followInheritDoc" href="org_casalib_load_base_LoadInterface.html#isLoading">#</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_load_base_LoadInterface.html#isLoading">org.casalib.load.base.LoadInterface.isLoading</a> </li></ul></div></div></div></div></div><div class="member" id="removeLoad"><h3>removeLoad</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>removeLoad</b> (
+</div><div class="code">loadItem:<a class="className" href="org_casalib_load_base_BytesLoadInterface.html">BytesLoadInterface</a>) : Boolean</div><br class="clear" /></div></div><div class="description"> Removes a load item from the group. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">loadItem<span class="itemSeparator">:</span></div><div>Load to be removed from the load group.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if item was successfully found and removed; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> You cannot remove a load item when the LoadGroup is in the process of loading. </li></ul></div></div></div></div></div><div class="member" id="start"><h3>start</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>start</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> Starts the group load process and begins reporting of the total load percentage of all files to observers. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Events broadcasted to listeners:</span><div class="item"><ul><li><code>onLoadStart = function (sender:LoadGroup) {}</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_control_RunnableInterface.html#start">org.casalib.control.RunnableInterface.start</a> </li></ul></div></div></div></div></div><div class="member" id="stop"><h3>stop</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>stop</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> Stops the group load process. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Events broadcasted to listeners:</span><div class="item"><ul><li><code>onLoadStop = function (sender:LoadGroup) {}</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_control_RunnableInterface.html#stop">org.casalib.control.RunnableInterface.stop</a> </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

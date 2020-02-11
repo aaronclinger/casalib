@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>ConversionUtil</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_util_ConversionUtil"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classmethods" accesskey="a">Cl<span class="accessKey">a</span>ss methods</a></li></ul><br class="clear" /></div><h1>ConversionUtil</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td>none</td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">02/17/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger, David Bliss</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.util.ConversionUtil</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+/**
+    @author Aaron Clinger
+    @author David Bliss
+    @version 02/17/07
+*/
+
+class org.casalib.util.ConversionUtil {
+    
+    /**
+        Converts bits to bytes.
+        
+        @param bits: The number of bits. 
+        @return Returns the number of bytes.
+    */
+    public static function bitsToBytes(bits:Number):Number {
+        return bits / 8;
+    }
+    
+    /**
+        Converts bits to kilobits.
+        
+        @param bits: The number of bits.
+        @return Returns the number of kilobits.
+    */
+    public static function bitsToKilobits(bits:Number):Number {
+        return bits / 1024;
+    }
+    
+    /**
+        Converts bits to kilobytes.
+        
+        @param bits: The number of bits. 
+        @return Returns the number of kilobits.
+    */
+    public static function bitsToKilobytes(bits:Number):Number {
+        return bits / 8192;
+    }
+    
+    /**
+        Converts bytes to bits.
+        
+        @param bytes: The number of bytes.
+        @return Returns the number of bits.
+    */
+    public static function bytesToBits(bytes:Number):Number {
+        return bytes * 8;
+    }
+    
+    /**
+        Converts bytes to kilobits.
+        
+        @param bytes: The number of bytes.
+        @return Returns the number of kilobits.
+    */
+    public static function bytesToKilobits(bytes:Number):Number {
+        return bytes / 128;
+    }
+    
+    /**
+        Converts bytes to kilobytes.
+        
+        @param bytes: The number of bytes.
+        @return Returns the number of kilobytes.
+    */
+    public static function bytesToKilobytes(bytes:Number):Number {
+        return bytes / 1024;
+    }
+    
+    /**
+        Converts kilobits to bits.
+        
+        @param kilobits: The number of kilobits.
+        @return Returns the number of bits.
+    */
+    public static function kilobitsToBits(kilobits:Number):Number {
+        return kilobits * 1024;
+    }
+    
+    /**
+        Converts kilobits to bytes.
+        
+        @param kilobits: The number of kilobits.
+        @return Returns the number of bytes.
+    */
+    public static function kilobitsToBytes(kilobits:Number):Number {
+        return kilobits * 128;
+    }
+    
+    /**
+        Converts kilobits to kilobytes.
+        
+        @param kilobytes: The number of kilobits.
+        @return Returns the number of kilobytes.
+    */
+    public static function kilobitsToKilobytes(kilobits:Number):Number {
+        return kilobits / 8;
+    }
+    
+    /**
+        Converts kilobytes to bits.
+        
+        @param kilobytes: The number of kilobytes.
+        @return Returns the number of bits.
+    */
+    public static function kilobytesToBits(kilobytes:Number):Number {
+        return kilobytes * 8192;
+    }
+    
+    /**
+        Converts kilobytes to bytes.
+        
+        @param kilobytes: The number of kilobytes.
+        @return Returns the number of bytes.
+    */
+    public static function kilobytesToBytes(kilobytes:Number):Number {
+        return kilobytes * 1024;
+    }
+    
+    /**
+        Converts kilobytes to kilobits.
+        
+        @param kilobytes: The number of kilobytes.
+        @return Returns the number of kilobits.
+    */
+    public static function kilobytesToKilobits(kilobytes:Number):Number {
+        return kilobytes * 8;
+    }
+    
+    /**
+        Converts milliseconds to seconds.
+        
+        @param milliseconds: The number of milliseconds.
+        @return Returns the number of seconds.
+    */
+    public static function millisecondsToSeconds(milliseconds:Number):Number {
+        return milliseconds / 1000;
+    }
+    
+    /**
+        Converts milliseconds to minutes.
+        
+        @param milliseconds: The number of milliseconds.
+        @return Returns the number of minutes.
+    */
+    public static function millisecondsToMinutes(milliseconds:Number):Number {
+        return ConversionUtil.secondsToMinutes(ConversionUtil.millisecondsToSeconds(milliseconds));
+    }
+    
+    /**
+        Converts milliseconds to hours.
+        
+        @param milliseconds: The number of milliseconds.
+        @return Returns the number of hours.
+    */
+    public static function millisecondsToHours(milliseconds:Number):Number {
+        return ConversionUtil.minutesToHours(ConversionUtil.millisecondsToMinutes(milliseconds));
+    }
+    
+    /**
+        Converts milliseconds to days.
+        
+        @param milliseconds: The number of milliseconds.
+        @return Returns the number of days.
+    */
+    public static function millisecondsToDays(milliseconds:Number):Number {
+        return ConversionUtil.hoursToDays(ConversionUtil.millisecondsToHours(milliseconds));
+    }
+    
+    /**
+        Converts seconds to milliseconds.
+        
+        @param seconds: The number of seconds.
+        @return Returns the number of milliseconds.
+    */
+    public static function secondsToMilliseconds(seconds:Number):Number {
+        return seconds * 1000;
+    }
+    
+    /**
+        Converts seconds to minutes.
+        
+        @param seconds: The number of seconds.
+        @return Returns the number of minutes.
+    */
+    public static function secondsToMinutes(seconds:Number):Number {
+        return seconds / 60;
+    }
+    
+    /**
+        Converts seconds to hours.
+        
+        @param seconds: The number of seconds.
+        @return Returns the number of hours.
+    */
+    public static function secondsToHours(seconds:Number):Number {
+        return ConversionUtil.minutesToHours(ConversionUtil.secondsToMinutes(seconds));
+    }
+    
+    /**
+        Converts seconds to days.
+        
+        @param seconds: The number of seconds.
+        @return Returns the number of days.
+    */
+    public static function secondsToDays(seconds:Number):Number {
+        return ConversionUtil.hoursToDays(ConversionUtil.secondsToHours(seconds));
+    }
+    
+    /**
+        Converts minutes to milliseconds.
+        
+        @param minutes: The number of minutes.
+        @return Returns the number of milliseconds.
+    */
+    public static function minutesToMilliseconds(minutes:Number):Number {
+        return ConversionUtil.secondsToMilliseconds(ConversionUtil.minutesToSeconds(minutes));
+    }
+    
+    /**
+        Converts minutes to seconds.
+        
+        @param minutes: The number of minutes.
+        @return Returns the number of seconds.
+    */
+    public static function minutesToSeconds(minutes:Number):Number {
+        return minutes * 60;
+    }
+    
+    /**
+        Converts minutes to hours.
+        
+        @param minutes: The number of minutes.
+        @return Returns the number of hours.
+    */
+    public static function minutesToHours(minutes:Number):Number {
+        return minutes / 60;
+    }
+    
+    /**
+        Converts minutes to days.
+        
+        @param minutes: The number of minutes.
+        @return Returns the number of days.
+    */
+    public static function minutesToDays(minutes:Number):Number {
+        return ConversionUtil.hoursToDays(ConversionUtil.minutesToHours(minutes));
+    }
+    
+    /**
+        Converts hours to milliseconds.
+        
+        @param hours: The number of hours.
+        @return Returns the number of milliseconds.
+    */
+    public static function hoursToMilliseconds(hours:Number):Number {
+        return ConversionUtil.secondsToMilliseconds(ConversionUtil.hoursToSeconds(hours));
+    }
+    
+    /**
+        Converts hours to seconds.
+        
+        @param hours: The number of hours.
+        @return Returns the number of seconds.
+    */
+    public static function hoursToSeconds(hours:Number):Number {
+        return ConversionUtil.minutesToSeconds(ConversionUtil.hoursToMinutes(hours));
+    }
+    
+    /**
+        Converts hours to minutes.
+        
+        @param hours: The number of hours.
+        @return Returns the number of minutes.
+    */
+    public static function hoursToMinutes(hours:Number):Number {
+        return hours * 60;
+    }
+    
+    /**
+        Converts hours to days.
+        
+        @param hours: The number of hours.
+        @return Returns the number of days.
+    */
+    public static function hoursToDays(hours:Number):Number {
+        return hours / 24;
+    }
+    
+    /**
+        Converts days to milliseconds.
+        
+        @param days: The number of days.
+        @return Returns the number of milliseconds.
+    */
+    public static function daysToMilliseconds(days:Number):Number {
+        return ConversionUtil.secondsToMilliseconds(ConversionUtil.daysToSeconds(days));
+    }
+    
+    /**
+        Converts days to seconds.
+        
+        @param days: The number of days.
+        @return Returns the number of seconds.
+    */
+    public static function daysToSeconds(days:Number):Number {
+        return ConversionUtil.minutesToSeconds(ConversionUtil.daysToMinutes(days));
+    }
+    
+    /**
+        Converts days to minutes.
+        
+        @param days: The number of days.
+        @return Returns the number of minutes.
+    */
+    public static function daysToMinutes(days:Number):Number {
+        return ConversionUtil.hoursToMinutes(ConversionUtil.daysToHours(days));
+    }
+    
+    /**
+        Converts days to hours.
+        
+        @param days: The number of days.
+        @return Returns the number of hours.
+    */
+    public static function daysToHours(days:Number):Number {
+        return days * 24;
+    }
+    
+    /**
+        Converts degrees to radians.
+        
+        @param degrees: The number of degrees.
+        @return Returns the number of radians.
+    */
+    public static function degreesToRadians(degrees:Number):Number {
+        return degrees * (Math.PI / 180);
+    }
+    
+    /**
+        Converts radians to degrees.
+        
+        @param radians: The number of radians.
+        @return Returns the number of degrees.
+    */
+    public static function radiansToDegrees(radians:Number):Number {
+        return radians * (180 / Math.PI);
+    }
+    
+    private function ConversionUtil() {} // Prevents instance creation
+}
+</textarea></div></div></div><div class="classDescription"></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class methods</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#bitsToBytes">bitsToBytes</a><span class="typeInfo"> (bits:Number) : Number</span><ul class="summary"><li>	Converts bits to bytes.</li></ul></li><li class="sortli listnum2"><a href="#bitsToKilobits">bitsToKilobits</a><span class="typeInfo"> (bits:Number) : Number</span><ul class="summary"><li>Converts bits to kilobits.</li></ul></li><li class="sortli listnum3"><a href="#bitsToKilobytes">bitsToKilobytes</a><span class="typeInfo"> (bits:Number) : Number</span><ul class="summary"><li>Converts bits to kilobytes.</li></ul></li><li class="sortli listnum4"><a href="#bytesToBits">bytesToBits</a><span class="typeInfo"> (bytes:Number) : Number</span><ul class="summary"><li>Converts bytes to bits.</li></ul></li><li class="sortli listnum5"><a href="#bytesToKilobits">bytesToKilobits</a><span class="typeInfo"> (bytes:Number) : Number</span><ul class="summary"><li>Converts bytes to kilobits.</li></ul></li><li class="sortli listnum6"><a href="#bytesToKilobytes">bytesToKilobytes</a><span class="typeInfo"> (bytes:Number) : Number</span><ul class="summary"><li>Converts bytes to kilobytes.</li></ul></li><li class="sortli listnum7"><a href="#kilobitsToBits">kilobitsToBits</a><span class="typeInfo"> (kilobits:Number) : Number</span><ul class="summary"><li>Converts kilobits to bits.</li></ul></li><li class="sortli listnum8"><a href="#kilobitsToBytes">kilobitsToBytes</a><span class="typeInfo"> (kilobits:Number) : Number</span><ul class="summary"><li>Converts kilobits to bytes.</li></ul></li><li class="sortli listnum9"><a href="#kilobitsToKilobytes">kilobitsToKilobytes</a><span class="typeInfo"> (kilobits:Number) : Number</span><ul class="summary"><li>Converts kilobits to kilobytes.</li></ul></li><li class="sortli listnum10"><a href="#kilobytesToBits">kilobytesToBits</a><span class="typeInfo"> (kilobytes:Number) : Number</span><ul class="summary"><li>Converts kilobytes to bits.</li></ul></li><li class="sortli listnum11"><a href="#kilobytesToBytes">kilobytesToBytes</a><span class="typeInfo"> (kilobytes:Number) : Number</span><ul class="summary"><li>Converts kilobytes to bytes.</li></ul></li><li class="sortli listnum12"><a href="#kilobytesToKilobits">kilobytesToKilobits</a><span class="typeInfo"> (kilobytes:Number) : Number</span><ul class="summary"><li>Converts kilobytes to kilobits.</li></ul></li><li class="sortli listnum13"><a href="#millisecondsToSeconds">millisecondsToSeconds</a><span class="typeInfo"> (milliseconds:Number) : Number</span><ul class="summary"><li>Converts milliseconds to seconds.</li></ul></li><li class="sortli listnum14"><a href="#millisecondsToMinutes">millisecondsToMinutes</a><span class="typeInfo"> (milliseconds:Number) : Number</span><ul class="summary"><li>Converts milliseconds to minutes.</li></ul></li><li class="sortli listnum15"><a href="#millisecondsToHours">millisecondsToHours</a><span class="typeInfo"> (milliseconds:Number) : Number</span><ul class="summary"><li>Converts milliseconds to hours.</li></ul></li><li class="sortli listnum16"><a href="#millisecondsToDays">millisecondsToDays</a><span class="typeInfo"> (milliseconds:Number) : Number</span><ul class="summary"><li>Converts milliseconds to days.</li></ul></li><li class="sortli listnum17"><a href="#secondsToMilliseconds">secondsToMilliseconds</a><span class="typeInfo"> (seconds:Number) : Number</span><ul class="summary"><li>Converts seconds to milliseconds.</li></ul></li><li class="sortli listnum18"><a href="#secondsToMinutes">secondsToMinutes</a><span class="typeInfo"> (seconds:Number) : Number</span><ul class="summary"><li>Converts seconds to minutes.</li></ul></li><li class="sortli listnum19"><a href="#secondsToHours">secondsToHours</a><span class="typeInfo"> (seconds:Number) : Number</span><ul class="summary"><li>Converts seconds to hours.</li></ul></li><li class="sortli listnum20"><a href="#secondsToDays">secondsToDays</a><span class="typeInfo"> (seconds:Number) : Number</span><ul class="summary"><li>Converts seconds to days.</li></ul></li><li class="sortli listnum21"><a href="#minutesToMilliseconds">minutesToMilliseconds</a><span class="typeInfo"> (minutes:Number) : Number</span><ul class="summary"><li>Converts minutes to milliseconds.</li></ul></li><li class="sortli listnum22"><a href="#minutesToSeconds">minutesToSeconds</a><span class="typeInfo"> (minutes:Number) : Number</span><ul class="summary"><li>Converts minutes to seconds.</li></ul></li><li class="sortli listnum23"><a href="#minutesToHours">minutesToHours</a><span class="typeInfo"> (minutes:Number) : Number</span><ul class="summary"><li>Converts minutes to hours.</li></ul></li><li class="sortli listnum24"><a href="#minutesToDays">minutesToDays</a><span class="typeInfo"> (minutes:Number) : Number</span><ul class="summary"><li>Converts minutes to days.</li></ul></li><li class="sortli listnum25"><a href="#hoursToMilliseconds">hoursToMilliseconds</a><span class="typeInfo"> (hours:Number) : Number</span><ul class="summary"><li>Converts hours to milliseconds.</li></ul></li><li class="sortli listnum26"><a href="#hoursToSeconds">hoursToSeconds</a><span class="typeInfo"> (hours:Number) : Number</span><ul class="summary"><li>Converts hours to seconds.</li></ul></li><li class="sortli listnum27"><a href="#hoursToMinutes">hoursToMinutes</a><span class="typeInfo"> (hours:Number) : Number</span><ul class="summary"><li>Converts hours to minutes.</li></ul></li><li class="sortli listnum28"><a href="#hoursToDays">hoursToDays</a><span class="typeInfo"> (hours:Number) : Number</span><ul class="summary"><li>Converts hours to days.</li></ul></li><li class="sortli listnum29"><a href="#daysToMilliseconds">daysToMilliseconds</a><span class="typeInfo"> (days:Number) : Number</span><ul class="summary"><li>Converts days to milliseconds.</li></ul></li><li class="sortli listnum30"><a href="#daysToSeconds">daysToSeconds</a><span class="typeInfo"> (days:Number) : Number</span><ul class="summary"><li>Converts days to seconds.</li></ul></li><li class="sortli listnum31"><a href="#daysToMinutes">daysToMinutes</a><span class="typeInfo"> (days:Number) : Number</span><ul class="summary"><li>Converts days to minutes.</li></ul></li><li class="sortli listnum32"><a href="#daysToHours">daysToHours</a><span class="typeInfo"> (days:Number) : Number</span><ul class="summary"><li>Converts days to hours.</li></ul></li><li class="sortli listnum33"><a href="#degreesToRadians">degreesToRadians</a><span class="typeInfo"> (degrees:Number) : Number</span><ul class="summary"><li>Converts degrees to radians.</li></ul></li><li class="sortli listnum34"><a href="#radiansToDegrees">radiansToDegrees</a><span class="typeInfo"> (radians:Number) : Number</span><ul class="summary"><li>Converts radians to degrees.</li></ul></li></ul></div></div></div><div class="memberSection"><h2 id="Classmethods">Class methods</h2><div class="member" id="bitsToBytes"><h3>bitsToBytes</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>bitsToBytes</b> (
+</div><div class="code">bits:Number) : Number</div><br class="clear" /></div></div><div class="description"> 	Converts bits to bytes. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">bits<span class="itemSeparator">:</span></div><div>The number of bits. </div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of bytes. </li></ul></div></div></div></div></div><div class="member" id="bitsToKilobits"><h3>bitsToKilobits</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>bitsToKilobits</b> (
+</div><div class="code">bits:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts bits to kilobits. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">bits<span class="itemSeparator">:</span></div><div>The number of bits.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of kilobits. </li></ul></div></div></div></div></div><div class="member" id="bitsToKilobytes"><h3>bitsToKilobytes</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>bitsToKilobytes</b> (
+</div><div class="code">bits:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts bits to kilobytes. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">bits<span class="itemSeparator">:</span></div><div>The number of bits. </div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of kilobits. </li></ul></div></div></div></div></div><div class="member" id="bytesToBits"><h3>bytesToBits</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>bytesToBits</b> (
+</div><div class="code">bytes:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts bytes to bits. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">bytes<span class="itemSeparator">:</span></div><div>The number of bytes.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of bits. </li></ul></div></div></div></div></div><div class="member" id="bytesToKilobits"><h3>bytesToKilobits</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>bytesToKilobits</b> (
+</div><div class="code">bytes:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts bytes to kilobits. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">bytes<span class="itemSeparator">:</span></div><div>The number of bytes.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of kilobits. </li></ul></div></div></div></div></div><div class="member" id="bytesToKilobytes"><h3>bytesToKilobytes</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>bytesToKilobytes</b> (
+</div><div class="code">bytes:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts bytes to kilobytes. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">bytes<span class="itemSeparator">:</span></div><div>The number of bytes.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of kilobytes. </li></ul></div></div></div></div></div><div class="member" id="daysToHours"><h3>daysToHours</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>daysToHours</b> (
+</div><div class="code">days:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts days to hours. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">days<span class="itemSeparator">:</span></div><div>The number of days.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of hours. </li></ul></div></div></div></div></div><div class="member" id="daysToMilliseconds"><h3>daysToMilliseconds</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>daysToMilliseconds</b> (
+</div><div class="code">days:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts days to milliseconds. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">days<span class="itemSeparator">:</span></div><div>The number of days.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of milliseconds. </li></ul></div></div></div></div></div><div class="member" id="daysToMinutes"><h3>daysToMinutes</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>daysToMinutes</b> (
+</div><div class="code">days:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts days to minutes. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">days<span class="itemSeparator">:</span></div><div>The number of days.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of minutes. </li></ul></div></div></div></div></div><div class="member" id="daysToSeconds"><h3>daysToSeconds</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>daysToSeconds</b> (
+</div><div class="code">days:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts days to seconds. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">days<span class="itemSeparator">:</span></div><div>The number of days.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of seconds. </li></ul></div></div></div></div></div><div class="member" id="degreesToRadians"><h3>degreesToRadians</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>degreesToRadians</b> (
+</div><div class="code">degrees:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts degrees to radians. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">degrees<span class="itemSeparator">:</span></div><div>The number of degrees.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of radians. </li></ul></div></div></div></div></div><div class="member" id="hoursToDays"><h3>hoursToDays</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>hoursToDays</b> (
+</div><div class="code">hours:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts hours to days. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">hours<span class="itemSeparator">:</span></div><div>The number of hours.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of days. </li></ul></div></div></div></div></div><div class="member" id="hoursToMilliseconds"><h3>hoursToMilliseconds</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>hoursToMilliseconds</b> (
+</div><div class="code">hours:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts hours to milliseconds. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">hours<span class="itemSeparator">:</span></div><div>The number of hours.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of milliseconds. </li></ul></div></div></div></div></div><div class="member" id="hoursToMinutes"><h3>hoursToMinutes</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>hoursToMinutes</b> (
+</div><div class="code">hours:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts hours to minutes. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">hours<span class="itemSeparator">:</span></div><div>The number of hours.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of minutes. </li></ul></div></div></div></div></div><div class="member" id="hoursToSeconds"><h3>hoursToSeconds</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>hoursToSeconds</b> (
+</div><div class="code">hours:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts hours to seconds. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">hours<span class="itemSeparator">:</span></div><div>The number of hours.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of seconds. </li></ul></div></div></div></div></div><div class="member" id="kilobitsToBits"><h3>kilobitsToBits</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>kilobitsToBits</b> (
+</div><div class="code">kilobits:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts kilobits to bits. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">kilobits<span class="itemSeparator">:</span></div><div>The number of kilobits.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of bits. </li></ul></div></div></div></div></div><div class="member" id="kilobitsToBytes"><h3>kilobitsToBytes</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>kilobitsToBytes</b> (
+</div><div class="code">kilobits:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts kilobits to bytes. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">kilobits<span class="itemSeparator">:</span></div><div>The number of kilobits.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of bytes. </li></ul></div></div></div></div></div><div class="member" id="kilobitsToKilobytes"><h3>kilobitsToKilobytes</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>kilobitsToKilobytes</b> (
+</div><div class="code">kilobits:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts kilobits to kilobytes. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">kilobytes<span class="itemSeparator">:</span></div><div>The number of kilobits.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of kilobytes. </li></ul></div></div></div></div></div><div class="member" id="kilobytesToBits"><h3>kilobytesToBits</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>kilobytesToBits</b> (
+</div><div class="code">kilobytes:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts kilobytes to bits. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">kilobytes<span class="itemSeparator">:</span></div><div>The number of kilobytes.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of bits. </li></ul></div></div></div></div></div><div class="member" id="kilobytesToBytes"><h3>kilobytesToBytes</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>kilobytesToBytes</b> (
+</div><div class="code">kilobytes:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts kilobytes to bytes. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">kilobytes<span class="itemSeparator">:</span></div><div>The number of kilobytes.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of bytes. </li></ul></div></div></div></div></div><div class="member" id="kilobytesToKilobits"><h3>kilobytesToKilobits</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>kilobytesToKilobits</b> (
+</div><div class="code">kilobytes:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts kilobytes to kilobits. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">kilobytes<span class="itemSeparator">:</span></div><div>The number of kilobytes.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of kilobits. </li></ul></div></div></div></div></div><div class="member" id="millisecondsToDays"><h3>millisecondsToDays</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>millisecondsToDays</b> (
+</div><div class="code">milliseconds:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts milliseconds to days. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">milliseconds<span class="itemSeparator">:</span></div><div>The number of milliseconds.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of days. </li></ul></div></div></div></div></div><div class="member" id="millisecondsToHours"><h3>millisecondsToHours</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>millisecondsToHours</b> (
+</div><div class="code">milliseconds:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts milliseconds to hours. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">milliseconds<span class="itemSeparator">:</span></div><div>The number of milliseconds.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of hours. </li></ul></div></div></div></div></div><div class="member" id="millisecondsToMinutes"><h3>millisecondsToMinutes</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>millisecondsToMinutes</b> (
+</div><div class="code">milliseconds:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts milliseconds to minutes. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">milliseconds<span class="itemSeparator">:</span></div><div>The number of milliseconds.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of minutes. </li></ul></div></div></div></div></div><div class="member" id="millisecondsToSeconds"><h3>millisecondsToSeconds</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>millisecondsToSeconds</b> (
+</div><div class="code">milliseconds:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts milliseconds to seconds. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">milliseconds<span class="itemSeparator">:</span></div><div>The number of milliseconds.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of seconds. </li></ul></div></div></div></div></div><div class="member" id="minutesToDays"><h3>minutesToDays</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>minutesToDays</b> (
+</div><div class="code">minutes:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts minutes to days. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">minutes<span class="itemSeparator">:</span></div><div>The number of minutes.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of days. </li></ul></div></div></div></div></div><div class="member" id="minutesToHours"><h3>minutesToHours</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>minutesToHours</b> (
+</div><div class="code">minutes:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts minutes to hours. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">minutes<span class="itemSeparator">:</span></div><div>The number of minutes.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of hours. </li></ul></div></div></div></div></div><div class="member" id="minutesToMilliseconds"><h3>minutesToMilliseconds</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>minutesToMilliseconds</b> (
+</div><div class="code">minutes:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts minutes to milliseconds. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">minutes<span class="itemSeparator">:</span></div><div>The number of minutes.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of milliseconds. </li></ul></div></div></div></div></div><div class="member" id="minutesToSeconds"><h3>minutesToSeconds</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>minutesToSeconds</b> (
+</div><div class="code">minutes:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts minutes to seconds. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">minutes<span class="itemSeparator">:</span></div><div>The number of minutes.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of seconds. </li></ul></div></div></div></div></div><div class="member" id="radiansToDegrees"><h3>radiansToDegrees</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>radiansToDegrees</b> (
+</div><div class="code">radians:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts radians to degrees. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">radians<span class="itemSeparator">:</span></div><div>The number of radians.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of degrees. </li></ul></div></div></div></div></div><div class="member" id="secondsToDays"><h3>secondsToDays</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>secondsToDays</b> (
+</div><div class="code">seconds:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts seconds to days. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">seconds<span class="itemSeparator">:</span></div><div>The number of seconds.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of days. </li></ul></div></div></div></div></div><div class="member" id="secondsToHours"><h3>secondsToHours</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>secondsToHours</b> (
+</div><div class="code">seconds:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts seconds to hours. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">seconds<span class="itemSeparator">:</span></div><div>The number of seconds.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of hours. </li></ul></div></div></div></div></div><div class="member" id="secondsToMilliseconds"><h3>secondsToMilliseconds</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>secondsToMilliseconds</b> (
+</div><div class="code">seconds:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts seconds to milliseconds. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">seconds<span class="itemSeparator">:</span></div><div>The number of seconds.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of milliseconds. </li></ul></div></div></div></div></div><div class="member" id="secondsToMinutes"><h3>secondsToMinutes</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>secondsToMinutes</b> (
+</div><div class="code">seconds:Number) : Number</div><br class="clear" /></div></div><div class="description"> Converts seconds to minutes. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">seconds<span class="itemSeparator">:</span></div><div>The number of seconds.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the number of minutes. </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

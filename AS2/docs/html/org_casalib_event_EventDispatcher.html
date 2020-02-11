@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>EventDispatcher</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_event_EventDispatcher"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Instanceproperties" accesskey="l">Instance <span class="accessKey">p</span>roperties</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li></ul><br class="clear" /></div><h1>EventDispatcher</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></td></tr><tr><th align="left">Implements:</th><td><ul><li><a class="className" href="org_casalib_event_DispatchableInterface.html">DispatchableInterface</a></li></ul></td></tr><tr><th align="left">Known subclasses:</th><td><ul><li><a class="className" href="org_casalib_time_Chain.html">Chain</a></li><li><a class="className" href="org_casalib_layout_DistributionCollection.html">DistributionCollection</a></li><li><a class="className" href="org_casalib_time_EnterFrame.html">EnterFrame</a></li><li><a class="className" href="org_casalib_key_EventKey.html">EventKey</a></li><li><a class="className" href="org_casalib_mouse_EventMouse.html">EventMouse</a></li><li><a class="className" href="org_casalib_stage_EventStage.html">EventStage</a></li><li><a class="className" href="org_casalib_util_Inactivity.html">Inactivity</a></li><li><a class="className" href="org_casalib_load_base_Load.html">Load</a></li><li><a class="className" href="org_casalib_load_LoadGroup.html">LoadGroup</a></li><li><a class="className" href="org_casalib_load_LoadManager.html">LoadManager</a></li><li><a class="className" href="org_casalib_time_Timer.html">Timer</a></li><li><a class="className" href="org_casalib_transitions_Tween.html">Tween</a></li></ul></td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">07/12/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger, Mike Creighton</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.event.EventDispatcher</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.core.CoreObject;
+import org.casalib.event.DispatchableInterface;
+import org.casalib.util.TypeUtil;
+
+/**
+    Provides event notification and listener management capabilities to objects. 
+    
+    Advantages of using this EventDispatcher:
+    &lt;ul>
+        &lt;li>Ability to {@link #addEventObserver remap event handlers} to a function not sharing the same name as the event.&lt;/li>
+        &lt;li>Ability to {@link #removeEventObserversForEvent remove all} event observers for a specified event.&lt;/li>
+        &lt;li>Ability to {@link #removeEventObserversForScope remove all} event observers for a specified scope.&lt;/li>
+        &lt;li>Ability to {@link #removeAllEventObservers remove all} event observers subscribed to broadcasting object.&lt;/li>
+    &lt;/ul>
+
+    @author Aaron Clinger
+    @author Mike Creighton
+    @version 07/12/07
+*/
+
+class org.casalib.event.EventDispatcher extends CoreObject implements DispatchableInterface {
+    private var $eventMap:Object;
+    
+    public function EventDispatcher() {
+        super();
+        
+        this.removeAllEventObservers();
+        
+        this.$setClassDescription('org.casalib.event.EventDispatcher');
+    }
+    
+    /**
+        {@inheritDoc}
+        
+        @param scope: {@inheritDoc}
+        @param eventName: {@inheritDoc}
+        @param eventHandler: {@inheritDoc}
+        @return {@inheritDoc}
+        @example &lt;code>this.eventButton_mc.addEventObserver(this, "onRollOver");&lt;/code>
+    */
+    public function addEventObserver(scope:Object, eventName:String, eventHandler:String):Boolean {
+        var eventFunction:String = (eventHandler == undefined) ? eventName : eventHandler;
+        
+        if (!TypeUtil.isTypeOf(scope[eventFunction], 'function'))
+            return false;
+        
+        var observers:Array = this.$eventMap[eventName];
+        
+        if (observers == undefined)
+            observers = this.$eventMap[eventName] = new Array();
+        else {
+            var len:Number = observers.length;
+            while (len--)
+                if (observers[len].scope == scope &amp;&amp; observers[len].funct == eventFunction)
+                    return false;
+        }
+        
+        var observer:Object = new Object();
+        observer.scope      = scope;
+        observer.funct      = eventFunction;
+        
+        observers.push(observer);
+        
+        return true;
+    }
+    
+    /**
+        {@inheritDoc}
+        
+        @param scope: {@inheritDoc}
+        @param eventName: {@inheritDoc}
+        @param eventHandler: {@inheritDoc}
+        @return {@inheritDoc}
+        @example &lt;code>this.eventButton_mc.removeEventObserver(this, "onRollOver");&lt;/code>
+    */
+    public function removeEventObserver(scope:Object, eventName:String, eventHandler:String):Boolean {
+        var funct:String    = (eventHandler == undefined) ? eventName : eventHandler;
+        var observers:Array = this.$eventMap[eventName];
+        var len:Number      = observers.length;
+        
+        while (len--) {
+            if (observers[len].scope == scope &amp;&amp; observers[len].funct == funct) {
+                observers.splice(len, 1, null);
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+        {@inheritDoc}
+        
+        @param eventName: {@inheritDoc}
+        @return {@inheritDoc}
+        @example &lt;code>this.eventButton_mc.removeEventObserversForEvent("onRollOver");&lt;/code>
+    */
+    public function removeEventObserversForEvent(eventName:String):Boolean {
+        if (this.$eventMap[eventName] == undefined)
+            return false;
+        
+        delete this.$eventMap[eventName];
+        
+        return true;
+    }
+    
+    /**
+        {@inheritDoc}
+        
+        @param scope: {@inheritDoc}
+        @return {@inheritDoc}
+        @example &lt;code>this.eventButton_mc.removeEventObserversForScope(this);&lt;/code>
+    */
+    public function removeEventObserversForScope(scope:Object):Boolean {
+        var removed:Boolean = false;
+        var observers:Array;
+        var len:Number;
+        
+        for (var i:String in this.$eventMap) {
+            observers = this.$eventMap[i];
+            len       = observers.length;
+            
+            while (len--) {
+                if (observers[len].scope == scope) {
+                    observers.splice(len, 1, null);
+                    removed = true;
+                }
+            }
+        }
+        
+        return removed;
+    }
+    
+    public function removeAllEventObservers():Boolean {
+        this.$eventMap = new Object();
+        
+        return true;
+    }
+    
+    /**
+        {@inheritDoc}
+        
+        @param eventName: {@inheritDoc}
+        @param param(s): {@inheritDoc}
+        @return {@inheritDoc}
+        @example &lt;code>this.dispatchEvent("onRelease", 5, true, "Aaron");&lt;/code>
+    */
+    public function dispatchEvent(eventName:String):Boolean {
+        var observers:Array = this.$eventMap[eventName];
+        if (observers == undefined)
+            return false;
+        
+        var i:Number              = -1;
+        var originalLength:Number = observers.length;
+        var dispatched:Boolean    = false;
+        var observer:Object;
+        
+        while (++i &lt; originalLength) {
+            observer = observers[i];
+            
+            if (observer == null) {
+                observers.splice(i, 1);
+                
+                if (observers.length == 0) {
+                    delete this.$eventMap[eventName];
+                    break;
+                }
+                
+                i--;
+                originalLength--;
+            } else {
+                observer.scope[observer.funct].apply(observer.scope, arguments.slice(1));
+                dispatched = true;
+            }
+        }
+        
+        return dispatched;
+    }
+    
+    public function destroy():Void {
+        delete this.$eventMap;
+        
+        super.destroy();
+    }
+}
+
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Provides event notification and listener management capabilities to objects.</span> <br />	<br />	Advantages of using this EventDispatcher:<ul><li>Ability to <a href="org_casalib_event_EventDispatcher.html#addEventObserver">remap event handlers</a> to a function not sharing the same name as the event.</li><li>Ability to <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForEvent">remove all</a> event observers for a specified event.</li><li>Ability to <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForScope">remove all</a> event observers for a specified scope.</li><li>Ability to <a href="org_casalib_event_EventDispatcher.html#removeAllEventObservers">remove all</a> event observers subscribed to broadcasting object.</li></ul></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Constructor</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#EventDispatcher">EventDispatcher</a></li></ul></div><div class="memberSummaryPart"><span class="title">Instance methods</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#addEventObserver">addEventObserver</a><span class="typeInfo"> (scope:Object, eventName:String, eventHandler:String) : Boolean</span><ul class="summary"><li><div class="inheritDoc">Registers a function to receive notification when a event handler is invoked.</li></ul></li><li class="sortli listnum2"><a href="#removeEventObserver">removeEventObserver</a><span class="typeInfo"> (scope:Object, eventName:String, eventHandler:String) : Boolean</span><ul class="summary"><li><div class="inheritDoc">Removes specific observer for event.</li></ul></li><li class="sortli listnum3"><a href="#removeEventObserversForEvent">removeEventObserversForEvent</a><span class="typeInfo"> (eventName:String) : Boolean</span><ul class="summary"><li><div class="inheritDoc">Removes all observers for a specified event.</li></ul></li><li class="sortli listnum4"><a href="#removeEventObserversForScope">removeEventObserversForScope</a><span class="typeInfo"> (scope:Object) : Boolean</span><ul class="summary"><li><div class="inheritDoc">Removes all observers in a specified scope.</li></ul></li><li class="sortli listnum5"><a href="#removeAllEventObservers">removeAllEventObservers</a><span class="typeInfo">  : Boolean</span><ul class="summary"><li><div class="inheritDoc">Removes all observers regardless of scope or event.</li></ul></li><li class="sortli listnum6"><a href="#dispatchEvent">dispatchEvent</a><span class="typeInfo"> (eventName:String) : Boolean</span><ul class="summary"><li><div class="inheritDoc">	Reports event to all subscribed objects.</li></ul></li><li class="sortli listnum7"><a href="#destroy">destroy</a><span class="typeInfo">  : Void</span><ul class="summary"><li><div class="inheritDoc">Removes any internal variables, intervals, enter frames, internal MovieClips and event observers to allow the object to be garbage collected.</li></ul></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_core_CoreObject.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_core_CoreObject.html#destroy">destroy</a>  <a href="org_casalib_core_CoreObject.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Constructor">Constructor</h2><div class="member" id="EventDispatcher"><h3>EventDispatcher</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>EventDispatcher</b> (
+</div><div class="code">)</div><br class="clear" /></div></div></div></div><div class="memberSection"><h2 id="Instancemethods">Instance methods</h2><div class="member" id="addEventObserver"><h3>addEventObserver</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>addEventObserver</b> (
+
+
+</div><div class="code">scope:Object,
+eventName:String,
+eventHandler:String) : Boolean</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Registers a function to receive notification when a event handler is invoked.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#addEventObserver">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">scope       <span class="itemSeparator">:</span></div><div><div class="inheritDoc">The target or object in which to subscribe.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#addEventObserver">#</a></div></div><div class="item"><div class="floatbox code colorizedCode">eventName   <span class="itemSeparator">:</span></div><div><div class="inheritDoc">Event name to subscribe to.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#addEventObserver">#</a></div></div><div class="item"><div class="floatbox code colorizedCode">eventHandler<span class="itemSeparator">:</span></div><div><div class="inheritDoc"><strong>[optional]</strong> Name of function to recieve the event. If undefined class assumes <code><span class="codeIdentifier">this</span>.eventButton_mc.removeEventObserversForEvent(<span class="codeString">"onRollOver"</span>);</code> matches <code><span class="codeIdentifier">this</span>.eventButton_mc.removeEventObserversForScope(<span class="codeIdentifier">this</span>);</code>.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#addEventObserver">#</a></div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> <div class="inheritDoc">Returns <code><span class="codeIdentifier">this</span>.dispatchEvent(<span class="codeString">"onRelease"</span>, <span class="codeNumber">5</span>, <span class="codeIdentifier">true</span>, <span class="codeString">"Aaron"</span>);</code> if the observer was established successfully; otherwise {VISDOC_CODE_BLOCK_5}.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#addEventObserver">#</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <code><span class="codeIdentifier">this</span>.eventButton_mc.addEventObserver(<span class="codeIdentifier">this</span>, <span class="codeString">"onRollOver"</span>);</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_event_DispatchableInterface.html#addEventObserver">DispatchableInterface.addEventObserver</a> </li></ul></div></div></div></div></div><div class="member" id="destroy"><h3>destroy</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>destroy</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Removes any internal variables, intervals, enter frames, internal MovieClips and event observers to allow the object to be garbage collected.<br />		<br />		<strong>Always call <code><span class="codeIdentifier">this</span>.eventButton_mc.addEventObserver(<span class="codeIdentifier">this</span>, <span class="codeString">"onRollOver"</span>);</code> before deleting last object pointer.</strong></div><a class="followInheritDoc" href="org_casalib_core_CoreInterface.html#destroy">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Overrides:</span><div class="item"><ul><li> <a href="org_casalib_core_CoreObject.html#destroy">org.casalib.core.CoreObject.destroy</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_core_CoreInterface.html#destroy">org.casalib.core.CoreInterface.destroy</a> </li></ul></div></div></div></div></div><div class="member" id="dispatchEvent"><h3>dispatchEvent</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>dispatchEvent</b> (
+</div><div class="code">eventName:String) : Boolean</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">	Reports event to all subscribed objects.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#dispatchEvent">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">eventName<span class="itemSeparator">:</span></div><div><div class="inheritDoc">Event name.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#dispatchEvent">#</a></div></div><div class="item"><div class="floatbox code colorizedCode">param(s) <span class="itemSeparator">:</span></div><div><div class="inheritDoc"><strong>[optional]</strong> Parameters passed to the function specified by "eventName". Multiple parameters are allowed and should be separated by commas: param1,param2, ...,paramN</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#dispatchEvent">#</a></div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> <div class="inheritDoc">Returns <code><span class="codeIdentifier">this</span>.eventButton_mc.addEventObserver(<span class="codeIdentifier">this</span>, <span class="codeString">"onRollOver"</span>);</code> if observer(s) listening to specifed event were found; otherwise <code><span class="codeIdentifier">this</span>.eventButton_mc.removeEventObserver(<span class="codeIdentifier">this</span>, <span class="codeString">"onRollOver"</span>);</code>.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#dispatchEvent">#</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <code><span class="codeIdentifier">this</span>.dispatchEvent(<span class="codeString">"onRelease"</span>, <span class="codeNumber">5</span>, <span class="codeIdentifier">true</span>, <span class="codeString">"Aaron"</span>);</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_event_DispatchableInterface.html#dispatchEvent">DispatchableInterface.dispatchEvent</a> </li></ul></div></div></div></div></div><div class="member" id="removeAllEventObservers"><h3>removeAllEventObservers</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>removeAllEventObservers</b> (
+</div><div class="code">) : Boolean</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Removes all observers regardless of scope or event.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#removeAllEventObservers">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> <div class="inheritDoc">Returns {VISDOC_CODE_BLOCK_16} if observers were successfully removed; otherwise {VISDOC_CODE_BLOCK_17}.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#removeAllEventObservers">#</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_event_DispatchableInterface.html#removeAllEventObservers">DispatchableInterface.removeAllEventObservers</a> </li></ul></div></div></div></div></div><div class="member" id="removeEventObserver"><h3>removeEventObserver</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>removeEventObserver</b> (
+
+
+</div><div class="code">scope:Object,
+eventName:String,
+eventHandler:String) : Boolean</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Removes specific observer for event.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#removeEventObserver">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">scope       <span class="itemSeparator">:</span></div><div><div class="inheritDoc">The target or object in which subscribed.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#removeEventObserver">#</a></div></div><div class="item"><div class="floatbox code colorizedCode">eventName   <span class="itemSeparator">:</span></div><div><div class="inheritDoc">Event name to unsubscribe to.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#removeEventObserver">#</a></div></div><div class="item"><div class="floatbox code colorizedCode">eventHandler<span class="itemSeparator">:</span></div><div><div class="inheritDoc"><strong>[optional]</strong> Name of function that recieved the event. If undefined class assumes {VISDOC_CODE_BLOCK_6} matched {VISDOC_CODE_BLOCK_7}.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#removeEventObserver">#</a></div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> <div class="inheritDoc">Returns {VISDOC_CODE_BLOCK_8} if the observer was successfully found and removed; otherwise {VISDOC_CODE_BLOCK_9}.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#removeEventObserver">#</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <code><span class="codeIdentifier">this</span>.eventButton_mc.removeEventObserver(<span class="codeIdentifier">this</span>, <span class="codeString">"onRollOver"</span>);</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_event_DispatchableInterface.html#removeEventObserver">DispatchableInterface.removeEventObserver</a> </li></ul></div></div></div></div></div><div class="member" id="removeEventObserversForEvent"><h3>removeEventObserversForEvent</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>removeEventObserversForEvent</b> (
+</div><div class="code">eventName:String) : Boolean</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Removes all observers for a specified event.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#removeEventObserversForEvent">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">eventName<span class="itemSeparator">:</span></div><div><div class="inheritDoc">Event name to unsubscribe to.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#removeEventObserversForEvent">#</a></div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> <div class="inheritDoc">Returns {VISDOC_CODE_BLOCK_10} if observers were successfully found for specified {VISDOC_CODE_BLOCK_11} and removed; otherwise {VISDOC_CODE_BLOCK_12}.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#removeEventObserversForEvent">#</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <code><span class="codeIdentifier">this</span>.eventButton_mc.removeEventObserversForEvent(<span class="codeString">"onRollOver"</span>);</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_event_DispatchableInterface.html#removeEventObserversForEvent">DispatchableInterface.removeEventObserversForEvent</a> </li></ul></div></div></div></div></div><div class="member" id="removeEventObserversForScope"><h3>removeEventObserversForScope</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>removeEventObserversForScope</b> (
+</div><div class="code">scope:Object) : Boolean</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Removes all observers in a specified scope.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#removeEventObserversForScope">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">scope<span class="itemSeparator">:</span></div><div><div class="inheritDoc">The target or object in which to unsubscribe.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#removeEventObserversForScope">#</a></div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> <div class="inheritDoc">Returns {VISDOC_CODE_BLOCK_13} if observers were successfully found in {VISDOC_CODE_BLOCK_14} and removed; otherwise {VISDOC_CODE_BLOCK_15}.</div><a class="followInheritDoc" href="org_casalib_event_DispatchableInterface.html#removeEventObserversForScope">#</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <code><span class="codeIdentifier">this</span>.eventButton_mc.removeEventObserversForScope(<span class="codeIdentifier">this</span>);</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_event_DispatchableInterface.html#removeEventObserversForScope">DispatchableInterface.removeEventObserversForScope</a> </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

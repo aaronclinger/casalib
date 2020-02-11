@@ -1,0 +1,852 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" encoding="utf-8">
+	<head>
+		<title>Inactivity | CASA Lib AS3 Docs</title>
+		<link rel="stylesheet" type="text/css" href="../css/shCoreDefault.min.css" />
+		<link rel="stylesheet" type="text/css" href="../css/VisDoc.min.css" />
+		<script type="text/javascript" src="../js/1_jquery.min.js"></script>
+		<script type="text/javascript" src="../js/2_jquery.cookie.min.js"></script>
+		<script type="text/javascript" src="../js/3_jquery.simpletreeview.min.js"></script>
+		<script type="text/javascript" src="../js/4_shCore.min.js"></script>
+		<script type="text/javascript" src="../js/5_shBrushAS3.min.js"></script>
+		<script type="text/javascript" src="../js/6_shBrushJava.min.js"></script>
+		<script type="text/javascript" src="../js/7_VisDoc.min.js"></script>
+	</head>
+	<body class='isShowingNavigation' id='page_org_casalib_time_Inactivity'>
+	    <div id='page'> 
+			<div id='wrapper'>
+				<div id='outer'> 
+					<div id='floatWrap'> 
+						<div id='main'>
+							<div id='clearHeaderCenter'></div> 
+							<div id='mainContent'>
+																<h1>Inactivity</h1>									<div class='classProperties'>
+		<table cellspacing='0'>
+				<tr>
+		<th>Kind of class:</th>
+		<td>public class</td>
+	</tr>
+							<tr>
+		<th>Package:</th>
+		<td>
+			<ul>
+								<li>			<a href="package_org_casalib_time.html">org.casalib.time</a>
+</li>
+							</ul>
+		</td>
+	</tr>
+							<tr>
+		<th>Inherits from:</th>
+		<td>
+			<ul>
+								<li>			<a href="org_casalib_events_RemovableEventDispatcher.html">RemovableEventDispatcher</a>
+</li>
+								<li>			EventDispatcher</li>
+							</ul>
+		</td>
+	</tr>
+				<tr>
+		<th>Implements:</th>
+		<td>
+			<ul>
+								<li>			<a href="org_casalib_control_IRunnable.html">IRunnable</a>
+</li>
+							</ul>
+		</td>
+	</tr>
+													<tr>
+		<th class='classDetails'>Version:</th>
+		<td class='classDetails'>05/04/11</td>
+	</tr>
+	<tr>
+		<th class='classDetails'>Author:</th>
+		<td class='classDetails'>Aaron Clinger, Mike Creighton</td>
+	</tr>
+	<tr>
+		<th class='classDetails'>Classpath:</th>
+		<td class='classDetails'>org.casalib.time.Inactivity</td>
+	</tr>
+	<tr>
+		<th class='classDetails'>File last modified:</th>
+		<td class='classDetails'>Friday, 20 May 2011, 00:59:45</td>
+	</tr>
+		</table>
+	</div>
+	<div class='sourceCode'>
+				<span class='sourceCodeShow'><a href="#"><span class='closure'>&#9658;&nbsp;</span><span class='linkLabel'>View source</span></a></span><span class='sourceCodeHide'><a href="#"><span class='disclosure'>&#9660;&nbsp;</span><span class='linkLabel'>Hide source</span></a></span>	<pre id="source" class="brush:as3">/*
+    CASA Lib for ActionScript 3.0
+    Copyright (c) 2011, Aaron Clinger & Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+package org.casalib.time {
+    import flash.events.Event;
+    import flash.events.KeyboardEvent;
+    import flash.events.MouseEvent;
+    import org.casalib.control.IRunnable;
+    import org.casalib.events.InactivityEvent;
+    import org.casalib.events.RemovableEventDispatcher;
+    import org.casalib.time.Interval;
+    import org.casalib.util.StageReference;
+    import org.casalib.time.Stopwatch;
+    
+    
+    [Event(name="activated", type="org.casalib.events.InactivityEvent")]
+    [Event(name="inactive", type="org.casalib.events.InactivityEvent")]
+    
+    /**
+        Detects user inactivity by checking for a void in mouse movement and key presses.
+        
+        @author Aaron Clinger
+        @author Mike Creighton
+        @version 05/04/11
+        @usageNote You must first initialize {@link StageReference} before using this class.
+        @example
+            <code>
+                package {
+                    import org.casalib.display.CasaMovieClip;
+                    import org.casalib.events.InactivityEvent;
+                    import org.casalib.time.Inactivity;
+                    import org.casalib.util.StageReference;
+                    
+                    
+                    public class MyExample extends CasaMovieClip {
+                        protected var _inactivity:Inactivity;
+                        
+                        
+                        public function MyExample() {
+                            super();
+                            
+                            StageReference.setStage(this.stage);
+                            
+                            this._inactivity = new Inactivity(3000);
+                            this._inactivity.addEventListener(InactivityEvent.INACTIVE, this.onUserInactive);
+                            this._inactivity.addEventListener(InactivityEvent.ACTIVATED, this.onUserActivated);
+                            this._inactivity.start();
+                        }
+                        
+                        public function onUserInactive(e:InactivityEvent):void {
+                            trace("User inactive for " + e.milliseconds + " milliseconds.");
+                        }
+                        
+                        public function onUserActivated(e:InactivityEvent):void {
+                            trace("User active after being inactive for " + e.milliseconds + " milliseconds.");
+                        }
+                    }
+                }
+            </code>
+    */
+    public class Inactivity extends RemovableEventDispatcher implements IRunnable {
+        protected var _interval:Interval;
+        protected var _stopwatch:Stopwatch;
+        
+        
+        /**
+            Creates an Inactivity.
+            
+            @param milliseconds: The time until a user is considered inactive.
+            @usageNote You must first initialize {@link StageReference} before using this class.
+        */
+        public function Inactivity(milliseconds:uint) {
+            super();
+            
+            this._interval  = Interval.setTimeout(this._userInactive, milliseconds);
+            this._stopwatch = new Stopwatch();
+        }
+        
+        /**
+            Starts detecting inactivity.
+        */
+        public function start():void {
+            if (this._interval.running)
+                return;
+            
+            StageReference.getStage().addEventListener(Event.RESIZE, this._userInput, false, 0, true);
+            StageReference.getStage().addEventListener(KeyboardEvent.KEY_DOWN, this._userInput, false, 0, true);
+            StageReference.getStage().addEventListener(KeyboardEvent.KEY_UP, this._userInput, false, 0, true);
+            StageReference.getStage().addEventListener(MouseEvent.MOUSE_DOWN, this._userInput, false, 0, true);
+            StageReference.getStage().addEventListener(MouseEvent.MOUSE_MOVE, this._userInput, false, 0, true);
+            StageReference.getStage().addEventListener(MouseEvent.MOUSE_WHEEL, this._userInput, false, 0, true);
+            StageReference.getStage().addEventListener(MouseEvent.MOUSE_DOWN, this._userInput, false, 0, true);
+            StageReference.getStage().addEventListener(MouseEvent.MOUSE_UP, this._userInput, false, 0, true);
+            
+            this._stopwatch.start();
+            this._interval.start();
+        }
+        
+        /**
+            Stops detecting inactivity.
+        */
+        public function stop():void {
+            this._interval.reset();
+            
+            StageReference.getStage().removeEventListener(Event.RESIZE, this._userInput);
+            StageReference.getStage().removeEventListener(KeyboardEvent.KEY_DOWN, this._userInput);
+            StageReference.getStage().removeEventListener(KeyboardEvent.KEY_UP, this._userInput);
+            StageReference.getStage().removeEventListener(MouseEvent.MOUSE_DOWN, this._userInput);
+            StageReference.getStage().removeEventListener(MouseEvent.MOUSE_MOVE, this._userInput);
+            StageReference.getStage().removeEventListener(MouseEvent.MOUSE_WHEEL, this._userInput);
+            StageReference.getStage().removeEventListener(MouseEvent.MOUSE_DOWN, this._userInput);
+            StageReference.getStage().removeEventListener(MouseEvent.MOUSE_UP, this._userInput);
+        }
+        
+        override public function destroy():void {
+            this.stop();
+            
+            this._interval.destroy();
+            
+            super.destroy();
+        }
+        
+        /**
+            @sends InactivityEvent#INACTIVE - Dispatched when the user is inactive.
+        */
+        protected function _userInactive():void {
+            this._interval.stop();
+            
+            var event:InactivityEvent = new InactivityEvent(InactivityEvent.INACTIVE);
+            event.milliseconds        = this._interval.delay;
+            
+            this.dispatchEvent(event);
+            
+            this._stopwatch.start();
+        }
+        
+        /**
+            @sends InactivityEvent#ACTIVATED - Dispatched when the user becomes active after a period of inactivity.
+        */
+        protected function _userInput(e:*):void {
+            if (!this._interval.running) {
+                var event:InactivityEvent = new InactivityEvent(InactivityEvent.ACTIVATED);
+                event.milliseconds        = this._stopwatch.time + this._interval.delay;
+                
+                this.dispatchEvent(event);
+                
+                this._stopwatch.stop();
+            }
+            
+            this._interval.reset();
+            this._interval.start();
+        }
+    }
+}</pre>
+</div>
+	<div class='classDescription'>
+	<span class='descriptionSummary'>Detects user inactivity by checking for a void in mouse movement and key presses.</span>	<div class='classFields'>
+		<div class='boxWithBorder'>
+								<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Example</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<pre>
+package {
+    import org.casalib.display.CasaMovieClip;
+    import org.casalib.events.InactivityEvent;
+    import org.casalib<span class="codeIdentifier">.time</span>.Inactivity;
+    import org.casalib.util.StageReference;
+    
+    
+    public class MyExample extends CasaMovieClip {
+        protected <span class="codeKeyword">var</span> _inactivity:Inactivity;
+        
+        
+        public <span class="codeKeyword">function</span> MyExample() {
+            <span class="codeIdentifier">super</span>();
+            
+            StageReference.setStage(<span class="codeIdentifier">this</span>.stage);
+            
+            <span class="codeIdentifier">this</span>._inactivity = <span class="codeKeyword">new</span> Inactivity(<span class="codeNumber">3000</span>);
+            <span class="codeIdentifier">this</span>._inactivity.addEventListener(InactivityEvent.INACTIVE, <span class="codeIdentifier">this</span>.onUserInactive);
+            <span class="codeIdentifier">this</span>._inactivity.addEventListener(InactivityEvent.ACTIVATED, <span class="codeIdentifier">this</span>.onUserActivated);
+            <span class="codeIdentifier">this</span>._inactivity<span class="codeIdentifier">.start</span>();
+        }
+        
+        public <span class="codeKeyword">function</span> onUserInactive(e:InactivityEvent):<span class="codeKeyword">void</span> {
+            <span class="codeIdentifier">trace</span>(<span class="codeString">&quot;User inactive <span class="codeKeyword">for</span> &quot;</span> + e.milliseconds + <span class="codeString">&quot; milliseconds.&quot;</span>);
+        }
+        
+        public <span class="codeKeyword">function</span> onUserActivated(e:InactivityEvent):<span class="codeKeyword">void</span> {
+            <span class="codeIdentifier">trace</span>(<span class="codeString">&quot;User active after being inactive <span class="codeKeyword">for</span> &quot;</span> + e.milliseconds + <span class="codeString">&quot; milliseconds.&quot;</span>);
+        }
+    }
+}
+</pre>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+								<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Events broadcasted to listeners</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<a href="org_casalib_events_InactivityEvent.html#INACTIVE">InactivityEvent</a> with type: <code>INACTIVE</code> - Dispatched when the user is inactive.									</li>
+								<li>
+					<a href="org_casalib_events_InactivityEvent.html#ACTIVATED">InactivityEvent</a> with type: <code>ACTIVATED</code> - Dispatched when the user becomes active after a period of inactivity.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+								<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Usage note</span>
+					<div class='item'>
+					<ul>
+								<li>
+					You must first initialize <a href="org_casalib_util_StageReference.html">StageReference</a> before using this class.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+					</div>
+	</div></div>
+
+									<div class='toc'>
+		<h2 id='Summary'>Summary</h2>
+		<div class='docNav'>
+			<ul>
+									<li>
+						<span class='typeInfoHide'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>&times;</span>Hide type info</a></span>
+						<span class='typeInfoShow'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>+</span>Show type info</a></span>
+					</li>									<li>
+						<span class='summariesHide'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>&times;</span>Hide summaries</a></span>
+						<span class='summariesShow'><a href="#" class='jqButton jqButtonSmall'><span class='jqButtonIcon'>+</span>Show summaries</a></span>
+					</li>			</ul>
+			<div class='clear'></div>
+		</div>
+				<div class='memberList'>
+							<div class='memberSummaryPart'>
+					<span class='title'>Constructor</span>
+					<ul>
+													<li class=''>								
+								<a href="#Inactivity">Inactivity</a>
+																<span class='typeInfo'>(milliseconds:uint)</span>																<ul class='summary'>
+									<li>Creates an Inactivity.</li>
+								</ul>							</li>
+											</ul>
+									</div>
+							<div class='memberSummaryPart'>
+					<span class='title'>Instance methods</span>
+					<ul>
+													<li class=''>								
+								<a href="#start">start</a>
+																<span class='typeInfo'>() : void</span>																<ul class='summary'>
+									<li>Starts detecting inactivity.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#stop">stop</a>
+																<span class='typeInfo'>() : void</span>																<ul class='summary'>
+									<li>Stops detecting inactivity.</li>
+								</ul>							</li>
+													<li class=''>								
+								<a href="#destroy">destroy</a>
+																<span class='typeInfo'>() : void</span>																<ul class='summary'>
+									<li><div</li>
+								</ul>							</li>
+											</ul>
+					<div class='boxWithBorder'>
+	<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Instance methods inherited from <span class='superclass'>			<a href="org_casalib_events_RemovableEventDispatcher.html">RemovableEventDispatcher</a>
+</span></span>
+			<div class='item inheritedList'>
+									<a href="org_casalib_events_RemovableEventDispatcher.html#addEventListener">addEventListener</a>
+
+									<a href="org_casalib_events_RemovableEventDispatcher.html#dispatchEvent">dispatchEvent</a>
+
+									<a href="org_casalib_events_RemovableEventDispatcher.html#getTotalEventListeners">getTotalEventListeners</a>
+
+									<a href="org_casalib_events_RemovableEventDispatcher.html#removeEventListener">removeEventListener</a>
+
+									<a href="org_casalib_events_RemovableEventDispatcher.html#removeEventListeners">removeEventListeners</a>
+
+									<a href="org_casalib_events_RemovableEventDispatcher.html#removeEventsForListener">removeEventsForListener</a>
+
+									<a href="org_casalib_events_RemovableEventDispatcher.html#removeEventsForType">removeEventsForType</a>
+
+						</div>
+		</div>
+	</div>
+</div>				</div>
+					</div>	</div>
+																					<div class='memberSection'>
+			<h2 id='Constructor'>Constructor</h2>
+							<div class='member' id='Inactivity'>
+									<h3>Inactivity</h3>											<div class='fullMemberString'>
+							<span class='code'>function <strong>Inactivity</strong>(milliseconds:uint)</span>						</div>											<div class='description'>
+																			<p>Creates an Inactivity.</p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Parameters</span>
+						<div class='item'>
+		<span class='colorizedCode code'>milliseconds<span class='itemSeparator'>:</span></span>The time until a user is considered inactive.	</div>
+
+					<div class='item'>
+					</div>
+					</div>
+	</div>
+
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Usage note</span>
+					<div class='item'>
+					<ul>
+								<li>
+					You must first initialize <a href="org_casalib_util_StageReference.html">StageReference</a> before using this class.									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+					</div>
+				<div class='memberSection'>
+			<h2 id='Instancemethods'>Instance methods</h2>
+							<div class='member' id='destroy'>
+									<h3>destroy</h3>											<div class='fullMemberString'>
+							<span class='code'>override function <strong>destroy</strong>() : void</span>						</div>											<div class='description'>
+																			<p><div class="inheritDoc"><div class="inheritDoc">Removes any event listeners and stops all internal processes to help allow for prompt garbage collection.
+			
+			<strong>Always call  before deleting last object pointer.</strong> <span class="inheritDocLink"></span></div> <span class="inheritDocLink"><a href="org_casalib_events_RemovableEventDispatcher.html#destroy">&rarr;</a></span></div></p>						</div>										<div class='boxWithBorder'>
+														<div class='boxedElem'>
+		<div class='contentHolder'>
+			<span class='title'>Overrides</span>
+					<div class='item'>
+					<ul>
+								<li>
+					<a href="org_casalib_events_RemovableEventDispatcher.html#destroy">RemovableEventDispatcher.destroy</a>									</li>
+							</ul>			</div>
+					</div>
+	</div>
+
+											</div>				</div>
+							<div class='member' id='start'>
+									<h3>start</h3>											<div class='fullMemberString'>
+							<span class='code'>function <strong>start</strong>() : void</span>						</div>											<div class='description'>
+																			<p>Starts detecting inactivity.</p>						</div>									</div>
+							<div class='member' id='stop'>
+									<h3>stop</h3>											<div class='fullMemberString'>
+							<span class='code'>function <strong>stop</strong>() : void</span>						</div>											<div class='description'>
+																			<p>Stops detecting inactivity.</p>						</div>									</div>
+					</div>
+		
+							</div>
+						</div>
+											<div id='sidebar'>
+		<div id='clearHeaderLeft'></div> 
+		<div id='sidebarContent'>
+				<div class="list">
+							<ul>
+		<li  class=''>											<li id='menu_index' class=''>				<a href="index.html">CASA Lib AS3 Docs</a>
+</li>
+						</li>
+</ul>
+
+					<ul id='treemenu'>
+		<li  class=''>									<h2>Packages and classes</h2>											<ul>
+		<li  id='menu_package_org_casalib_collection' class='package'>
+																	<a href="package_org_casalib_collection.html">org.casalib.collection</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_collection_IList' class='interface'>				<a href="org_casalib_collection_IList.html"><span class='packagePath'>org.casalib.collection.</span>IList</a>
+</li>
+							<li id='menu_org_casalib_collection_List' class=''>				<a href="org_casalib_collection_List.html"><span class='packagePath'>org.casalib.collection.</span>List</a>
+</li>
+							<li id='menu_org_casalib_collection_UniqueList' class=''>				<a href="org_casalib_collection_UniqueList.html"><span class='packagePath'>org.casalib.collection.</span>UniqueList</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_control' class='package'>
+																	<a href="package_org_casalib_control.html">org.casalib.control</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_control_IResumable' class='interface'>				<a href="org_casalib_control_IResumable.html"><span class='packagePath'>org.casalib.control.</span>IResumable</a>
+</li>
+							<li id='menu_org_casalib_control_IRunnable' class='interface'>				<a href="org_casalib_control_IRunnable.html"><span class='packagePath'>org.casalib.control.</span>IRunnable</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_core' class='package'>
+																	<a href="package_org_casalib_core.html">org.casalib.core</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_core_Destroyable' class=''>				<a href="org_casalib_core_Destroyable.html"><span class='packagePath'>org.casalib.core.</span>Destroyable</a>
+</li>
+							<li id='menu_org_casalib_core_IDestroyable' class='interface'>				<a href="org_casalib_core_IDestroyable.html"><span class='packagePath'>org.casalib.core.</span>IDestroyable</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_display' class='package'>
+																	<a href="package_org_casalib_display.html">org.casalib.display</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_display_CasaBitmap' class=''>				<a href="org_casalib_display_CasaBitmap.html"><span class='packagePath'>org.casalib.display.</span>CasaBitmap</a>
+</li>
+							<li id='menu_org_casalib_display_CasaMovieClip' class=''>				<a href="org_casalib_display_CasaMovieClip.html"><span class='packagePath'>org.casalib.display.</span>CasaMovieClip</a>
+</li>
+							<li id='menu_org_casalib_display_CasaShape' class=''>				<a href="org_casalib_display_CasaShape.html"><span class='packagePath'>org.casalib.display.</span>CasaShape</a>
+</li>
+							<li id='menu_org_casalib_display_CasaSimpleButton' class=''>				<a href="org_casalib_display_CasaSimpleButton.html"><span class='packagePath'>org.casalib.display.</span>CasaSimpleButton</a>
+</li>
+							<li id='menu_org_casalib_display_CasaSprite' class=''>				<a href="org_casalib_display_CasaSprite.html"><span class='packagePath'>org.casalib.display.</span>CasaSprite</a>
+</li>
+							<li id='menu_org_casalib_display_CasaTextField' class=''>				<a href="org_casalib_display_CasaTextField.html"><span class='packagePath'>org.casalib.display.</span>CasaTextField</a>
+</li>
+							<li id='menu_org_casalib_display_ReversibleMovieClip' class=''>				<a href="org_casalib_display_ReversibleMovieClip.html"><span class='packagePath'>org.casalib.display.</span>ReversibleMovieClip</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_errors' class='package'>
+																	<a href="package_org_casalib_errors.html">org.casalib.errors</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_errors_ArguementTypeError' class=''>				<a href="org_casalib_errors_ArguementTypeError.html"><span class='packagePath'>org.casalib.errors.</span>ArguementTypeError</a>
+</li>
+							<li id='menu_org_casalib_errors_ArrayContentsError' class=''>				<a href="org_casalib_errors_ArrayContentsError.html"><span class='packagePath'>org.casalib.errors.</span>ArrayContentsError</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_events' class='package'>
+																	<a href="package_org_casalib_events.html">org.casalib.events</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_events_InactivityEvent' class=''>				<a href="org_casalib_events_InactivityEvent.html"><span class='packagePath'>org.casalib.events.</span>InactivityEvent</a>
+</li>
+							<li id='menu_org_casalib_events_IRemovableEventDispatcher' class='interface'>				<a href="org_casalib_events_IRemovableEventDispatcher.html"><span class='packagePath'>org.casalib.events.</span>IRemovableEventDispatcher</a>
+</li>
+							<li id='menu_org_casalib_events_KeyComboEvent' class=''>				<a href="org_casalib_events_KeyComboEvent.html"><span class='packagePath'>org.casalib.events.</span>KeyComboEvent</a>
+</li>
+							<li id='menu_org_casalib_events_ListenerManager' class=''>				<a href="org_casalib_events_ListenerManager.html"><span class='packagePath'>org.casalib.events.</span>ListenerManager</a>
+</li>
+							<li id='menu_org_casalib_events_LoadEvent' class=''>				<a href="org_casalib_events_LoadEvent.html"><span class='packagePath'>org.casalib.events.</span>LoadEvent</a>
+</li>
+							<li id='menu_org_casalib_events_ProcessEvent' class=''>				<a href="org_casalib_events_ProcessEvent.html"><span class='packagePath'>org.casalib.events.</span>ProcessEvent</a>
+</li>
+							<li id='menu_org_casalib_events_RemovableEventDispatcher' class=''>				<a href="org_casalib_events_RemovableEventDispatcher.html"><span class='packagePath'>org.casalib.events.</span>RemovableEventDispatcher</a>
+</li>
+							<li id='menu_org_casalib_events_RetryEvent' class=''>				<a href="org_casalib_events_RetryEvent.html"><span class='packagePath'>org.casalib.events.</span>RetryEvent</a>
+</li>
+							<li id='menu_org_casalib_events_SequenceEvent' class=''>				<a href="org_casalib_events_SequenceEvent.html"><span class='packagePath'>org.casalib.events.</span>SequenceEvent</a>
+</li>
+							<li id='menu_org_casalib_events_StageEventProxy' class=''>				<a href="org_casalib_events_StageEventProxy.html"><span class='packagePath'>org.casalib.events.</span>StageEventProxy</a>
+</li>
+							<li id='menu_org_casalib_events_TweenEvent' class=''>				<a href="org_casalib_events_TweenEvent.html"><span class='packagePath'>org.casalib.events.</span>TweenEvent</a>
+</li>
+							<li id='menu_org_casalib_events_VideoInfoEvent' class=''>				<a href="org_casalib_events_VideoInfoEvent.html"><span class='packagePath'>org.casalib.events.</span>VideoInfoEvent</a>
+</li>
+							<li id='menu_org_casalib_events_VideoLoadEvent' class=''>				<a href="org_casalib_events_VideoLoadEvent.html"><span class='packagePath'>org.casalib.events.</span>VideoLoadEvent</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_layout' class='package'>
+																	<a href="package_org_casalib_layout.html">org.casalib.layout</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_layout_Distribution' class=''>				<a href="org_casalib_layout_Distribution.html"><span class='packagePath'>org.casalib.layout.</span>Distribution</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_load' class='package'>
+																	<a href="package_org_casalib_load.html">org.casalib.load</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_load_AudioLoad' class=''>				<a href="org_casalib_load_AudioLoad.html"><span class='packagePath'>org.casalib.load.</span>AudioLoad</a>
+</li>
+							<li id='menu_org_casalib_load_CasaLoader' class=''>				<a href="org_casalib_load_CasaLoader.html"><span class='packagePath'>org.casalib.load.</span>CasaLoader</a>
+</li>
+							<li id='menu_org_casalib_load_DataLoad' class=''>				<a href="org_casalib_load_DataLoad.html"><span class='packagePath'>org.casalib.load.</span>DataLoad</a>
+</li>
+							<li id='menu_org_casalib_load_GroupLoad' class=''>				<a href="org_casalib_load_GroupLoad.html"><span class='packagePath'>org.casalib.load.</span>GroupLoad</a>
+</li>
+							<li id='menu_org_casalib_load_ImageLoad' class=''>				<a href="org_casalib_load_ImageLoad.html"><span class='packagePath'>org.casalib.load.</span>ImageLoad</a>
+</li>
+							<li id='menu_org_casalib_load_LoadItem' class=''>				<a href="org_casalib_load_LoadItem.html"><span class='packagePath'>org.casalib.load.</span>LoadItem</a>
+</li>
+							<li id='menu_org_casalib_load_SwfLoad' class=''>				<a href="org_casalib_load_SwfLoad.html"><span class='packagePath'>org.casalib.load.</span>SwfLoad</a>
+</li>
+							<li id='menu_org_casalib_load_VideoLoad' class=''>				<a href="org_casalib_load_VideoLoad.html"><span class='packagePath'>org.casalib.load.</span>VideoLoad</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_math' class='package'>
+																	<a href="package_org_casalib_math.html">org.casalib.math</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_math_Percent' class=''>				<a href="org_casalib_math_Percent.html"><span class='packagePath'>org.casalib.math.</span>Percent</a>
+</li>
+							<li id='menu_org_casalib_math_Range' class=''>				<a href="org_casalib_math_Range.html"><span class='packagePath'>org.casalib.math.</span>Range</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_math_geom' class='package'>
+																	<a href="package_org_casalib_math_geom.html">org.casalib.math.geom</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_math_geom_Ellipse' class=''>				<a href="org_casalib_math_geom_Ellipse.html"><span class='packagePath'>org.casalib.math.geom.</span>Ellipse</a>
+</li>
+							<li id='menu_org_casalib_math_geom_Point3d' class=''>				<a href="org_casalib_math_geom_Point3d.html"><span class='packagePath'>org.casalib.math.geom.</span>Point3d</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_process' class='package'>
+																	<a href="package_org_casalib_process.html">org.casalib.process</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_process_Process' class=''>				<a href="org_casalib_process_Process.html"><span class='packagePath'>org.casalib.process.</span>Process</a>
+</li>
+							<li id='menu_org_casalib_process_ProcessGroup' class=''>				<a href="org_casalib_process_ProcessGroup.html"><span class='packagePath'>org.casalib.process.</span>ProcessGroup</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_time' class='package'>
+																	<a href="package_org_casalib_time.html">org.casalib.time</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_time_EnterFrame' class=''>				<a href="org_casalib_time_EnterFrame.html"><span class='packagePath'>org.casalib.time.</span>EnterFrame</a>
+</li>
+							<li id='menu_org_casalib_time_FrameDelay' class=''>				<a href="org_casalib_time_FrameDelay.html"><span class='packagePath'>org.casalib.time.</span>FrameDelay</a>
+</li>
+							<li id='menu_org_casalib_time_FrameTime' class=''>				<a href="org_casalib_time_FrameTime.html"><span class='packagePath'>org.casalib.time.</span>FrameTime</a>
+</li>
+							<li id='menu_org_casalib_time_FrameTimeStopwatch' class=''>				<a href="org_casalib_time_FrameTimeStopwatch.html"><span class='packagePath'>org.casalib.time.</span>FrameTimeStopwatch</a>
+</li>
+							<li id='menu_org_casalib_time_Inactivity' class=''>				<a href="org_casalib_time_Inactivity.html"><span class='packagePath'>org.casalib.time.</span>Inactivity</a>
+</li>
+							<li id='menu_org_casalib_time_Interval' class=''>				<a href="org_casalib_time_Interval.html"><span class='packagePath'>org.casalib.time.</span>Interval</a>
+</li>
+							<li id='menu_org_casalib_time_Sequence' class=''>				<a href="org_casalib_time_Sequence.html"><span class='packagePath'>org.casalib.time.</span>Sequence</a>
+</li>
+							<li id='menu_org_casalib_time_Stopwatch' class=''>				<a href="org_casalib_time_Stopwatch.html"><span class='packagePath'>org.casalib.time.</span>Stopwatch</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_transitions' class='package'>
+																	<a href="package_org_casalib_transitions.html">org.casalib.transitions</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_transitions_PropertyTween' class=''>				<a href="org_casalib_transitions_PropertyTween.html"><span class='packagePath'>org.casalib.transitions.</span>PropertyTween</a>
+</li>
+							<li id='menu_org_casalib_transitions_Tween' class=''>				<a href="org_casalib_transitions_Tween.html"><span class='packagePath'>org.casalib.transitions.</span>Tween</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_ui' class='package'>
+																	<a href="package_org_casalib_ui.html">org.casalib.ui</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_ui_Key' class=''>				<a href="org_casalib_ui_Key.html"><span class='packagePath'>org.casalib.ui.</span>Key</a>
+</li>
+							<li id='menu_org_casalib_ui_KeyCombo' class=''>				<a href="org_casalib_ui_KeyCombo.html"><span class='packagePath'>org.casalib.ui.</span>KeyCombo</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+							<ul>
+		<li  id='menu_package_org_casalib_util' class='package'>
+																	<a href="package_org_casalib_util.html">org.casalib.util</a>
+
+															<ul>
+		<li  class=''>											<li id='menu_org_casalib_util_AlignUtil' class=''>				<a href="org_casalib_util_AlignUtil.html"><span class='packagePath'>org.casalib.util.</span>AlignUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ArrayUtil' class=''>				<a href="org_casalib_util_ArrayUtil.html"><span class='packagePath'>org.casalib.util.</span>ArrayUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ClassUtil' class=''>				<a href="org_casalib_util_ClassUtil.html"><span class='packagePath'>org.casalib.util.</span>ClassUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ColorUtil' class=''>				<a href="org_casalib_util_ColorUtil.html"><span class='packagePath'>org.casalib.util.</span>ColorUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ConversionUtil' class=''>				<a href="org_casalib_util_ConversionUtil.html"><span class='packagePath'>org.casalib.util.</span>ConversionUtil</a>
+</li>
+							<li id='menu_org_casalib_util_DateUtil' class=''>				<a href="org_casalib_util_DateUtil.html"><span class='packagePath'>org.casalib.util.</span>DateUtil</a>
+</li>
+							<li id='menu_org_casalib_util_DisplayObjectUtil' class=''>				<a href="org_casalib_util_DisplayObjectUtil.html"><span class='packagePath'>org.casalib.util.</span>DisplayObjectUtil</a>
+</li>
+							<li id='menu_org_casalib_util_DrawUtil' class=''>				<a href="org_casalib_util_DrawUtil.html"><span class='packagePath'>org.casalib.util.</span>DrawUtil</a>
+</li>
+							<li id='menu_org_casalib_util_FlashVarUtil' class=''>				<a href="org_casalib_util_FlashVarUtil.html"><span class='packagePath'>org.casalib.util.</span>FlashVarUtil</a>
+</li>
+							<li id='menu_org_casalib_util_FrameUtil' class=''>				<a href="org_casalib_util_FrameUtil.html"><span class='packagePath'>org.casalib.util.</span>FrameUtil</a>
+</li>
+							<li id='menu_org_casalib_util_GeomUtil' class=''>				<a href="org_casalib_util_GeomUtil.html"><span class='packagePath'>org.casalib.util.</span>GeomUtil</a>
+</li>
+							<li id='menu_org_casalib_util_LibraryManager' class=''>				<a href="org_casalib_util_LibraryManager.html"><span class='packagePath'>org.casalib.util.</span>LibraryManager</a>
+</li>
+							<li id='menu_org_casalib_util_LoadItemUtil' class=''>				<a href="org_casalib_util_LoadItemUtil.html"><span class='packagePath'>org.casalib.util.</span>LoadItemUtil</a>
+</li>
+							<li id='menu_org_casalib_util_LoadUtil' class=''>				<a href="org_casalib_util_LoadUtil.html"><span class='packagePath'>org.casalib.util.</span>LoadUtil</a>
+</li>
+							<li id='menu_org_casalib_util_LocationUtil' class=''>				<a href="org_casalib_util_LocationUtil.html"><span class='packagePath'>org.casalib.util.</span>LocationUtil</a>
+</li>
+							<li id='menu_org_casalib_util_NavigateUtil' class=''>				<a href="org_casalib_util_NavigateUtil.html"><span class='packagePath'>org.casalib.util.</span>NavigateUtil</a>
+</li>
+							<li id='menu_org_casalib_util_NumberUtil' class=''>				<a href="org_casalib_util_NumberUtil.html"><span class='packagePath'>org.casalib.util.</span>NumberUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ObjectUtil' class=''>				<a href="org_casalib_util_ObjectUtil.html"><span class='packagePath'>org.casalib.util.</span>ObjectUtil</a>
+</li>
+							<li id='menu_org_casalib_util_PropertySetter' class=''>				<a href="org_casalib_util_PropertySetter.html"><span class='packagePath'>org.casalib.util.</span>PropertySetter</a>
+</li>
+							<li id='menu_org_casalib_util_QueryStringUtil' class=''>				<a href="org_casalib_util_QueryStringUtil.html"><span class='packagePath'>org.casalib.util.</span>QueryStringUtil</a>
+</li>
+							<li id='menu_org_casalib_util_RatioUtil' class=''>				<a href="org_casalib_util_RatioUtil.html"><span class='packagePath'>org.casalib.util.</span>RatioUtil</a>
+</li>
+							<li id='menu_org_casalib_util_SingletonUtil' class=''>				<a href="org_casalib_util_SingletonUtil.html"><span class='packagePath'>org.casalib.util.</span>SingletonUtil</a>
+</li>
+							<li id='menu_org_casalib_util_StageReference' class=''>				<a href="org_casalib_util_StageReference.html"><span class='packagePath'>org.casalib.util.</span>StageReference</a>
+</li>
+							<li id='menu_org_casalib_util_StringUtil' class=''>				<a href="org_casalib_util_StringUtil.html"><span class='packagePath'>org.casalib.util.</span>StringUtil</a>
+</li>
+							<li id='menu_org_casalib_util_TextFieldUtil' class=''>				<a href="org_casalib_util_TextFieldUtil.html"><span class='packagePath'>org.casalib.util.</span>TextFieldUtil</a>
+</li>
+							<li id='menu_org_casalib_util_UrlVariablesUtil' class=''>				<a href="org_casalib_util_UrlVariablesUtil.html"><span class='packagePath'>org.casalib.util.</span>UrlVariablesUtil</a>
+</li>
+							<li id='menu_org_casalib_util_ValidationUtil' class=''>				<a href="org_casalib_util_ValidationUtil.html"><span class='packagePath'>org.casalib.util.</span>ValidationUtil</a>
+</li>
+						</li>
+</ul>
+
+				</li>
+</ul>
+
+				</li>
+</ul>
+
+			</div>					<div class="globalNav">
+							<ul>
+									<li>
+						<li id='menu_all-packages' class=''>				<a href="all-packages.html">Package tree</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-classes' class=''>				<a href="all-classes.html">Classes</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-methods' class=''>				<a href="all-methods.html">Methods</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-constants' class=''>				<a href="all-constants.html">Constants</a>
+</li>					</li>
+									<li>
+						<li id='menu_all-properties' class=''>				<a href="all-properties.html">Properties</a>
+</li>					</li>
+									<li>
+						<li class=''></li>					</li>
+							</ul>	</div>
+		</div>
+	</div>
+
+					</div>
+					<div class='clear'>&nbsp;</div> 
+				</div>
+			</div>
+			<div id='header'>
+				<div id='headerContentWrapper'>
+					<div id='headerContent'>
+						<ul id='headerButtons'>
+															<li id='toggleTocButton'><a href="#"><span class='disclosure'>&#9660;</span><span class='closure'>&#9658;</span>Navigation</a></li>													</ul>
+					</div>
+				</div>
+			</div>
+			<div id="footer">
+	<div id="footerContent">
+		<ul>
+						<li class="copyright">
+				&copy; 2011 Aaron Clinger and the CASA Lib Team
+			</li>		</ul>
+	</div>
+</div>
+		</div>
+     </body>
+</html>

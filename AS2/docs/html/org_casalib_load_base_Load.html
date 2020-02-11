@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Load</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_load_base_Load"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classproperties" accesskey="l">C<span class="accessKey">l</span>ass properties</a></li><li><a href="#Instanceproperties" accesskey="l">Instance <span class="accessKey">p</span>roperties</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li></ul><br class="clear" /></div><h1>Load</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_event_EventDispatcher.html">EventDispatcher</a> &lt; <a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></td></tr><tr><th align="left">Implements:</th><td><ul><li><a class="className" href="org_casalib_load_base_LoadInterface.html">LoadInterface</a></li></ul></td></tr><tr><th align="left">Known subclasses:</th><td><ul><li><a class="className" href="org_casalib_load_base_RetryableLoad.html">RetryableLoad</a></li></ul></td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">05/06/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.load.base.Load</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.event.EventDispatcher;
+import org.casalib.load.base.LoadInterface;
+import org.casalib.time.FrameDelay;
+
+/**
+    Base load class. Class needs to be extended further to function properly.
+    
+    @author Aaron Clinger
+    @version 05/06/07
+    @since Flash Player 7
+*/
+
+class org.casalib.load.base.Load extends EventDispatcher implements LoadInterface {
+    public static var EVENT_LOAD_START:String    = 'onLoadStart';
+    public static var EVENT_LOAD_ERROR:String    = 'onLoadError';
+    public static var EVENT_LOAD_COMPLETE:String = 'onLoadComplete';
+    public static var EVENT_LOAD_INIT:String     = 'onLoadInit';
+    private var $filePath:String;
+    private var $target:Object;
+    private var $hasLoaded:Boolean;
+    private var $isLoading:Boolean;
+    private var $frameDelay:FrameDelay;
+    
+    
+    /**
+        @param target: A path to a container where the file specified by &lt;code>filePath&lt;/code> should be loaded into.
+        @param filePath: The absolute or relative URL of the file to be loaded.
+    */
+    private function Load(target:Object, filePath:String) {
+        super();
+        
+        this.$target    = target;
+        this.$filePath  = filePath;
+        this.$hasLoaded = this.$isLoading = false;
+        
+        this.$setClassDescription('org.casalib.load.base.Load');
+    }
+    
+    /**
+        Begins the loading process and broadcasts events to observers.
+        
+        @usageNote Use {@link EventDispatcher#addEventObserver} to listen for broadcasted events.
+        @sends onLoadStart = function(sender:Load) {}
+    */
+    public function start():Void {
+        if (this.isLoading() || this.hasLoaded())
+            return;
+        
+        if (this.$filePath == undefined || this.$target == undefined) {
+            this.dispatchEvent(Load.EVENT_LOAD_ERROR, this);
+            return;
+        }
+        
+        this.$startLoad();
+        
+        this.dispatchEvent(Load.EVENT_LOAD_START, this);
+    }
+    
+    /**
+        Unloads a file that has previously loaded, or cancels a currently loading file from completing.
+        
+        @usageNote If you issue this command while a file is loading, event &lt;code>onLoadError&lt;/code> is also invoked.
+    */
+    public function stop():Void {
+        if (this.isLoading()) {
+            this.$stopLoad();
+            this.dispatchEvent(Load.EVENT_LOAD_ERROR, this);
+            return;
+        }
+        
+        this.$stopLoad();
+    }
+    
+    public function getFilePath():String {
+        return this.$filePath;
+    }
+    
+    public function hasLoaded():Boolean {
+        return this.$hasLoaded;
+    }
+    
+    public function isLoading():Boolean {
+        return this.$isLoading;
+    }
+    
+    public function destroy():Void {
+        this.$clean();
+        
+        delete this.$hasLoaded;
+        delete this.$filePath;
+        delete this.$target;
+        
+        super.destroy();
+    }
+    
+    /**
+        &lt;strong>This function needs to be extended by a subclass.&lt;/strong>
+    */
+    private function $startLoad():Void {
+        this.$isLoading = true;
+        this.$hasLoaded = false;
+    }
+    
+    /**
+        &lt;strong>This function needs to be extended by a subclass.&lt;/strong>
+    */
+    private function $stopLoad():Void {
+        this.$clean();
+        this.$hasLoaded = false;
+    }
+    
+    /**
+        &lt;strong>This function needs to be called by a subclass.&lt;/strong>
+        
+        If target in subclass has an reliable &lt;code>"onLoad"&lt;/code> handler call this method after target is defined in the constructor.
+        
+        @param loadContainer: &lt;strong>[optional]&lt;/strong> Defines object file is loading into and has the event handler &lt;code>"onLoad"&lt;/code>; defaults to &lt;code>$target&lt;/code>.
+    */
+    private function $remapOnLoadHandler(loadContainer:Object):Void {
+        var _this:Load  = this;
+        var targ:Object = (loadContainer == undefined) ? this.$target : loadContainer;
+        
+        targ.onLoad = function(success:Boolean):Void {
+            _this.$onLoad(success);
+        };
+    }
+    
+    private function $onLoad(success:Boolean):Void {
+        if (success)
+            this.$onComplete();
+    }
+    
+    /**
+        @sends onLoadComplete = function(sender:Load) {}
+        @sends onLoadError = function(sender:Load) {}
+    */
+    private function $onComplete():Void {
+        this.$hasLoaded = true;
+        
+        this.dispatchEvent(Load.EVENT_LOAD_COMPLETE, this);
+        
+        this.$frameDelay = new FrameDelay(this, '$onInitialized');
+        this.$frameDelay.start();
+    }
+    
+    /**
+        @sends onLoadInit = function(sender:Load) {}
+    */
+    private function $onInitialized():Void {
+        this.dispatchEvent(Load.EVENT_LOAD_INIT, this);
+        this.$clean();
+    }
+    
+    private function $clean():Void {
+        this.$frameDelay.destroy();
+        
+        delete this.$frameDelay;
+        delete this.$isLoading;
+    }
+}
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Base load class.</span> Class needs to be extended further to function properly.<div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Since:</span><div class="item"><ul><li> Flash Player 7 </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Events broadcasted to listeners:</span><div class="item"><ul><li><code>onLoadStart = function (sender:Load) {}</code> </li><li><code>onLoadComplete = function (sender:Load) {}</code> </li><li><code>onLoadError = function (sender:Load) {}</code> </li><li><code>onLoadInit = function (sender:Load) {}</code> </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class properties</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#EVENT_LOAD_START">EVENT_LOAD_START</a><span class="typeInfo">  : String</span></li><li class="sortli listnum2"><a href="#EVENT_LOAD_ERROR">EVENT_LOAD_ERROR</a><span class="typeInfo">  : String</span></li><li class="sortli listnum3"><a href="#EVENT_LOAD_COMPLETE">EVENT_LOAD_COMPLETE</a><span class="typeInfo">  : String</span></li><li class="sortli listnum4"><a href="#EVENT_LOAD_INIT">EVENT_LOAD_INIT</a><span class="typeInfo">  : String</span></li></ul></div><div class="memberSummaryPart"><span class="title">Instance methods</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#start">start</a><span class="typeInfo">  : Void</span><ul class="summary"><li>Begins the loading process and broadcasts events to observers.</li></ul></li><li class="sortli listnum2"><a href="#stop">stop</a><span class="typeInfo">  : Void</span><ul class="summary"><li>Unloads a file that has previously loaded, or cancels a currently loading file from completing.</li></ul></li><li class="sortli listnum3"><a href="#getFilePath">getFilePath</a><span class="typeInfo">  : String</span><ul class="summary"><li><div class="inheritDoc">	Retrieves the path to the file that is to be loaded.</li></ul></li><li class="sortli listnum4"><a href="#hasLoaded">hasLoaded</a><span class="typeInfo">  : Boolean</span><ul class="summary"><li><div class="inheritDoc">Determines whether the requested file has finished loading.</li></ul></li><li class="sortli listnum5"><a href="#isLoading">isLoading</a><span class="typeInfo">  : Boolean</span><ul class="summary"><li><div class="inheritDoc">Determines whether the requested file is in the process of loading.</li></ul></li><li class="sortli listnum6"><a href="#destroy">destroy</a><span class="typeInfo">  : Void</span><ul class="summary"><li><div class="inheritDoc">Removes any internal variables, intervals, enter frames, internal MovieClips and event observers to allow the object to be garbage collected.</li></ul></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_event_EventDispatcher.html">EventDispatcher</a></span></span><div class="item inheritedList"><a href="org_casalib_event_EventDispatcher.html#addEventObserver">addEventObserver</a>  <a href="org_casalib_event_EventDispatcher.html#destroy">destroy</a>  <a href="org_casalib_event_EventDispatcher.html#dispatchEvent">dispatchEvent</a>  <a href="org_casalib_event_EventDispatcher.html#removeAllEventObservers">removeAllEventObservers</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserver">removeEventObserver</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForEvent">removeEventObserversForEvent</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForScope">removeEventObserversForScope</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_core_CoreObject.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_core_CoreObject.html#destroy">destroy</a>  <a href="org_casalib_core_CoreObject.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Classproperties">Class properties</h2><div class="member" id="EVENT_LOAD_COMPLETE"><h3>EVENT_LOAD_COMPLETE</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_LOAD_COMPLETE</b>:String = <span class="codeString">'onLoadComplete'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_LOAD_ERROR"><h3>EVENT_LOAD_ERROR</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_LOAD_ERROR</b>:String = <span class="codeString">'onLoadError'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_LOAD_INIT"><h3>EVENT_LOAD_INIT</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_LOAD_INIT</b>:String = <span class="codeString">'onLoadInit'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_LOAD_START"><h3>EVENT_LOAD_START</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_LOAD_START</b>:String = <span class="codeString">'onLoadStart'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div></div><div class="memberSection"><h2 id="Instancemethods">Instance methods</h2><div class="member" id="destroy"><h3>destroy</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>destroy</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Removes any internal variables, intervals, enter frames, internal MovieClips and event observers to allow the object to be garbage collected.<br />		<br />		<strong>Always call <code>filePath</code> before deleting last object pointer.</strong></div><a class="followInheritDoc" href="org_casalib_core_CoreInterface.html#destroy">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Overrides:</span><div class="item"><ul><li> <a href="org_casalib_event_EventDispatcher.html#destroy">org.casalib.event.EventDispatcher.destroy</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_core_CoreInterface.html#destroy">org.casalib.core.CoreInterface.destroy</a> </li></ul></div></div></div></div></div><div class="member" id="getFilePath"><h3>getFilePath</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>getFilePath</b> (
+</div><div class="code">) : String</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">	Retrieves the path to the file that is to be loaded.</div><a class="followInheritDoc" href="org_casalib_load_base_LoadInterface.html#getFilePath">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> <div class="inheritDoc">String containing the path to the file.</div><a class="followInheritDoc" href="org_casalib_load_base_LoadInterface.html#getFilePath">#</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_load_base_LoadInterface.html#getFilePath">LoadInterface.getFilePath</a> </li></ul></div></div></div></div></div><div class="member" id="hasLoaded"><h3>hasLoaded</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>hasLoaded</b> (
+</div><div class="code">) : Boolean</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Determines whether the requested file has finished loading.</div><a class="followInheritDoc" href="org_casalib_load_base_LoadInterface.html#hasLoaded">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> <div class="inheritDoc">Returns <code>filePath</code> if file has completely loaded; otherwise <code><span class="codeIdentifier">onLoadError</span></code>.</div><a class="followInheritDoc" href="org_casalib_load_base_LoadInterface.html#hasLoaded">#</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_load_base_LoadInterface.html#hasLoaded">LoadInterface.hasLoaded</a> </li></ul></div></div></div></div></div><div class="member" id="isLoading"><h3>isLoading</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>isLoading</b> (
+</div><div class="code">) : Boolean</div><br class="clear" /></div></div><div class="description"> <div class="inheritDoc">Determines whether the requested file is in the process of loading.</div><a class="followInheritDoc" href="org_casalib_load_base_LoadInterface.html#isLoading">#</a> </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> <div class="inheritDoc">Returns <code><span class="codeString">"onLoad"</span></code> if the file is currently loading; otherwise <code><span class="codeString">"onLoad"</span></code>.</div><a class="followInheritDoc" href="org_casalib_load_base_LoadInterface.html#isLoading">#</a> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_load_base_LoadInterface.html#isLoading">LoadInterface.isLoading</a> </li></ul></div></div></div></div></div><div class="member" id="start"><h3>start</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>start</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> Begins the loading process and broadcasts events to observers. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> Use <a href="org_casalib_event_EventDispatcher.html#addEventObserver">org.casalib.event.EventDispatcher.addEventObserver</a> to listen for broadcasted events. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Events broadcasted to listeners:</span><div class="item"><ul><li><code>onLoadStart = function (sender:Load) {}</code> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_control_RunnableInterface.html#start">org.casalib.control.RunnableInterface.start</a> </li></ul></div></div></div></div></div><div class="member" id="stop"><h3>stop</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>stop</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="description"> Unloads a file that has previously loaded, or cancels a currently loading file from completing. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> If you issue this command while a file is loading, event <code><span class="codeIdentifier">onLoadError</span></code> is also invoked. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Specified by:</span><div class="item"><ul><li> <a href="org_casalib_control_RunnableInterface.html#stop">org.casalib.control.RunnableInterface.stop</a> </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

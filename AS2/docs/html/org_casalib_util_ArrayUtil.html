@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>ArrayUtil</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_util_ArrayUtil"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classmethods" accesskey="a">Cl<span class="accessKey">a</span>ss methods</a></li></ul><br class="clear" /></div><h1>ArrayUtil</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td>none</td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">06/08/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger, David Nelson</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.util.ArrayUtil</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.util.NumberUtil;
+
+/**
+    Utilities for sorting, searching and manipulating Arrays.
+    
+    @author Aaron Clinger
+    @author David Nelson
+    @version 06/08/07
+*/
+
+class org.casalib.util.ArrayUtil {
+    
+    /**
+        Determines if two Arrays contain the same objects at the same index.
+        
+        @param first: First Array to compare to &lt;code>second&lt;/code>.
+        @param second: Second Array to compare to &lt;code>first&lt;/code>.
+        @return Returns &lt;code>true&lt;/code> if Arrays are the same; otherwise &lt;code>false&lt;/code>.
+    */
+    public static function equals(first:Array, second:Array):Boolean {
+        var i:Number = first.length;
+        
+        if (i != second.length)
+            return false;
+        
+        while (i--)
+            if (first[i] != second[i])
+                return false;
+        
+        return true;
+    }
+    
+    /**
+        Creates new Array comprised of only the non-identical elements of passed Array.
+        
+        @param inArray: Array to remove equivalent items.
+        @return A new Array comprised of only unique elements.
+        @usage
+            &lt;code>
+                var numberArray:Array = new Array(1, 2, 3, 4, 4, 4, 4, 5);
+                trace(ArrayUtil.removeDuplicates(numberArray));
+            &lt;/code>
+    */
+    public static function removeDuplicates(inArray:Array):Array {
+        var o:Object;
+        var i:Number = -1;
+        var m:Object = new Object();
+        var u:Array  = new Array();
+        
+        while (++i &lt; inArray.length) {
+            o = inArray[i];
+            
+            if (!m[o]) {
+                u.push(o);
+                m[o] = true;
+            }
+        }
+        
+        return u;
+    }
+    
+    /**
+        Modifies original Array by removing all items that are identical to passed &lt;code>item&lt;/code>.
+        
+        @param tarArray: Array to remove passed &lt;code>item&lt;/code>.
+        @param item: Value to remove.
+        @return The amount of removed elements that matched &lt;code>item&lt;/code>, if none found returns &lt;code>0&lt;/code>.
+        @usage
+            &lt;code>
+                var numberArray:Array = new Array(1, 2, 3, 7, 7, 7, 4, 5);
+                trace("Removed " + ArrayUtil.removeArrayItem(numberArray, 7) + " items.");
+                trace(numberArray);
+            &lt;/code>
+        @usageNote &lt;code>item&lt;/code> can be any object; &lt;code>Number&lt;/code>, &lt;code>String&lt;/code>, &lt;code>Object&lt;/code>, etc...
+    */
+    public static function removeArrayItem(tarArray:Array, item:Object):Number {
+        var l:Number = tarArray.length;
+        var f:Number = 0;
+        
+        while (l--) {
+            if (tarArray[l] == item) {
+                tarArray.splice(l, 1);
+                f++;
+            }
+        }
+        
+        return f;
+    }
+    
+    /**
+        Removes only the specified items in an Array.
+        
+        @param tarArray: Array to remove specified items from.
+        @param items: Array of elements to remove.
+        @return Returns &lt;code>true&lt;/code> if the Array was changed as a result of the call; otherwise &lt;code>false&lt;/code>.
+        @usage
+            &lt;code>
+                var numberArray:Array = new Array(1, 2, 3, 7, 7, 7, 4, 5);
+                ArrayUtil.removeArrayItems(numberArray, new Array(1, 3, 7, 5));
+                trace(numberArray);
+            &lt;/code>
+    */
+    public static function removeArrayItems(tarArray:Array, items:Array):Boolean {
+        var removed:Boolean = false;
+        var l:Number        = tarArray.length;
+        var i:Number;
+        
+        while (l--) {
+            i = ArrayUtil.indexOf(items, tarArray[l]);
+            
+            if (i != -1) {
+                tarArray.splice(l, 1);
+                removed = true;
+            }
+        }
+        
+        return removed;
+    }
+    
+    /**
+        Retains only the specified items in an Array.
+        
+        @param tarArray: Array to remove non specified items from.
+        @param items: Array of elements to keep.
+        @return Returns &lt;code>true&lt;/code> if the Array was changed as a result of the call; otherwise &lt;code>false&lt;/code>.
+        @usage
+            &lt;code>
+                var numberArray:Array = new Array(1, 2, 3, 7, 7, 7, 4, 5);
+                ArrayUtil.retainArrayItems(numberArray, new Array(2, 4));
+                trace(numberArray);
+            &lt;/code>
+    */
+    public static function retainArrayItems(tarArray:Array, items:Array):Boolean {
+        var removed:Boolean = false;
+        var l:Number        = tarArray.length;
+        var i:Number;
+        
+        while (l--) {
+            i = ArrayUtil.indexOf(items, tarArray[l]);
+            
+            if (i == -1) {
+                tarArray.splice(l, 1);
+                removed = true;
+            }
+        }
+        
+        return removed;
+    }
+    
+    /**
+        Finds the position of the first instance of passed &lt;code>item&lt;/code> in &lt;code>inArray&lt;/code>.
+        
+        @param inArray: Array to find &lt;code>item&lt;/code>'s position in.
+        @param item: Object to find position of.
+        @param startIndex: &lt;strong>[optional]&lt;/strong> The starting position of the search.
+        @return The first index of the instance &lt;code>item&lt;/code>; if none found returns &lt;code>-1&lt;/code>.
+        @usage
+            &lt;code>
+                var colorArray = new Array("red", "blue", "pink", "black");
+                trace("First postion of 'pink' is: " + ArrayUtil.indexOf(colorArray, "pink"));
+            &lt;/code>
+        @usageNote &lt;code>item&lt;/code> can be any object; &lt;code>Number&lt;/code>, &lt;code>String&lt;/code>, &lt;code>Object&lt;/code>, etc...
+    */
+    public static function indexOf(inArray:Array, item:Object, startIndex:Number):Number {
+        var i:Number = (startIndex == undefined) ? -1 : startIndex - 1;
+        
+        while (++i &lt; inArray.length)
+            if (inArray[i] == item)
+                return i;
+        
+        return -1;
+    }
+    
+    /**
+        Finds the position of the last instance of passed &lt;code>item&lt;/code> in &lt;code>inArray&lt;/code>.
+        
+        @param inArray: Array to find &lt;code>item&lt;/code>'s position in.
+        @param item: Object to find position of.
+        @param startIndex: &lt;strong>[optional]&lt;/strong> The starting position of the search.
+        @return The last index of the instance &lt;code>item&lt;/code>; if none found returns &lt;code>-1&lt;/code>.
+        @usage
+            &lt;code>
+                var colorArray = new Array("red", "blue", "pink", "black");
+                trace("First postion of 'pink' is: " + ArrayUtil.indexOf(colorArray, "pink"));
+            &lt;/code>
+        @usageNote &lt;code>item&lt;/code> can be any object; &lt;code>Number&lt;/code>, &lt;code>String&lt;/code>, &lt;code>Object&lt;/code>, etc...
+    */
+    public static function lastIndexOf(inArray:Array, item:Object, startIndex:Number):Number {
+        var i:Number = (startIndex == undefined) ? inArray.length : startIndex;
+        
+        while (i--)
+            if (inArray[i] == item)
+                return i;
+        
+        return -1;
+    }
+    
+    /**
+        Finds out how many instances of &lt;code>item&lt;/code> Array contains.
+        
+        @param inArray: Array to search for &lt;code>item&lt;/code> in.
+        @param item: Object to find.
+        @return The amount of &lt;code>item&lt;/code>'s found; if none were found returns &lt;code>0&lt;/code>.
+        @usage
+            &lt;code>
+                var numberArray:Array = new Array(1, 2, 3, 7, 7, 7, 4, 5);
+                trace("numberArray contains " + ArrayUtil.contains(numberArray, 7) + " 7's.");
+            &lt;/code>
+        @usageNote If you are trying to find if an array contains an item and don't need to know the total, use {@link #indexOf} instead. &lt;code>item&lt;/code> can be any object; &lt;code>Number&lt;/code>, &lt;code>String&lt;/code>, &lt;code>Object&lt;/code>, etc...
+    */
+    public static function contains(inArray:Array, item:Object):Number {
+        var l:Number = inArray.length;
+        var t:Number = 0;
+        
+        while (l--)
+            if (inArray[l] == item)
+                t++;
+        
+        return t;
+    }
+    
+    /**
+        Determines if Array contains all items.
+        
+        @param inArray: Array to search for &lt;code>items&lt;/code> in.
+        @param items: Array of elements to search for.
+        @return Returns &lt;code>true&lt;/code> if &lt;code>inArray&lt;/code> contains all elements of &lt;code>items&lt;/code>; otherwise &lt;code>false&lt;/code>.
+        @usage
+            &lt;code>
+                var numberArray:Array = new Array(1, 2, 3, 4, 5);
+                trace(ArrayUtil.containsAll(numberArray, new Array(1, 3, 5)));
+            &lt;/code>
+    */
+    public static function containsAll(inArray:Array, items:Array):Boolean {
+        var l:Number = items.length;
+        
+        while (l--)
+            if (ArrayUtil.indexOf(inArray, items[l]) == -1)
+                return false;
+        
+        return true;
+    }
+    
+    /**
+        Determines if Array &lt;code>inArray&lt;/code> contains any element of Array &lt;code>items&lt;/code>.
+        
+        @param inArray: Array to search for &lt;code>items&lt;/code> in.
+        @param items: Array of elements to search for.
+        @return Returns &lt;code>true&lt;/code> if &lt;code>inArray&lt;/code> contains any element of &lt;code>items&lt;/code>; otherwise &lt;code>false&lt;/code>.
+        @usage
+            &lt;code>
+                var numberArray:Array = new Array(1, 2, 3, 4, 5);
+                trace(ArrayUtil.containsAny(numberArray, new Array(1, 3, 5)));
+            &lt;/code>
+    */
+    public static function containsAny(inArray:Array, items:Array):Boolean {
+        var l:Number = items.length;
+        
+        while (l--)
+            if (ArrayUtil.indexOf(inArray, items[l]) != -1)
+                return true;
+        
+        return false;
+    }
+    
+    /**
+        Creates new Array composed of passed Array's items in a random order.
+        
+        @param inArray: Array to create copy of, and randomize.
+        @return A new Array comprised of passed Array's items in a random order.
+        @usage
+            &lt;code>
+                var numberArray:Array = new Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+                trace(ArrayUtil.randomize(numberArray));
+            &lt;/code>
+        @since Flash Player 7
+    */
+    public static function randomize(inArray:Array):Array {
+        var t:Array  = new Array();
+        var r:Array  = inArray.sort(ArrayUtil.$sortRandom, Array.RETURNINDEXEDARRAY);
+        var i:Number = -1;
+        
+        while (++i &lt; inArray.length)
+            t.push(inArray[r[i]]);
+        
+        return t;
+    }
+    
+    private static function $sortRandom(a:Object, b:Object):Number {
+        return NumberUtil.randomInteger(0, 1) ? 1 : -1;
+    }
+    
+    
+    /**
+        Adds all items in &lt;code>inArray&lt;/code> and returns the value.
+        
+        @param inArray: Array comprised only of numbers.
+        @return The total of all numbers in &lt;code>inArray&lt;/code> added.
+        @usage
+            &lt;code>
+                var numberArray:Array = new Array(2, 3);
+                trace("Total is: " + ArrayUtil.sum(numberArray));
+            &lt;/code>
+    */
+    public static function sum(inArray: /*Number*/ Array):Number {
+        var t:Number = 0;
+        var l:Number = inArray.length;
+        
+        while (l--)
+            t += inArray[l];
+        
+        return t;
+    }
+    
+    /**
+        Averages the values in &lt;code>inArray&lt;/code>.
+        
+        @param inArray: Array comprised only of numbers.
+        @return The average of all numbers in the &lt;code>inArray&lt;/code>.
+        @usage
+            &lt;code>
+                var numberArray:Array = new Array(2, 3, 8, 3);
+                trace("Average is: " + ArrayUtil.average(numberArray));
+            &lt;/code>
+    */
+    public static function average(inArray: /*Number*/ Array):Number {
+        if (inArray.length == 0)
+            return 0;
+        
+        return ArrayUtil.sum(inArray) / inArray.length;
+    }
+    
+    /**
+        Finds the lowest value in &lt;code>inArray&lt;/code>.
+        
+        @param inArray: Array comprised only of numbers.
+        @return The lowest value in &lt;code>inArray&lt;/code>.
+        @usage
+            &lt;code>
+                var numberArray:Array = new Array(2, 1, 5, 4, 3);
+                trace("The lowest value is: " + ArrayUtil.getLowestValue(numberArray));
+            &lt;/code>
+        @since Flash Player 7
+    */
+    public static function getLowestValue(inArray: /*Number*/ Array):Number {
+        return inArray[inArray.sort(16|8)[0]];
+    }
+    
+    /**
+        Finds the highest value in &lt;code>inArray&lt;/code>.
+        
+        @param inArray: Array comprised only of numbers.
+        @return The highest value in &lt;code>inArray&lt;/code>.
+        @usage
+            &lt;code>
+                var numberArray:Array = new Array(2, 1, 5, 4, 3);
+                trace("The highest value is: " + ArrayUtil.getHighestValue(numberArray));
+            &lt;/code>
+        @since Flash Player 7
+    */
+    public static function getHighestValue(inArray: /*Number*/ Array):Number {
+        return inArray[inArray.sort(16|8)[inArray.length - 1]];
+    }
+    
+    private function ArrayUtil() {} // Prevents instance creation
+}
+
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Utilities for sorting, searching and manipulating Arrays.</span></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class methods</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#equals">equals</a><span class="typeInfo"> (first:Array, second:Array) : Boolean</span><ul class="summary"><li>	Determines if two Arrays contain the same objects at the same index.</li></ul></li><li class="sortli listnum2"><a href="#removeDuplicates">removeDuplicates</a><span class="typeInfo"> (inArray:Array) : Array</span><ul class="summary"><li>Creates new Array comprised of only the non-identical elements of passed Array.</li></ul></li><li class="sortli listnum3"><a href="#removeArrayItem">removeArrayItem</a><span class="typeInfo"> (tarArray:Array, item:Object) : Number</span><ul class="summary"><li>Modifies original Array by removing all items that are identical to passed item.</li></ul></li><li class="sortli listnum4"><a href="#removeArrayItems">removeArrayItems</a><span class="typeInfo"> (tarArray:Array, items:Array) : Boolean</span><ul class="summary"><li>Removes only the specified items in an Array.</li></ul></li><li class="sortli listnum5"><a href="#retainArrayItems">retainArrayItems</a><span class="typeInfo"> (tarArray:Array, items:Array) : Boolean</span><ul class="summary"><li>Retains only the specified items in an Array.</li></ul></li><li class="sortli listnum6"><a href="#indexOf">indexOf</a><span class="typeInfo"> (inArray:Array, item:Object, startIndex:Number) : Number</span><ul class="summary"><li>Finds the position of the first instance of passed item in inArray.</li></ul></li><li class="sortli listnum7"><a href="#lastIndexOf">lastIndexOf</a><span class="typeInfo"> (inArray:Array, item:Object, startIndex:Number) : Number</span><ul class="summary"><li>Finds the position of the last instance of passed item in inArray.</li></ul></li><li class="sortli listnum8"><a href="#contains">contains</a><span class="typeInfo"> (inArray:Array, item:Object) : Number</span><ul class="summary"><li>Finds out how many instances of item Array contains.</li></ul></li><li class="sortli listnum9"><a href="#containsAll">containsAll</a><span class="typeInfo"> (inArray:Array, items:Array) : Boolean</span><ul class="summary"><li>Determines if Array contains all items.</li></ul></li><li class="sortli listnum10"><a href="#containsAny">containsAny</a><span class="typeInfo"> (inArray:Array, items:Array) : Boolean</span><ul class="summary"><li>Determines if Array inArray contains any element of Array items.</li></ul></li><li class="sortli listnum11"><a href="#randomize">randomize</a><span class="typeInfo"> (inArray:Array) : Array</span><ul class="summary"><li>Creates new Array composed of passed Array's items in a random order.</li></ul></li><li class="sortli listnum12"><a href="#sum">sum</a><span class="typeInfo"> (inArray:Array) : Number</span><ul class="summary"><li>Adds all items in inArray and returns the value.</li></ul></li><li class="sortli listnum13"><a href="#average">average</a><span class="typeInfo"> (inArray:Array) : Number</span><ul class="summary"><li>Averages the values in inArray.</li></ul></li><li class="sortli listnum14"><a href="#getLowestValue">getLowestValue</a><span class="typeInfo"> (inArray:Array) : Number</span><ul class="summary"><li>Finds the lowest value in inArray.</li></ul></li><li class="sortli listnum15"><a href="#getHighestValue">getHighestValue</a><span class="typeInfo"> (inArray:Array) : Number</span><ul class="summary"><li>Finds the highest value in inArray.</li></ul></li></ul></div></div></div><div class="memberSection"><h2 id="Classmethods">Class methods</h2><div class="member" id="average"><h3>average</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>average</b> (
+</div><div class="code">inArray:Array) : Number</div><br class="clear" /></div></div><div class="description"> Averages the values in <code>inArray</code>. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">inArray<span class="itemSeparator">:</span></div><div>Array comprised only of numbers.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> The average of all numbers in the <code>inArray</code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> numberArray:<span class="codeIdentifier">Array</span> = <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeNumber">2</span>, <span class="codeNumber">3</span>, <span class="codeNumber">8</span>, <span class="codeNumber">3</span>);
+<span class="codeIdentifier">trace</span>(<span class="codeString">"Average is: "</span> + ArrayUtil.average(numberArray));</pre> </li></ul></div></div></div></div></div><div class="member" id="contains"><h3>contains</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>contains</b> (
+
+</div><div class="code">inArray:Array,
+item:Object) : Number</div><br class="clear" /></div></div><div class="description"> Finds out how many instances of <code>item</code> Array contains. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">inArray<span class="itemSeparator">:</span></div><div>Array to search for <code>item</code> in.</div></div><div class="item"><div class="floatbox code colorizedCode">item   <span class="itemSeparator">:</span></div><div>Object to find.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> The amount of <code>item</code>'s found; if none were found returns <code><span class="codeNumber">0</span></code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> numberArray:<span class="codeIdentifier">Array</span> = <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeNumber">1</span>, <span class="codeNumber">2</span>, <span class="codeNumber">3</span>, <span class="codeNumber">7</span>, <span class="codeNumber">7</span>, <span class="codeNumber">7</span>, <span class="codeNumber">4</span>, <span class="codeNumber">5</span>);
+<span class="codeIdentifier">trace</span>(<span class="codeString">"numberArray contains "</span> + ArrayUtil.contains(numberArray, <span class="codeNumber">7</span>) + <span class="codeString">" 7'</span>s.");</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> If you are trying to find if an array contains an item and don't need to know the total, use <a href="org_casalib_util_ArrayUtil.html#indexOf">indexOf</a> instead. <code>item</code> can be any object; <code><span class="codeIdentifier">Number</span></code>, <code><span class="codeIdentifier">String</span></code>, <code><span class="codeIdentifier">Object</span></code>, etc... </li></ul></div></div></div></div></div><div class="member" id="containsAll"><h3>containsAll</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>containsAll</b> (
+
+</div><div class="code">inArray:Array,
+items:Array) : Boolean</div><br class="clear" /></div></div><div class="description"> Determines if Array contains all items. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">inArray<span class="itemSeparator">:</span></div><div>Array to search for <code>items</code> in.</div></div><div class="item"><div class="floatbox code colorizedCode">items  <span class="itemSeparator">:</span></div><div>Array of elements to search for.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if <code>inArray</code> contains all elements of <code>items</code>; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> numberArray:<span class="codeIdentifier">Array</span> = <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeNumber">1</span>, <span class="codeNumber">2</span>, <span class="codeNumber">3</span>, <span class="codeNumber">4</span>, <span class="codeNumber">5</span>);
+<span class="codeIdentifier">trace</span>(ArrayUtil.containsAll(numberArray, <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeNumber">1</span>, <span class="codeNumber">3</span>, <span class="codeNumber">5</span>)));</pre> </li></ul></div></div></div></div></div><div class="member" id="containsAny"><h3>containsAny</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>containsAny</b> (
+
+</div><div class="code">inArray:Array,
+items:Array) : Boolean</div><br class="clear" /></div></div><div class="description"> Determines if Array <code>inArray</code> contains any element of Array <code>items</code>. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">inArray<span class="itemSeparator">:</span></div><div>Array to search for <code>items</code> in.</div></div><div class="item"><div class="floatbox code colorizedCode">items  <span class="itemSeparator">:</span></div><div>Array of elements to search for.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if <code>inArray</code> contains any element of <code>items</code>; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> numberArray:<span class="codeIdentifier">Array</span> = <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeNumber">1</span>, <span class="codeNumber">2</span>, <span class="codeNumber">3</span>, <span class="codeNumber">4</span>, <span class="codeNumber">5</span>);
+<span class="codeIdentifier">trace</span>(ArrayUtil.containsAny(numberArray, <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeNumber">1</span>, <span class="codeNumber">3</span>, <span class="codeNumber">5</span>)));</pre> </li></ul></div></div></div></div></div><div class="member" id="equals"><h3>equals</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>equals</b> (
+
+</div><div class="code">first:Array,
+second:Array) : Boolean</div><br class="clear" /></div></div><div class="description"> 	Determines if two Arrays contain the same objects at the same index. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">first <span class="itemSeparator">:</span></div><div>First Array to compare to <code>second</code>.</div></div><div class="item"><div class="floatbox code colorizedCode">second<span class="itemSeparator">:</span></div><div>Second Array to compare to <code>first</code>.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if Arrays are the same; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div><div class="member" id="getHighestValue"><h3>getHighestValue</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>getHighestValue</b> (
+</div><div class="code">inArray:Array) : Number</div><br class="clear" /></div></div><div class="description"> Finds the highest value in <code>inArray</code>. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">inArray<span class="itemSeparator">:</span></div><div>Array comprised only of numbers.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> The highest value in <code>inArray</code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> numberArray:<span class="codeIdentifier">Array</span> = <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeNumber">2</span>, <span class="codeNumber">1</span>, <span class="codeNumber">5</span>, <span class="codeNumber">4</span>, <span class="codeNumber">3</span>);
+<span class="codeIdentifier">trace</span>(<span class="codeString">"The highest value is: "</span> + ArrayUtil.getHighestValue(numberArray));</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Since:</span><div class="item"><ul><li> Flash Player 7 </li></ul></div></div></div></div></div><div class="member" id="getLowestValue"><h3>getLowestValue</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>getLowestValue</b> (
+</div><div class="code">inArray:Array) : Number</div><br class="clear" /></div></div><div class="description"> Finds the lowest value in <code>inArray</code>. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">inArray<span class="itemSeparator">:</span></div><div>Array comprised only of numbers.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> The lowest value in <code>inArray</code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> numberArray:<span class="codeIdentifier">Array</span> = <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeNumber">2</span>, <span class="codeNumber">1</span>, <span class="codeNumber">5</span>, <span class="codeNumber">4</span>, <span class="codeNumber">3</span>);
+<span class="codeIdentifier">trace</span>(<span class="codeString">"The lowest value is: "</span> + ArrayUtil.getLowestValue(numberArray));</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Since:</span><div class="item"><ul><li> Flash Player 7 </li></ul></div></div></div></div></div><div class="member" id="indexOf"><h3>indexOf</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>indexOf</b> (
+
+
+</div><div class="code">inArray:Array,
+item:Object,
+startIndex:Number) : Number</div><br class="clear" /></div></div><div class="description"> Finds the position of the first instance of passed <code>item</code> in <code>inArray</code>. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">inArray   <span class="itemSeparator">:</span></div><div>Array to find <code>item</code>'s position in.</div></div><div class="item"><div class="floatbox code colorizedCode">item      <span class="itemSeparator">:</span></div><div>Object to find position of.</div></div><div class="item"><div class="floatbox code colorizedCode">startIndex<span class="itemSeparator">:</span></div><div><strong>[optional]</strong> The starting position of the search.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> The first index of the instance <code>item</code>; if none found returns <code>-<span class="codeNumber">1</span></code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> colorArray = <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeString">"red"</span>, <span class="codeString">"blue"</span>, <span class="codeString">"pink"</span>, <span class="codeString">"black"</span>);
+<span class="codeIdentifier">trace</span>(<span class="codeString">"First postion of '</span>pink<span class="codeString">' is: "</span> + ArrayUtil<span class="codeIdentifier">.indexOf</span>(colorArray, <span class="codeString">"pink"</span>));</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> <code>item</code> can be any object; <code><span class="codeIdentifier">Number</span></code>, <code><span class="codeIdentifier">String</span></code>, <code><span class="codeIdentifier">Object</span></code>, etc... </li></ul></div></div></div></div></div><div class="member" id="lastIndexOf"><h3>lastIndexOf</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>lastIndexOf</b> (
+
+
+</div><div class="code">inArray:Array,
+item:Object,
+startIndex:Number) : Number</div><br class="clear" /></div></div><div class="description"> Finds the position of the last instance of passed <code>item</code> in <code>inArray</code>. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">inArray   <span class="itemSeparator">:</span></div><div>Array to find <code>item</code>'s position in.</div></div><div class="item"><div class="floatbox code colorizedCode">item      <span class="itemSeparator">:</span></div><div>Object to find position of.</div></div><div class="item"><div class="floatbox code colorizedCode">startIndex<span class="itemSeparator">:</span></div><div><strong>[optional]</strong> The starting position of the search.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> The last index of the instance <code>item</code>; if none found returns <code>-<span class="codeNumber">1</span></code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> colorArray = <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeString">"red"</span>, <span class="codeString">"blue"</span>, <span class="codeString">"pink"</span>, <span class="codeString">"black"</span>);
+<span class="codeIdentifier">trace</span>(<span class="codeString">"First postion of '</span>pink<span class="codeString">' is: "</span> + ArrayUtil<span class="codeIdentifier">.indexOf</span>(colorArray, <span class="codeString">"pink"</span>));</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> <code>item</code> can be any object; <code><span class="codeIdentifier">Number</span></code>, <code><span class="codeIdentifier">String</span></code>, <code><span class="codeIdentifier">Object</span></code>, etc... </li></ul></div></div></div></div></div><div class="member" id="randomize"><h3>randomize</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>randomize</b> (
+</div><div class="code">inArray:Array) : Array</div><br class="clear" /></div></div><div class="description"> Creates new Array composed of passed Array's items in a random order. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">inArray<span class="itemSeparator">:</span></div><div>Array to create copy of, and randomize.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> A new Array comprised of passed Array's items in a random order. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> numberArray:<span class="codeIdentifier">Array</span> = <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeNumber">1</span>, <span class="codeNumber">2</span>, <span class="codeNumber">3</span>, <span class="codeNumber">4</span>, <span class="codeNumber">5</span>, <span class="codeNumber">6</span>, <span class="codeNumber">7</span>, <span class="codeNumber">8</span>, <span class="codeNumber">9</span>, <span class="codeNumber">10</span>);
+<span class="codeIdentifier">trace</span>(ArrayUtil.randomize(numberArray));</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Since:</span><div class="item"><ul><li> Flash Player 7 </li></ul></div></div></div></div></div><div class="member" id="removeArrayItem"><h3>removeArrayItem</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>removeArrayItem</b> (
+
+</div><div class="code">tarArray:Array,
+item:Object) : Number</div><br class="clear" /></div></div><div class="description"> Modifies original Array by removing all items that are identical to passed <code>item</code>. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">tarArray<span class="itemSeparator">:</span></div><div>Array to remove passed <code>item</code>.</div></div><div class="item"><div class="floatbox code colorizedCode">item    <span class="itemSeparator">:</span></div><div>Value to remove.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> The amount of removed elements that matched <code>item</code>, if none found returns <code><span class="codeNumber">0</span></code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> numberArray:<span class="codeIdentifier">Array</span> = <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeNumber">1</span>, <span class="codeNumber">2</span>, <span class="codeNumber">3</span>, <span class="codeNumber">7</span>, <span class="codeNumber">7</span>, <span class="codeNumber">7</span>, <span class="codeNumber">4</span>, <span class="codeNumber">5</span>);
+<span class="codeIdentifier">trace</span>(<span class="codeString">"Removed "</span> + ArrayUtil.removeArrayItem(numberArray, <span class="codeNumber">7</span>) + <span class="codeString">" items."</span>);
+<span class="codeIdentifier">trace</span>(numberArray);</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> <code>item</code> can be any object; <code><span class="codeIdentifier">Number</span></code>, <code><span class="codeIdentifier">String</span></code>, <code><span class="codeIdentifier">Object</span></code>, etc... </li></ul></div></div></div></div></div><div class="member" id="removeArrayItems"><h3>removeArrayItems</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>removeArrayItems</b> (
+
+</div><div class="code">tarArray:Array,
+items:Array) : Boolean</div><br class="clear" /></div></div><div class="description"> Removes only the specified items in an Array. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">tarArray<span class="itemSeparator">:</span></div><div>Array to remove specified items from.</div></div><div class="item"><div class="floatbox code colorizedCode">items   <span class="itemSeparator">:</span></div><div>Array of elements to remove.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if the Array was changed as a result of the call; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> numberArray:<span class="codeIdentifier">Array</span> = <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeNumber">1</span>, <span class="codeNumber">2</span>, <span class="codeNumber">3</span>, <span class="codeNumber">7</span>, <span class="codeNumber">7</span>, <span class="codeNumber">7</span>, <span class="codeNumber">4</span>, <span class="codeNumber">5</span>);
+ArrayUtil.removeArrayItems(numberArray, <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeNumber">1</span>, <span class="codeNumber">3</span>, <span class="codeNumber">7</span>, <span class="codeNumber">5</span>));
+<span class="codeIdentifier">trace</span>(numberArray);</pre> </li></ul></div></div></div></div></div><div class="member" id="removeDuplicates"><h3>removeDuplicates</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>removeDuplicates</b> (
+</div><div class="code">inArray:Array) : Array</div><br class="clear" /></div></div><div class="description"> Creates new Array comprised of only the non-identical elements of passed Array. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">inArray<span class="itemSeparator">:</span></div><div>Array to remove equivalent items.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> A new Array comprised of only unique elements. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> numberArray:<span class="codeIdentifier">Array</span> = <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeNumber">1</span>, <span class="codeNumber">2</span>, <span class="codeNumber">3</span>, <span class="codeNumber">4</span>, <span class="codeNumber">4</span>, <span class="codeNumber">4</span>, <span class="codeNumber">4</span>, <span class="codeNumber">5</span>);
+<span class="codeIdentifier">trace</span>(ArrayUtil.removeDuplicates(numberArray));</pre> </li></ul></div></div></div></div></div><div class="member" id="retainArrayItems"><h3>retainArrayItems</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>retainArrayItems</b> (
+
+</div><div class="code">tarArray:Array,
+items:Array) : Boolean</div><br class="clear" /></div></div><div class="description"> Retains only the specified items in an Array. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">tarArray<span class="itemSeparator">:</span></div><div>Array to remove non specified items from.</div></div><div class="item"><div class="floatbox code colorizedCode">items   <span class="itemSeparator">:</span></div><div>Array of elements to keep.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if the Array was changed as a result of the call; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> numberArray:<span class="codeIdentifier">Array</span> = <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeNumber">1</span>, <span class="codeNumber">2</span>, <span class="codeNumber">3</span>, <span class="codeNumber">7</span>, <span class="codeNumber">7</span>, <span class="codeNumber">7</span>, <span class="codeNumber">4</span>, <span class="codeNumber">5</span>);
+ArrayUtil.retainArrayItems(numberArray, <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeNumber">2</span>, <span class="codeNumber">4</span>));
+<span class="codeIdentifier">trace</span>(numberArray);</pre> </li></ul></div></div></div></div></div><div class="member" id="sum"><h3>sum</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>sum</b> (
+</div><div class="code">inArray:Array) : Number</div><br class="clear" /></div></div><div class="description"> Adds all items in <code>inArray</code> and returns the value. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">inArray<span class="itemSeparator">:</span></div><div>Array comprised only of numbers.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> The total of all numbers in <code>inArray</code> added. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">var</span> numberArray:<span class="codeIdentifier">Array</span> = <span class="codeKeyword">new</span> <span class="codeIdentifier">Array</span>(<span class="codeNumber">2</span>, <span class="codeNumber">3</span>);
+<span class="codeIdentifier">trace</span>(<span class="codeString">"Total is: "</span> + ArrayUtil.sum(numberArray));</pre> </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

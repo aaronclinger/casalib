@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>NumberUtil</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_util_NumberUtil"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classmethods" accesskey="a">Cl<span class="accessKey">a</span>ss methods</a></li></ul><br class="clear" /></div><h1>NumberUtil</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td>none</td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">08/24/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger, David Nelson</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.util.NumberUtil</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+/**
+    @author Aaron Clinger
+    @author David Nelson
+    @version 08/24/07
+*/
+
+class org.casalib.util.NumberUtil {
+    
+    /**
+        Evaluates &lt;code>val1&lt;/code> and &lt;code>val2&lt;/code> and returns the smaller value. Unlike &lt;code>Math.min&lt;/code> this method will return the defined value if the other value is &lt;code>undefined&lt;/code>.
+        
+        @param val1: A number or expression to compare.
+        @param val2: A number or expression to compare.
+        @return Returns the smallest value, or the value out of the two that is defined.
+    */
+    public static function min(val1:Number, val2:Number):Number {
+        if (val1 == undefined || val2 == undefined)
+            return (val2 == undefined) ? val1 : val2;
+        
+        return Math.min(val1, val2);
+    }
+    
+    /**
+        Evaluates &lt;code>val1&lt;/code> and &lt;code>val2&lt;/code> and returns the larger value. Unlike &lt;code>Math.max&lt;/code> this method will return the defined value if the other value is &lt;code>undefined&lt;/code>.
+        
+        @param val1: A number or expression to compare.
+        @param val2: A number or expression to compare.
+        @return Returns the largest value, or the value out of the two that is defined.
+    */
+    public static function max(val1:Number, val2:Number):Number {
+        if (val1 == undefined || val2 == undefined) 
+            return (val2 == undefined) ? val1 : val2;
+        
+        return Math.max(val1, val2);
+    }
+    
+    /**
+        Creates a random integer within the defined range.
+        
+        @param min: The minimum number the random integer can be.
+        @param min: The maximum number the random integer can be.
+        @return Returns a random integer within the range.
+    */
+    public static function randomInteger(min:Number, max:Number):Number {
+        return min + Math.floor(Math.random() * (max + 1 - min));
+    }
+    
+    /**
+        Determines if the number is even.
+        
+        @param num: A number to determine if it is divisible by &lt;code>2&lt;/code>.
+        @return Returns &lt;code>true&lt;/code> if the number is even; otherwise &lt;code>false&lt;/code>.
+    */
+    public static function isEven(num:Number):Boolean {
+        return (num &amp; 1) == 0;
+    }
+    
+    /**
+        Determines if the number is odd.
+        
+        @param num: A number to determine if it is not divisible by &lt;code>2&lt;/code>.
+        @return Returns &lt;code>true&lt;/code> if the number is odd; otherwise &lt;code>false&lt;/code>.
+    */
+    public static function isOdd(num:Number):Boolean {
+        return !NumberUtil.isEven(num);
+    }
+    
+    /**
+        Determines if the number is an integer.
+        
+        @param num: A number to determine if it contains no decimal values.
+        @return Returns &lt;code>true&lt;/code> if the number is an integer; otherwise &lt;code>false&lt;/code>.
+    */
+    public static function isInteger(num:Number):Boolean {
+        return (num % 1) == 0;
+    }
+    
+    /**
+        Determines if the number is prime.
+        
+        @param num: A number to determine if it is only divisible by 1 and itself.
+        @return Returns &lt;code>true&lt;/code> if the number is prime; otherwise &lt;code>false&lt;/code>.
+    */
+    public static function isPrime(num:Number):Boolean {
+        if (num == 1 || num == 2)
+            return true;
+        
+        if (NumberUtil.isEven(num))
+            return false;
+        
+        var s:Number = Math.sqrt(num);
+        for (var i:Number = 3; i &lt;= s; i++)
+            if (num % i == 0)
+                return false;
+        
+        return true;
+    }
+    
+    /**
+        Rounds a number's decimal value to a specific place.
+        
+        @param num: The number to round.
+        @param place: The decimal place to round.
+        @return Returns the value rounded to the defined place. 
+        @example
+            &lt;code>
+                trace(NumberUtil.roundToPlace(3.14159, 2)); // Traces 3.14
+                trace(NumberUtil.roundToPlace(3.14159, 3)); // Traces 3.142
+            &lt;/code>
+    */
+    public static function roundDecimalToPlace(num:Number, place:Number):Number {
+        var p:Number = Math.pow(10, Math.round(place));
+        
+        return Math.round(num * p) / p;
+    }
+    
+    /**
+        Determines if the value is included within a range.
+        
+        @param num: Number to determine if it's included in the range.
+        @param startValue: First value of the range.
+        @param endValue: Second value of the range.
+        @return Returns &lt;code>true&lt;/code> if the number falls within the range; otherwise &lt;code>false&lt;/code>.
+    */
+    public static function isBetween(num:Number, startValue:Number, endValue:Number):Boolean {
+        return !(num &lt; Math.min(startValue, endValue) || num > Math.max(startValue, endValue));
+    }
+    
+    /**
+        Determines if value falls within a range; if not it is snapped to the nearest range value.
+        
+        @param num: Number to determine if it's included in the range.
+        @param startValue: First value of the range.
+        @param endValue: Second value of the range.
+        @return Returns either the number as passed, or its value once snapped to nearest range value.
+    */
+    public static function makeBetween(num:Number, startValue:Number, endValue:Number):Number {
+        return Math.min(Math.max(num, Math.min(startValue, endValue)), Math.max(startValue, endValue));
+    }
+    
+    /**
+        Creates evenly spaced numerical increments between two numbers.
+        
+        @param begin: The starting value.
+        @param end: The ending value.
+        @param steps: The number of increments between the starting and ending values.
+        @return Returns an Array comprised of the increments between the two values.
+        @example
+            &lt;code>
+                trace(NumberUtil.createStepsBetween(0, 5, 4)); // Traces 1,2,3,4
+                trace(NumberUtil.createStepsBetween(1, 3, 3)); // Traces 1.5,2,2.5
+            &lt;/code>
+    */
+    public static function createStepsBetween(begin:Number, end:Number, steps:Number): /*Number*/ Array {
+        steps++;
+        
+        var i:Number = 0;
+        var stepsBetween: /*Number*/ Array = new Array();
+        var increment:Number = (end - begin) / steps;
+        
+        while (++i &lt; steps)
+            stepsBetween.push((i * increment) + begin);
+        
+        return stepsBetween;
+    }
+    
+    /**
+        Formats a number.
+        
+        @param numberToFormat: The number you wish to format.
+        @param minLength: The minimum length of the number.
+        @param thouDelim: &lt;strong>[optional]&lt;/strong> The character used to seperate thousands; defaults to none.
+        @param fillChar: &lt;strong>[optional]&lt;/strong> The leading character used to make the number the minimum length; defaults to &lt;code>0&lt;/code>.
+        @return Returns the formated number as a String.
+        @example
+            &lt;code>
+                trace(NumberUtil.format(1234567, 8, ",")); // Traces 01,234,567
+            &lt;/code>
+    */
+    public static function format(numberToFormat:Number, minLength:Number, thouDelim:String, fillChar:String):String {
+        var num:String = numberToFormat.toString();
+        var len:Number = num.length;
+        
+        if (thouDelim != undefined) {
+            var numSplit:Array = num.split('');
+            var counter:Number = 3;
+            var i:Number       = numSplit.length;
+            
+            while (--i > 0) {
+                counter--;
+                if (counter == 0) {
+                    counter = 3;
+                    numSplit.splice(i, 0, thouDelim);
+                }
+            }
+            
+            num = numSplit.join('');
+        }
+        
+        if (minLength != undefined) {
+            if (len &lt; minLength) {
+                minLength -= len;
+                
+                var addChar:String = (fillChar == undefined) ? '0' : fillChar;
+                
+                while (minLength--)
+                    num = addChar + num;
+            }
+        }
+        
+        return num;
+    }
+    
+    /**
+        Finds the English ordinal suffix for the number given.
+        
+        @param num: Number to find the ordinal suffix of.
+        @return Returns the suffix for the number, 2 characters.
+        @example
+            &lt;code>
+                trace(32 + NumberUtil.getOrdinalSuffix(32)); // Traces 32nd
+            &lt;/code>
+    */
+    public static function getOrdinalSuffix(num:Number):String {
+        if (num >= 10 &amp;&amp; num &lt;= 20)
+            return 'th';
+            
+        switch (num % 10) {
+            case 0 :
+            case 4 :
+            case 5 :
+            case 6 :
+            case 7 :
+            case 8 :
+            case 9 :
+                return 'th';
+            case 3 :
+                return 'rd';
+            case 2 :
+                return 'nd';
+            case 1 :
+                return 'st';
+        }
+    }
+    
+    /**
+        Adds a leading zero for numbers less than ten.
+        
+        @param num: Number to add leading zero.
+        @return Number as a String; if the number was less than ten the number will have a leading zero.
+    */
+    public static function addLeadingZero(num:Number):String {
+        return (num &lt; 10) ? '0' + num : num.toString();
+    }
+    
+    private function NumberUtil() {} // Prevents instance creation
+}
+</textarea></div></div></div><div class="classDescription"></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class methods</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#min">min</a><span class="typeInfo"> (val1:Number, val2:Number) : Number</span><ul class="summary"><li>	Evaluates val1 and val2 and returns the smaller value.</li></ul></li><li class="sortli listnum2"><a href="#max">max</a><span class="typeInfo"> (val1:Number, val2:Number) : Number</span><ul class="summary"><li>Evaluates val1 and val2 and returns the larger value.</li></ul></li><li class="sortli listnum3"><a href="#randomInteger">randomInteger</a><span class="typeInfo"> (min:Number, max:Number) : Number</span><ul class="summary"><li>Creates a random integer within the defined range.</li></ul></li><li class="sortli listnum4"><a href="#isEven">isEven</a><span class="typeInfo"> (num:Number) : Boolean</span><ul class="summary"><li>Determines if the number is even.</li></ul></li><li class="sortli listnum5"><a href="#isOdd">isOdd</a><span class="typeInfo"> (num:Number) : Boolean</span><ul class="summary"><li>Determines if the number is odd.</li></ul></li><li class="sortli listnum6"><a href="#isInteger">isInteger</a><span class="typeInfo"> (num:Number) : Boolean</span><ul class="summary"><li>Determines if the number is an integer.</li></ul></li><li class="sortli listnum7"><a href="#isPrime">isPrime</a><span class="typeInfo"> (num:Number) : Boolean</span><ul class="summary"><li>Determines if the number is prime.</li></ul></li><li class="sortli listnum8"><a href="#roundDecimalToPlace">roundDecimalToPlace</a><span class="typeInfo"> (num:Number, place:Number) : Number</span><ul class="summary"><li>Rounds a number's decimal value to a specific place.</li></ul></li><li class="sortli listnum9"><a href="#isBetween">isBetween</a><span class="typeInfo"> (num:Number, startValue:Number, endValue:Number) : Boolean</span><ul class="summary"><li>Determines if the value is included within a range.</li></ul></li><li class="sortli listnum10"><a href="#makeBetween">makeBetween</a><span class="typeInfo"> (num:Number, startValue:Number, endValue:Number) : Number</span><ul class="summary"><li>Determines if value falls within a range; if not it is snapped to the nearest range value.</li></ul></li><li class="sortli listnum11"><a href="#createStepsBetween">createStepsBetween</a><span class="typeInfo"> (begin:Number, end:Number, steps:Number) : Array</span><ul class="summary"><li>Creates evenly spaced numerical increments between two numbers.</li></ul></li><li class="sortli listnum12"><a href="#format">format</a><span class="typeInfo"> (numberToFormat:Number, minLength:Number, thouDelim:String, fillChar:String) : String</span><ul class="summary"><li>Formats a number.</li></ul></li><li class="sortli listnum13"><a href="#getOrdinalSuffix">getOrdinalSuffix</a><span class="typeInfo"> (num:Number) : String</span><ul class="summary"><li>Finds the English ordinal suffix for the number given.</li></ul></li><li class="sortli listnum14"><a href="#addLeadingZero">addLeadingZero</a><span class="typeInfo"> (num:Number) : String</span><ul class="summary"><li>Adds a leading zero for numbers less than ten.</li></ul></li></ul></div></div></div><div class="memberSection"><h2 id="Classmethods">Class methods</h2><div class="member" id="addLeadingZero"><h3>addLeadingZero</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>addLeadingZero</b> (
+</div><div class="code">num:Number) : String</div><br class="clear" /></div></div><div class="description"> Adds a leading zero for numbers less than ten. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">num<span class="itemSeparator">:</span></div><div>Number to add leading zero.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Number as a String; if the number was less than ten the number will have a leading zero. </li></ul></div></div></div></div></div><div class="member" id="createStepsBetween"><h3>createStepsBetween</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>createStepsBetween</b> (
+
+
+</div><div class="code">begin:Number,
+end:Number,
+steps:Number) : Array</div><br class="clear" /></div></div><div class="description"> Creates evenly spaced numerical increments between two numbers. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">begin<span class="itemSeparator">:</span></div><div>The starting value.</div></div><div class="item"><div class="floatbox code colorizedCode">end  <span class="itemSeparator">:</span></div><div>The ending value.</div></div><div class="item"><div class="floatbox code colorizedCode">steps<span class="itemSeparator">:</span></div><div>The number of increments between the starting and ending values.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns an Array comprised of the increments between the two values. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeIdentifier">trace</span>(NumberUtil.createStepsBetween(<span class="codeNumber">0</span>, <span class="codeNumber">5</span>, <span class="codeNumber">4</span>)); <span class="codeComment">// Traces 1,2,3,4</span>
+<span class="codeIdentifier">trace</span>(NumberUtil.createStepsBetween(<span class="codeNumber">1</span>, <span class="codeNumber">3</span>, <span class="codeNumber">3</span>)); <span class="codeComment">// Traces 1.5,2,2.5</span></pre> </li></ul></div></div></div></div></div><div class="member" id="format"><h3>format</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>format</b> (
+
+
+
+</div><div class="code">numberToFormat:Number,
+minLength:Number,
+thouDelim:String,
+fillChar:String) : String</div><br class="clear" /></div></div><div class="description"> Formats a number. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">numberToFormat<span class="itemSeparator">:</span></div><div>The number you wish to format.</div></div><div class="item"><div class="floatbox code colorizedCode">minLength     <span class="itemSeparator">:</span></div><div>The minimum length of the number.</div></div><div class="item"><div class="floatbox code colorizedCode">thouDelim     <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> The character used to seperate thousands; defaults to none.</div></div><div class="item"><div class="floatbox code colorizedCode">fillChar      <span class="itemSeparator">:</span></div><div><strong>[optional]</strong> The leading character used to make the number the minimum length; defaults to <code><span class="codeNumber">0</span></code>.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the formated number as a String. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeIdentifier">trace</span>(NumberUtil.format(<span class="codeNumber">1234567</span>, <span class="codeNumber">8</span>, <span class="codeString">","</span>)); <span class="codeComment">// Traces 01,234,567</span></pre> </li></ul></div></div></div></div></div><div class="member" id="getOrdinalSuffix"><h3>getOrdinalSuffix</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>getOrdinalSuffix</b> (
+</div><div class="code">num:Number) : String</div><br class="clear" /></div></div><div class="description"> Finds the English ordinal suffix for the number given. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">num<span class="itemSeparator">:</span></div><div>Number to find the ordinal suffix of.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the suffix for the number, 2 characters. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeIdentifier">trace</span>(<span class="codeNumber">32</span> + NumberUtil.getOrdinalSuffix(<span class="codeNumber">32</span>)); <span class="codeComment">// Traces 32nd</span></pre> </li></ul></div></div></div></div></div><div class="member" id="isBetween"><h3>isBetween</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>isBetween</b> (
+
+
+</div><div class="code">num:Number,
+startValue:Number,
+endValue:Number) : Boolean</div><br class="clear" /></div></div><div class="description"> Determines if the value is included within a range. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">num       <span class="itemSeparator">:</span></div><div>Number to determine if it's included in the range.</div></div><div class="item"><div class="floatbox code colorizedCode">startValue<span class="itemSeparator">:</span></div><div>First value of the range.</div></div><div class="item"><div class="floatbox code colorizedCode">endValue  <span class="itemSeparator">:</span></div><div>Second value of the range.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if the number falls within the range; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div><div class="member" id="isEven"><h3>isEven</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>isEven</b> (
+</div><div class="code">num:Number) : Boolean</div><br class="clear" /></div></div><div class="description"> Determines if the number is even. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">num<span class="itemSeparator">:</span></div><div>A number to determine if it is divisible by <code><span class="codeNumber">2</span></code>.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if the number is even; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div><div class="member" id="isInteger"><h3>isInteger</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>isInteger</b> (
+</div><div class="code">num:Number) : Boolean</div><br class="clear" /></div></div><div class="description"> Determines if the number is an integer. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">num<span class="itemSeparator">:</span></div><div>A number to determine if it contains no decimal values.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if the number is an integer; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div><div class="member" id="isOdd"><h3>isOdd</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>isOdd</b> (
+</div><div class="code">num:Number) : Boolean</div><br class="clear" /></div></div><div class="description"> Determines if the number is odd. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">num<span class="itemSeparator">:</span></div><div>A number to determine if it is not divisible by <code><span class="codeNumber">2</span></code>.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if the number is odd; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div><div class="member" id="isPrime"><h3>isPrime</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>isPrime</b> (
+</div><div class="code">num:Number) : Boolean</div><br class="clear" /></div></div><div class="description"> Determines if the number is prime. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">num<span class="itemSeparator">:</span></div><div>A number to determine if it is only divisible by 1 and itself.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if the number is prime; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div><div class="member" id="makeBetween"><h3>makeBetween</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>makeBetween</b> (
+
+
+</div><div class="code">num:Number,
+startValue:Number,
+endValue:Number) : Number</div><br class="clear" /></div></div><div class="description"> Determines if value falls within a range; if not it is snapped to the nearest range value. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">num       <span class="itemSeparator">:</span></div><div>Number to determine if it's included in the range.</div></div><div class="item"><div class="floatbox code colorizedCode">startValue<span class="itemSeparator">:</span></div><div>First value of the range.</div></div><div class="item"><div class="floatbox code colorizedCode">endValue  <span class="itemSeparator">:</span></div><div>Second value of the range.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns either the number as passed, or its value once snapped to nearest range value. </li></ul></div></div></div></div></div><div class="member" id="max"><h3>max</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>max</b> (
+
+</div><div class="code">val1:Number,
+val2:Number) : Number</div><br class="clear" /></div></div><div class="description"> Evaluates <code>val1</code> and <code>val2</code> and returns the larger value. Unlike <code>Math.max</code> this method will return the defined value if the other value is <code><span class="codeIdentifier">undefined</span></code>. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">val1<span class="itemSeparator">:</span></div><div>A number or expression to compare.</div></div><div class="item"><div class="floatbox code colorizedCode">val2<span class="itemSeparator">:</span></div><div>A number or expression to compare.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the largest value, or the value out of the two that is defined. </li></ul></div></div></div></div></div><div class="member" id="min"><h3>min</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>min</b> (
+
+</div><div class="code">val1:Number,
+val2:Number) : Number</div><br class="clear" /></div></div><div class="description"> 	Evaluates <code>val1</code> and <code>val2</code> and returns the smaller value. Unlike <code>Math.min</code> this method will return the defined value if the other value is <code><span class="codeIdentifier">undefined</span></code>. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">val1<span class="itemSeparator">:</span></div><div>A number or expression to compare.</div></div><div class="item"><div class="floatbox code colorizedCode">val2<span class="itemSeparator">:</span></div><div>A number or expression to compare.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the smallest value, or the value out of the two that is defined. </li></ul></div></div></div></div></div><div class="member" id="randomInteger"><h3>randomInteger</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>randomInteger</b> (
+
+</div><div class="code">min:Number,
+max:Number) : Number</div><br class="clear" /></div></div><div class="description"> Creates a random integer within the defined range. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">min<span class="itemSeparator">:</span></div><div>The minimum number the random integer can be.</div></div><div class="item"><div class="floatbox code colorizedCode">min<span class="itemSeparator">:</span></div><div>The maximum number the random integer can be.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns a random integer within the range. </li></ul></div></div></div></div></div><div class="member" id="roundDecimalToPlace"><h3>roundDecimalToPlace</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>roundDecimalToPlace</b> (
+
+</div><div class="code">num:Number,
+place:Number) : Number</div><br class="clear" /></div></div><div class="description"> Rounds a number's decimal value to a specific place. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">num  <span class="itemSeparator">:</span></div><div>The number to round.</div></div><div class="item"><div class="floatbox code colorizedCode">place<span class="itemSeparator">:</span></div><div>The decimal place to round.</div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns the value rounded to the defined place.  </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeIdentifier">trace</span>(NumberUtil.roundToPlace(<span class="codeNumber">3.14159</span>, <span class="codeNumber">2</span>)); <span class="codeComment">// Traces 3.14</span>
+<span class="codeIdentifier">trace</span>(NumberUtil.roundToPlace(<span class="codeNumber">3.14159</span>, <span class="codeNumber">3</span>)); <span class="codeComment">// Traces 3.142</span></pre> </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

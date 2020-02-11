@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>EventMouse</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_mouse_EventMouse"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Classproperties" accesskey="l">C<span class="accessKey">l</span>ass properties</a></li><li><a href="#Instanceproperties" accesskey="l">Instance <span class="accessKey">p</span>roperties</a></li><li><a href="#Classmethods" accesskey="a">Cl<span class="accessKey">a</span>ss methods</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li><li><a href="#Eventhandlers" accesskey="e"><span class="accessKey">E</span>vent handlers</a></li></ul><br class="clear" /></div><h1>EventMouse</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_event_EventDispatcher.html">EventDispatcher</a> &lt; <a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">9/11/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.mouse.EventMouse</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.event.EventDispatcher;
+
+/**
+    Dispatches mouse events to observers. Should be used instead of &lt;code>Mouse.addListener&lt;/code>.
+    
+    @author Aaron Clinger
+    @version 9/11/07
+    @example
+        &lt;code>
+            function onMouseMove():Void {
+                trace("Mouse position is x:" + _root._xmouse + " y:" + _root._ymouse + ".");
+            }
+            
+            var mouseInstance:EventMouse = EventMouse.getInstance();
+            this.mouseInstance.addEventObserver(this, EventMouse.EVENT_MOUSE_MOVE);
+        &lt;/code>
+*/
+
+class org.casalib.mouse.EventMouse extends EventDispatcher {
+    public static var EVENT_MOUSE_DOWN:String  = 'onMouseDown';
+    public static var EVENT_MOUSE_MOVE:String  = 'onMouseMove';
+    public static var EVENT_MOUSE_UP:String    = 'onMouseUp';
+    public static var EVENT_MOUSE_WHEEL:String = 'onMouseWheel';
+    private static var $mouseInstance:EventMouse;
+    private var $mouseDown:Boolean;
+    
+    /**
+        @return {@link EventMouse} instance.
+    */
+    public static function getInstance():EventMouse {
+        if (EventMouse.$mouseInstance == undefined)
+            EventMouse.$mouseInstance = new EventMouse();
+        
+        return EventMouse.$mouseInstance;
+    }
+    
+    /**
+        Determines whether the mouse is currently pressed.
+        
+        @return Returns &lt;code>true&lt;/code> if the mouse is down; otherwise &lt;code>false&lt;/code>.
+    */
+    public static function isDown():Boolean {
+        var instance:EventMouse = EventMouse.getInstance();
+        
+        return instance.$mouseDown;
+    }
+    
+    private function EventMouse() {
+        super();
+        
+        this.$mouseDown = false;
+        
+        Mouse.addListener(this);
+        
+        this.$setClassDescription('org.casalib.mouse.EventMouse');
+    }
+    
+    /**
+        @sends onMouseDown = function() {}
+    */
+    private function onMouseDown():Void {
+        this.$mouseDown = true;
+        
+        this.dispatchEvent(EventMouse.EVENT_MOUSE_DOWN);
+    }
+    
+    /**
+        @sends onMouseMove = function() {}
+    */
+    private function onMouseMove():Void {
+        this.dispatchEvent(EventMouse.EVENT_MOUSE_MOVE);
+    }
+    
+    /**
+        @sends onMouseUp = function() {}
+    */
+    private function onMouseUp():Void {
+        this.$mouseDown = false;
+        
+        this.dispatchEvent(EventMouse.EVENT_MOUSE_UP);
+    }
+    
+    /**
+        @sends onMouseWheel = function(delta:Number, scrollTarget:String) {}
+    */
+    private function onMouseWheel(delta:Number, scrollTarget:String):Void {
+        this.dispatchEvent(EventMouse.EVENT_MOUSE_WHEEL, delta, scrollTarget);
+    }
+}
+
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Dispatches mouse events to observers.</span> Should be used instead of <code>Mouse.addListener</code>.<div class="classFields"><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Example:</span><div class="item"><ul><li> <pre>
+<span class="codeKeyword">function</span> <span class="codeIdentifier">onMouseMove</span>():<span class="codeIdentifier">Void</span> {
+    <span class="codeIdentifier">trace</span>(<span class="codeString">"Mouse position is x:"</span> + <span class="codeIdentifier">_root</span>._xmouse + <span class="codeString">" y:"</span> + <span class="codeIdentifier">_root</span>._ymouse + <span class="codeString">"."</span>);
+}
+
+<span class="codeKeyword">var</span> mouseInstance:EventMouse = EventMouse.getInstance();
+<span class="codeIdentifier">this</span>.mouseInstance.addEventObserver(<span class="codeIdentifier">this</span>, EventMouse.EVENT_MOUSE_MOVE);</pre> </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Events broadcasted to listeners:</span><div class="item"><ul><li><code>onMouseDown = function () {}</code> </li><li><code>onMouseMove = function () {}</code> </li><li><code>onMouseUp = function () {}</code> </li><li><code>onMouseWheel = function (delta:Number, scrollTarget:String) {}</code> </li></ul></div></div></div></div></div></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Class properties</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#EVENT_MOUSE_DOWN">EVENT_MOUSE_DOWN</a><span class="typeInfo">  : String</span></li><li class="sortli listnum2"><a href="#EVENT_MOUSE_MOVE">EVENT_MOUSE_MOVE</a><span class="typeInfo">  : String</span></li><li class="sortli listnum3"><a href="#EVENT_MOUSE_UP">EVENT_MOUSE_UP</a><span class="typeInfo">  : String</span></li><li class="sortli listnum4"><a href="#EVENT_MOUSE_WHEEL">EVENT_MOUSE_WHEEL</a><span class="typeInfo">  : String</span></li></ul></div><div class="memberSummaryPart"><span class="title">Class methods</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#getInstance">getInstance</a><span class="typeInfo">  : <a class="className" href="org_casalib_mouse_EventMouse.html">EventMouse</a></span></li><li class="sortli listnum2"><a href="#isDown">isDown</a><span class="typeInfo">  : Boolean</span><ul class="summary"><li>Determines whether the mouse is currently pressed.</li></ul></li></ul></div><div class="memberSummaryPart"><span class="title">Instance methods</span><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_event_EventDispatcher.html">EventDispatcher</a></span></span><div class="item inheritedList"><a href="org_casalib_event_EventDispatcher.html#addEventObserver">addEventObserver</a>  <a href="org_casalib_event_EventDispatcher.html#destroy">destroy</a>  <a href="org_casalib_event_EventDispatcher.html#dispatchEvent">dispatchEvent</a>  <a href="org_casalib_event_EventDispatcher.html#removeAllEventObservers">removeAllEventObservers</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserver">removeEventObserver</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForEvent">removeEventObserversForEvent</a>  <a href="org_casalib_event_EventDispatcher.html#removeEventObserversForScope">removeEventObserversForScope</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_core_CoreObject.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_core_CoreObject.html#destroy">destroy</a>  <a href="org_casalib_core_CoreObject.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Classproperties">Class properties</h2><div class="member" id="EVENT_MOUSE_DOWN"><h3>EVENT_MOUSE_DOWN</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_MOUSE_DOWN</b>:String = <span class="codeString">'onMouseDown'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_MOUSE_MOVE"><h3>EVENT_MOUSE_MOVE</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_MOUSE_MOVE</b>:String = <span class="codeString">'onMouseMove'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_MOUSE_UP"><h3>EVENT_MOUSE_UP</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_MOUSE_UP</b>:String = <span class="codeString">'onMouseUp'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div><div class="member" id="EVENT_MOUSE_WHEEL"><h3>EVENT_MOUSE_WHEEL</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> <b>EVENT_MOUSE_WHEEL</b>:String = <span class="codeString">'onMouseWheel'</span>
+</div><div class="floatbox"><span class="access">(read,write)</span></div><br class="clear" /></div></div></div></div><div class="memberSection"><h2 id="Classmethods">Class methods</h2><div class="member" id="getInstance"><h3>getInstance</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>getInstance</b> (
+</div><div class="code">) : <a class="className" href="org_casalib_mouse_EventMouse.html">EventMouse</a></div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> <a class="className" href="org_casalib_mouse_EventMouse.html">EventMouse</a> instance. </li></ul></div></div></div></div></div><div class="member" id="isDown"><h3>isDown</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code"><span class="memberAccess">static</span> function <b>isDown</b> (
+</div><div class="code">) : Boolean</div><br class="clear" /></div></div><div class="description"> Determines whether the mouse is currently pressed. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> Returns <code><span class="codeIdentifier">true</span></code> if the mouse is down; otherwise <code><span class="codeIdentifier">false</span></code>. </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>

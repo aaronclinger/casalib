@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Ellipse</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="stylesheet" type="text/css" href="../css/VisDoc.css" /><script src="../js/jquery.js" type="text/javascript">//</script><script src="../js/common.js" type="text/javascript">//</script><script src="../js/doc.js" type="text/javascript">//</script></head><body id="page_org_casalib_math_geom_Ellipse"><script type="text/javascript">VisDoc.initBody();</script><div id="PageTop"><!----></div><div class="VisDoc"><div class="content"><div class="docNav"><ul><li><div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed"><a href="#"><span class="icon">+</span>Show TOC</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script><div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed"><a href="#"><span class="icon">&times;</span>Hide TOC</a></div><span id="twistyTOC_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script></li></ul><ul class="accessKeyLinks"><li><a href="#PageTop" accesskey="t"><span class="accessKey">T</span>op</a></li><li><a href="#Summary" accesskey="s"><span class="accessKey">S</span>ummary</a></li><li><a href="#Constructor" accesskey="c"><span class="accessKey">C</span>onstructors</a></li><li><a href="#Instancemethods" accesskey="m">Instance <span class="accessKey">m</span>ethods</a></li></ul><br class="clear" /></div><h1>Ellipse</h1><div class="classProperties"><table cellspacing="0"><tr><th align="left">Kind of class:</th><td>class</td></tr><tr><th align="left">Inherits from:</th><td><a class="className" href="org_casalib_math_geom_BaseShape.html">BaseShape</a> &lt; <a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></td></tr><tr><th class="classDetails" align="left">Version:</th><td class="classDetails">08/02/07</td></tr><tr><th class="classDetails" align="left">Author:</th><td class="classDetails">Aaron Clinger</td></tr><tr><th class="classDetails" align="left">Classpath:</th><td class="classDetails">org.casalib.math.geom.Ellipse</td></tr><tr><th class="classDetails" align="left">File last modified:</th><td class="classDetails">Monday, 01 December 2008, 13:34:40</td></tr></table></div><div id="sourceCodeTop" class="sourceCodeView"><div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">►&nbsp;</span><span class="linkLabel">View source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">▼&nbsp;</span><span class="linkLabel">Hide source</span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script><div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script><div class="sourceCode"><textarea rows="10" cols="10" id="source" readonly="readonly">/*
+    CASA Lib for ActionScript 2.0
+    Copyright (c) 2008, Aaron Clinger &amp; Contributors of CASA Lib
+    All rights reserved.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    
+    - Neither the name of the CASA Lib nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import org.casalib.math.geom.BaseShape;
+import org.casalib.math.geom.Point;
+
+/**
+    Stores position and size of an ellipse (circle or oval).
+    
+    @author Aaron Clinger
+    @version 08/02/07
+*/
+
+class org.casalib.math.geom.Ellipse extends BaseShape {
+    
+    
+    /**
+        Creates new ellipse object.
+        
+        @param x: The horizontal position of the ellipse.
+        @param y: The vertical position of the ellipse.
+        @param width: Width of the ellipse at its widest horizontal point.
+        @param height: &lt;strong>[optional]&lt;/strong> Height of the ellipse at its tallest point. If &lt;code>undefined&lt;/code> assumes &lt;code>height&lt;/code> matches &lt;code>width&lt;/code> (Creates circle).
+    */
+    public function Ellipse(x:Number, y:Number, width:Number, height:Number) {
+        super(x, y, width, height);
+        
+        this.$setClassDescription('org.casalib.math.geom.Ellipse');
+    }
+    
+    /**
+        {@inheritDoc}
+        
+        @return {@inheritDoc}
+        @usageNote Calculating the circumference of an ellipse is difficult; this is an approximation but should be fine for most cases.
+    */
+    public function getPerimeter():Number {
+        return (Math.sqrt(.5 * (Math.pow(this.getWidth(), 2) + Math.pow(this.getHeight(), 2))) * Math.PI * 2) * 0.5;
+    }
+    
+    public function getArea():Number {
+        return Math.PI * (this.getWidth() * 0.5) * (this.getHeight() * 0.5);
+    }
+    
+    /**
+        Finds the &lt;code>x, y&lt;/code> position of the degree along the circumference of the ellipse.
+        
+        @param degree: Number representing a degree on the ellipse. 
+        @return A defined {@link Point} object.
+        @usageNote &lt;code>degree&lt;/code> can be over &lt;code>360&lt;/code> or even negitive numbers; minding &lt;code>0 = 360 = 720&lt;/code>, &lt;code>540 = 180&lt;/code>, &lt;code>-90 = 270&lt;/code>, etc...
+    */
+    public function getPointOfDegree(degree:Number):Point {
+        var radian:Number  = (degree - 90) * (Math.PI / 180);
+        var xRadius:Number = this.getWidth() * 0.5;
+        var yRadius:Number = this.getHeight() * 0.5;
+        
+        return new Point(this.getX() + xRadius + Math.cos(radian) * xRadius, this.getY() + yRadius + Math.sin(radian) * yRadius);
+    }
+    
+    public function containsPoint(pointObject:Point):Boolean {
+        var xRadius:Number = this.getWidth() * 0.5;
+        var yRadius:Number = this.getHeight() * 0.5;
+        var xTar:Number    = pointObject.getX() - this.getX() - xRadius;
+        var yTar:Number    = pointObject.getY() - this.getY() - yRadius;
+        
+        return Math.pow(xTar / xRadius, 2) + Math.pow(yTar / yRadius, 2) &lt;= 1;
+    }
+    
+    /**
+        Determines whether the ellipse specified in the &lt;code>ellipseObject&lt;/code> parameter is equal to this ellipse object.
+        
+        @param rectangleObject: A defined {@link Ellipse} object.
+        @return {@inheritDoc}
+    */
+    public function equals(ellipseObject:Ellipse):Boolean {
+        return this.getX() == ellipseObject.getX() &amp;&amp; this.getY() == ellipseObject.getY() &amp;&amp; this.getWidth() == ellipseObject.getWidth() &amp;&amp; this.getHeight() == ellipseObject.getHeight();
+    }
+    
+    /**
+        @return A new ellipse object with the same values as this ellipse.
+    */
+    public function clone():Ellipse {
+        return new Ellipse(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+    }
+    
+    public function destroy():Void {
+        super.destroy();
+    }
+}
+</textarea></div></div></div><div class="classDescription"><span class="descriptionSummary">Stores position and size of an ellipse (circle or oval).</span></div><div class="summary"><h2 id="Summary">Summary</h2><div class="docNav"><ul><li><div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide type info</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script><div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show type info</a></div><span id="twistyTypeInfo_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script></li><li><div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Hide summaries</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script><div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Show summaries</a></div><span id="twistySummaries_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script></li><li><div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">&times;</span>Sort by source order</a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script><div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting"><a href="#"><span class="icon">+</span>Sort alphabetically</a></div><span id="twistySort_toggle" class="twistyContent"><!----></span><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script></li></ul><br class="clear" /></div><div class="memberList"><div class="memberSummaryPart"><span class="title">Constructor</span><ul class="sortable" id="sortul1"><li class="sortli listnum1"><a href="#Ellipse">Ellipse</a><span class="typeInfo"> (x:Number, y:Number, width:Number, height:Number)</span><ul class="summary"><li>	Creates new ellipse object.</li></ul></li></ul></div><div class="memberSummaryPart"><span class="title">Instance methods</span><ul class="sortable" id="sortul2"><li class="sortli listnum1"><a href="#getPerimeter">getPerimeter</a><span class="typeInfo">  : Number</span></li><li class="sortli listnum2"><a href="#getArea">getArea</a><span class="typeInfo">  : Number</span></li><li class="sortli listnum3"><a href="#getPointOfDegree">getPointOfDegree</a><span class="typeInfo"> (degree:Number) : <a class="className" href="org_casalib_math_geom_Point.html">Point</a></span><ul class="summary"><li>Finds the x, y position of the degree along the circumference of the ellipse.</li></ul></li><li class="sortli listnum4"><a href="#containsPoint">containsPoint</a><span class="typeInfo"> (pointObject:<a class="className" href="org_casalib_math_geom_Point.html">Point</a>) : Boolean</span></li><li class="sortli listnum5"><a href="#equals">equals</a><span class="typeInfo"> (ellipseObject:<a class="className" href="org_casalib_math_geom_Ellipse.html">Ellipse</a>) : Boolean</span><ul class="summary"><li>Determines whether the ellipse specified in the ellipseObject parameter is equal to this ellipse object.</li></ul></li><li class="sortli listnum6"><a href="#clone">clone</a><span class="typeInfo">  : <a class="className" href="org_casalib_math_geom_Ellipse.html">Ellipse</a></span></li><li class="sortli listnum7"><a href="#destroy">destroy</a><span class="typeInfo">  : Void</span></li></ul><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_math_geom_BaseShape.html">BaseShape</a></span></span><div class="item inheritedList"><a href="org_casalib_math_geom_BaseShape.html#clone">clone</a>  <a href="org_casalib_math_geom_BaseShape.html#containsPoint">containsPoint</a>  <a href="org_casalib_math_geom_BaseShape.html#destroy">destroy</a>  <a href="org_casalib_math_geom_BaseShape.html#equals">equals</a>  <a href="org_casalib_math_geom_BaseShape.html#getArea">getArea</a>  <a href="org_casalib_math_geom_BaseShape.html#getCenterPoint">getCenterPoint</a>  <a href="org_casalib_math_geom_BaseShape.html#getHeight">getHeight</a>  <a href="org_casalib_math_geom_BaseShape.html#getPerimeter">getPerimeter</a>  <a href="org_casalib_math_geom_BaseShape.html#getPosition">getPosition</a>  <a href="org_casalib_math_geom_BaseShape.html#getWidth">getWidth</a>  <a href="org_casalib_math_geom_BaseShape.html#getX">getX</a>  <a href="org_casalib_math_geom_BaseShape.html#getY">getY</a>  <a href="org_casalib_math_geom_BaseShape.html#setHeight">setHeight</a>  <a href="org_casalib_math_geom_BaseShape.html#setPosition">setPosition</a>  <a href="org_casalib_math_geom_BaseShape.html#setWidth">setWidth</a>  <a href="org_casalib_math_geom_BaseShape.html#setX">setX</a>  <a href="org_casalib_math_geom_BaseShape.html#setY">setY</a></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Instance methods inherited from <span class="superclass"><a class="className" href="org_casalib_core_CoreObject.html">CoreObject</a></span></span><div class="item inheritedList"><a class="private" href="org_casalib_core_CoreObject.html#$setClassDescription">$setClassDescription</a>  <a href="org_casalib_core_CoreObject.html#destroy">destroy</a>  <a href="org_casalib_core_CoreObject.html#toString">toString</a></div></div></div></div></div></div></div><div class="memberSection"><h2 id="Constructor">Constructor</h2><div class="member" id="Ellipse"><h3>Ellipse</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>Ellipse</b> (
+
+
+
+</div><div class="code">x:Number,
+y:Number,
+width:Number,
+height:Number)</div><br class="clear" /></div></div><div class="description"> 	Creates new ellipse object. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">x     <span class="itemSeparator">:</span></div><div>The horizontal position of the ellipse.</div></div><div class="item"><div class="floatbox code colorizedCode">y     <span class="itemSeparator">:</span></div><div>The vertical position of the ellipse.</div></div><div class="item"><div class="floatbox code colorizedCode">width <span class="itemSeparator">:</span></div><div>Width of the ellipse at its widest horizontal point.</div></div><div class="item"><div class="floatbox code colorizedCode">height<span class="itemSeparator">:</span></div><div><strong>[optional]</strong> Height of the ellipse at its tallest point. If <code><span class="codeIdentifier">undefined</span></code> assumes <code>height</code> matches <code>width</code> (Creates circle).</div></div></div></div></div></div></div><div class="memberSection"><h2 id="Instancemethods">Instance methods</h2><div class="member" id="clone"><h3>clone</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>clone</b> (
+</div><div class="code">) : <a class="className" href="org_casalib_math_geom_Ellipse.html">Ellipse</a></div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> A new ellipse object with the same values as this ellipse. </li></ul></div></div></div></div></div><div class="member" id="containsPoint"><h3>containsPoint</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>containsPoint</b> (
+</div><div class="code">pointObject:<a class="className" href="org_casalib_math_geom_Point.html">Point</a>) : Boolean</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Overrides:</span><div class="item"><ul><li> <a href="org_casalib_math_geom_BaseShape.html#containsPoint">BaseShape.containsPoint</a> </li></ul></div></div></div></div></div><div class="member" id="destroy"><h3>destroy</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>destroy</b> (
+</div><div class="code">) : Void</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Overrides:</span><div class="item"><ul><li> <a href="org_casalib_math_geom_BaseShape.html#destroy">BaseShape.destroy</a> </li></ul></div></div></div></div></div><div class="member" id="equals"><h3>equals</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>equals</b> (
+</div><div class="code">ellipseObject:<a class="className" href="org_casalib_math_geom_Ellipse.html">Ellipse</a>) : Boolean</div><br class="clear" /></div></div><div class="description"> Determines whether the ellipse specified in the <code>ellipseObject</code> parameter is equal to this ellipse object. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">rectangleObject<span class="itemSeparator">:</span></div><div>A defined <a class="className" href="org_casalib_math_geom_Ellipse.html">Ellipse</a> object.</div></div></div></div></div></div><div class="member" id="getArea"><h3>getArea</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>getArea</b> (
+</div><div class="code">) : Number</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Overrides:</span><div class="item"><ul><li> <a href="org_casalib_math_geom_BaseShape.html#getArea">BaseShape.getArea</a> </li></ul></div></div></div></div></div><div class="member" id="getPerimeter"><h3>getPerimeter</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>getPerimeter</b> (
+</div><div class="code">) : Number</div><br class="clear" /></div></div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> Calculating the circumference of an ellipse is difficult; this is an approximation but should be fine for most cases. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Overrides:</span><div class="item"><ul><li> <a href="org_casalib_math_geom_BaseShape.html#getPerimeter">BaseShape.getPerimeter</a> </li></ul></div></div></div></div></div><div class="member" id="getPointOfDegree"><h3>getPointOfDegree</h3><div class="fullMemberString"><div class="floatholder"><div class="floatbox code">function <b>getPointOfDegree</b> (
+</div><div class="code">degree:Number) : <a class="className" href="org_casalib_math_geom_Point.html">Point</a></div><br class="clear" /></div></div><div class="description"> Finds the <code>x, y</code> position of the degree along the circumference of the ellipse. </div><div class="boxWithBorder"><div class="boxedElem"><div class="contentHolder"><span class="title">Parameters:</span><div class="item"><div class="floatbox code colorizedCode">degree<span class="itemSeparator">:</span></div><div>Number representing a degree on the ellipse. </div></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Returns:</span><div class="item"><ul><li> A defined <a class="className" href="org_casalib_math_geom_Point.html">Point</a> object. </li></ul></div></div></div><div class="boxedElem"><div class="contentHolder"><span class="title">Usage note:</span><div class="item"><ul><li> <code>degree</code> can be over <code><span class="codeNumber">360</span></code> or even negitive numbers; minding <code><span class="codeNumber">0</span> = <span class="codeNumber">360</span> = <span class="codeNumber">720</span></code>, <code><span class="codeNumber">540</span> = <span class="codeNumber">180</span></code>, <code>-<span class="codeNumber">90</span> = <span class="codeNumber">270</span></code>, etc... </li></ul></div></div></div></div></div></div><div class="footer"><ul class="docFooter"><li class="copyright">&copy; 2008 Aaron Clinger and the CASA Lib Team</li><li class="createdWith">Created with <a href="http://visiblearea.com/visdoc/">VisDoc</a></li></ul></div></div></div></body></html>
