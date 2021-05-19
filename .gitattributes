@@ -2,3 +2,7 @@ AS2/docs/* linguist-documentation
 AS3/docs/* linguist-documentation
 AS2/docs/html/* linguist-documentation
 AS3/docs/html/* linguist-documentation
+AS2/docs/js/* linguist-documentation
+AS3/docs/js/* linguist-documentation
+AS2/docs/css/* linguist-documentation
+AS3/docs/css/* linguist-documentation
